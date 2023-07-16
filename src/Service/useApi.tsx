@@ -3,8 +3,8 @@ import { useLoader } from '../Components/Loading';
 import { useModal } from '../Components/Modals';
 
 function getSocket() {
-  const baseUrl = "https://localhost:7082/api/"
-  //const baseUrl = "https://api-server.shop/api/"
+  //const baseUrl = "https://localhost:7082/api/"
+  const baseUrl = "https://api-server.shop/api/"
   const localAuth = localStorage.getItem('token');
   const auth = localAuth ? localAuth : '';
 
