@@ -17,6 +17,7 @@ export function InputCuston(props: InputCustomTypes) {
                 maxLength: props.maxLength,
                 readOnly: props.readOnly
             }}
+            focused={props.readOnly}
         />
     )
 

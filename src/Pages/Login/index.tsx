@@ -26,7 +26,7 @@ export function Login() {
                 .required('Senha é obrigatório')
         }),
         onSubmit: async (values, helpers) => {
-            api.post("Login", values)
+            api.post("login", values)
         }
     });
 

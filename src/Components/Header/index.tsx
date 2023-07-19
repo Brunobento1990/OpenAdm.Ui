@@ -8,6 +8,7 @@ interface IHeaderProps {
     text: string;
     open: boolean;
     openSidebar: () => void;
+    avatar?:string
 };
 
 export function Header(props: IHeaderProps) {
@@ -50,6 +51,7 @@ export function Header(props: IHeaderProps) {
                 <Avatar
                     sx={{ margin: '10px', cursor: 'pointer' }}
                     onClick={() => setOpenAvatar(!openAvatar)}
+                    src={props.avatar}
                 />
                 <PopoverCustom 
                     open={openAvatar}

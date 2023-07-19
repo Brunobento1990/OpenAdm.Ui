@@ -3,8 +3,10 @@ import Modal from 'react-bootstrap/Modal'
 import { useApi } from '../../Service/useApi';
 import { ButtonCustom } from '../Buttons/ButtonCustom';
 import * as S from './styles'
+import { Box } from '@mui/material';
+import { Logo } from '../Logo';
 
-let loaderHandler: (isLoading: boolean, message?: string, delay?: boolean,url?:string) => void;
+let loaderHandler: (isLoading: boolean, message?: string, delay?: boolean, url?: string) => void;
 
 export function ModalGeneric() {
 
@@ -13,13 +15,13 @@ export function ModalGeneric() {
     const [message, setMessage] = useState<string>("");
     const [url, setUrl] = useState<string | undefined>();
     const api = useApi();
-    
+
     async function apiDelete() {
         // api.apiDelete(url ?? "");
         setShow(false)
     }
 
-    loaderHandler = (isLoading: boolean, message?: string, delay?: boolean,url?:string) => {
+    loaderHandler = (isLoading: boolean, message?: string, delay?: boolean, url?: string) => {
         setUrl(url)
         if (message) {
             setMessage(message);
@@ -42,12 +44,21 @@ export function ModalGeneric() {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
-            <Modal.Header 
+            <Modal.Header
                 closeButton
                 onClick={() => setShow(false)}
             >
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Barber system
+                    <Box
+                        sx={{
+                            display: 'inline-flex',
+                            height: 32,
+                            width: 32
+                        }}
+                    >
+                        <Logo />
+                    </Box>
+                    Open Adm
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -68,7 +79,7 @@ export function ModalGeneric() {
 export function useModal() {
     return {
         Component: ModalGeneric,
-        show: (message?: string, delay?: boolean,url?:string) => loaderHandler(true, message, delay,url),
+        show: (message?: string, delay?: boolean, url?: string) => loaderHandler(true, message, delay, url),
         hide: () => loaderHandler(false),
     };
 }

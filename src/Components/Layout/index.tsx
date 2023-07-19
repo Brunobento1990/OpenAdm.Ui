@@ -1,9 +1,11 @@
 import Box from "@mui/material/Box";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Siderbar } from "../Sidebar";
 import { useTheme } from "@mui/material";
 import { useThemeApp } from "../../hooks/use-theme-app";
 import { Header } from "../Header";
+import { useContextApp } from "../../hooks/use-context-app";
+import { useNavigate } from "react-router-dom";
 
 interface OutletProps {
     children: ReactNode;
@@ -12,8 +14,9 @@ interface OutletProps {
 
 export function Layout(props: OutletProps) {
 
-    const theme = useTheme();
-    const themeApp = useThemeApp();
+    const useContext = useContextApp();
+    const sessionInfo = useContext.getSessionInfo();
+    const navigate = useNavigate();
     const [open, setOpen] = useState<boolean>(true);
 
     const width = open ? '225px' : '25px'
@@ -21,6 +24,12 @@ export function Layout(props: OutletProps) {
     function openSidebar() {
         setOpen(!open)
     }
+
+    useEffect(() => {
+        if(!sessionInfo){
+            navigate("/")
+        }
+    },[])
 
     return (
         <Box height='100vh' display='flex' width='100%' margin={0}>
@@ -33,13 +42,14 @@ export function Layout(props: OutletProps) {
                 />
             }
             <Box
-                marginLeft={width}
+                marginLeft={open ? '225px' : '0'}
                 width='100%'
             >
                 <Header
                     open={open}
                     openSidebar={openSidebar}
                     text={props.text}
+                    avatar={sessionInfo?.avatar}
                 />
                 {props.children}
             </Box>

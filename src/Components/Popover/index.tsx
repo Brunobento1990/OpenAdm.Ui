@@ -1,6 +1,7 @@
 import { Box, Divider, MenuItem, MenuList, Typography } from '@mui/material';
 import Popover from '@mui/material/Popover';
 import { useNavigate } from 'react-router-dom';
+import { useContextApp } from '../../hooks/use-context-app';
 
 interface IPropoverProps{
     open:boolean;
@@ -11,7 +12,11 @@ export function PopoverCustom(props: IPropoverProps) {
 
     const navigate = useNavigate();
 
+    const useContext = useContextApp();
+    const sessionInfo = useContext.getSessionInfo();
+
     function sair(){
+        useContext.clearContextApp();
         navigate("/")
     }
 
@@ -40,9 +45,24 @@ export function PopoverCustom(props: IPropoverProps) {
                     color="text.secondary"
                     variant="body2"
                 >
-                    Anika Visser
+                    {sessionInfo?.nome}
                 </Typography>
             </Box>
+            <Divider />
+            <MenuList
+                disablePadding
+                dense
+                sx={{
+                    p: '8px',
+                    '& > *': {
+                        borderRadius: 1
+                    }
+                }}
+            >
+                <MenuItem onClick={() => navigate("/meu-perfil")}>
+                    Meu perfil
+                </MenuItem>
+            </MenuList>
             <Divider />
             <MenuList
                 disablePadding

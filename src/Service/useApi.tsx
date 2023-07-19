@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useLoader } from '../Components/Loading';
 import { useModal } from '../Components/Modals';
+import { useNavigate } from 'react-router-dom';
+import { useContextApp } from '../hooks/use-context-app';
 
 function getSocket() {
   //const baseUrl = "https://localhost:7082/api/"
@@ -20,6 +22,46 @@ export function useApi() {
 
   const Loader = useLoader();
   const Modal = useModal();
+  const useContext = useContextApp();
+  //const navigate = useNavigate();
+
+  async function getUsuario(){
+    try {
+
+      Loader.show();
+      const api = getSocket();
+      const response = await api.get("retorna-usuario");
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        Modal.show(error.response.data)
+      } else {
+        Modal.show("Ocorreu um erro interno, tente novamente mais tarde.")
+      }
+    } finally {
+      Loader.hide();
+    }
+  }
+
+  async function getEmpresa(){
+    try {
+
+      Loader.show();
+      const api = getSocket();
+      const response = await api.get("retorna-empresa");
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        Modal.show(error.response.data)
+      } else {
+        Modal.show("Ocorreu um erro interno, tente novamente mais tarde.")
+      }
+    } finally {
+      Loader.hide();
+    }
+  }
 
   async function post(url: string, payload: any, message?: string) {
 
@@ -28,9 +70,9 @@ export function useApi() {
       Loader.show();
       const api = getSocket();
       const response = await api.post(url, payload);
-      if (url === "Login") {
-        console.log(response.data)
-        localStorage.setItem("token", response.data.token)
+      if (url === "login") {
+        useContext.setContextApp(response.data)
+        //navigate("/home")
         window.location.href = "/home"
       } else {
         Modal.show(message);
@@ -41,7 +83,8 @@ export function useApi() {
         Modal.show(error.response.data)
       } else {
         Modal.show("Ocorreu um erro interno, tente novamente mais tarde.")
-        localStorage.removeItem("token")
+        useContext.clearContextApp();
+        //navigate("/")
         window.location.href = "/"
       }
     } finally {
@@ -50,7 +93,9 @@ export function useApi() {
   }
 
   return {
-    post
+    post,
+    getEmpresa,
+    getUsuario
   }
 
 }

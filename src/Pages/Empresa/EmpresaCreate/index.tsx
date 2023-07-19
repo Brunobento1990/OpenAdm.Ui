@@ -44,7 +44,7 @@ export function EmpresaCreate() {
                 .required('Senha é obrigatório')
         }),
         onSubmit: async (values, helpers) => {
-            await api.post("AdicionarEmpresa", values)
+            await api.post("adicionar-empresa", values)
         }
     });
 
