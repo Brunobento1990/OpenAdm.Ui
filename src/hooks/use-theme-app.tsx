@@ -15,6 +15,12 @@ export function useThemeApp() {
             fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
             fontWeight: 600,
             color:'rgb(255, 255, 255)'
+        },
+        configFontEscuro: {
+            fontSize: 14,
+            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
+            fontWeight: 600,
+            color:'rgb(99, 102, 241)'
         }
     }
 }

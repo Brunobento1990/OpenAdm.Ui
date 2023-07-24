@@ -2,6 +2,7 @@ import { TextField } from "@mui/material";
 import { InputCustomTypes } from "./types";
 
 export function InputCuston(props: InputCustomTypes) {
+
     return (
         <TextField
             id="outlined-basic"
@@ -18,6 +19,8 @@ export function InputCuston(props: InputCustomTypes) {
                 readOnly: props.readOnly
             }}
             focused={props.readOnly}
+            sx={{margin: props.margin}}
+            onBlur={props.onBlur}
         />
     )
 

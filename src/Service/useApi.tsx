@@ -25,7 +25,7 @@ export function useApi() {
   const useContext = useContextApp();
   //const navigate = useNavigate();
 
-  async function getUsuario(){
+  async function getUsuario() {
     try {
 
       Loader.show();
@@ -44,7 +44,7 @@ export function useApi() {
     }
   }
 
-  async function getEmpresa(){
+  async function getEmpresa() {
     try {
 
       Loader.show();
@@ -92,10 +92,36 @@ export function useApi() {
     }
   }
 
+  async function put(url: string, payload: any, message?: string) {
+
+    try {
+
+      Loader.show();
+      const api = getSocket();
+      const response = await api.put(url, payload);
+
+      Modal.show(message ?? "Registro editado com sucesso !");
+
+      return response.data;
+    } catch (error: any) {
+      if (error.response) {
+        Modal.show(error.response.data)
+      } else {
+        Modal.show("Ocorreu um erro interno, tente novamente mais tarde.")
+        useContext.clearContextApp();
+        //navigate("/")
+        window.location.href = "/"
+      }
+    } finally {
+      Loader.hide();
+    }
+  }
+
   return {
     post,
     getEmpresa,
-    getUsuario
+    getUsuario,
+    put
   }
 
 }

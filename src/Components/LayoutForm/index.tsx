@@ -11,7 +11,9 @@ export function LayoutForm(props: OutletProps){
         <Box
             margin={2}
             marginTop={5}
-            height='80%'
+            marginBottom={5}
+            height='100%'
+            width='98%'
             display='flex'
             flexDirection='column'
             component={Paper}
@@ -19,6 +21,8 @@ export function LayoutForm(props: OutletProps){
             <Grid
                 container
                 direction='column'
+                display='flex'
+                alignItems="flex-start"
                 padding={2}
                 spacing={2}
             >
