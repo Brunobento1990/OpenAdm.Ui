@@ -1,28 +1,28 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useApi } from "../../Service/useApi"
-import { IUsuarioView } from "./types";
 import { LayoutForm } from "../../Components/LayoutForm";
-import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
+import { Avatar, Box, Grid, Paper, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Item from "@mui/material/Grid"
 import { InputCuston } from "../../Components/Inputs/InputCustom";
 import * as S from "./styles";
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { useThemeApp } from "../../hooks/use-theme-app";
-import EditIcon from '@mui/icons-material/Edit';
 import { ButtonCustom } from "../../Components/Buttons/ButtonCustom";
 
 export function MeuPerfil() {
 
     const [imagemModel, setImagemModel] = useState<string | undefined>(undefined);
-    const [readOnly, setReadOnly] = useState<boolean>(true);
     const themeApp = useThemeApp();
 
     const [email, setEmail] = useState<string>("");
     const [nome, setNome] = useState<string>("");
     const [avatar, setAvatar] = useState<string | undefined>(undefined);
-    const [ddd, setDdd] = useState<string | undefined>(undefined);
-    const [telefone, setTelefone] = useState<string | undefined>(undefined);
-    const [observacao, setObservacao] = useState<string | undefined>(undefined);
+    const [ddd, setDdd] = useState<string | undefined>("");
+    const [telefone, setTelefone] = useState<string | undefined>("");
+    const [observacao, setObservacao] = useState<string | undefined>("");
+
+    const theme = useTheme();
+    const smDown = useMediaQuery(theme.breakpoints.down('sm'));
 
 
     const openFile = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,143 +84,126 @@ export function MeuPerfil() {
 
 
     return (
-        <LayoutForm>
-            <Paper
-                sx={{
-                    height: 200,
-                    width: 200,
-                    padding: 2,
-                    margin: 2
-                }}
-            >
-                <Avatar
-                    sx={{ margin: '10px', height: '100px', width: '100px' }}
-                    onClick={(e: any) => openFile(e)}
-                    src={imagemModel}
-                />
-                <S.labelCustom htmlFor="arquivo">
-                    <PhotoCameraIcon
-                        sx={{ color: themeApp.color.secundary }}
-                    />
-                </S.labelCustom>
-                <input
-                    style={{ display: 'none' }}
-                    type="file"
-                    className="imgInput"
-                    accept="image/*"
-                    id="arquivo"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => openFile(e)}
-                />
-                <Typography
-                    variant='subtitle2'
-                    sx={themeApp.configFontEscuro}
-                >
-                    {nome}
-                </Typography>
-            </Paper>
+        <LayoutForm
+            height="80%"
+            onSubmit={submit}
+        >
 
-            <EditIcon
-                sx={{ cursor: 'pointer', color: themeApp.color.secundary, marginLeft: '30px' }}
-                onClick={() => setReadOnly(!readOnly)}
-            />
             <Grid
                 item
-                direction='row'
+                direction={smDown ? 'column' : 'row'}
                 display='flex'
                 alignItems='start'
-                width='60%'
                 spacing={2}
                 padding={2}
             >
+                <Item>
+                    <Paper
+                        sx={{
+                            height: 200,
+                            width: smDown ? 320 : 200,
+                            padding: 2,
+                            margin: 2
+                        }}
+                    >
+                        <Avatar
+                            sx={{ margin: '10px', height: '100px', width: '100px' }}
+                            onClick={(e: any) => openFile(e)}
+                            src={imagemModel}
+                        />
+                        <S.labelCustom htmlFor="arquivo">
+                            <PhotoCameraIcon
+                                sx={{ color: themeApp.color.secundary }}
+                            />
+                        </S.labelCustom>
+                        <input
+                            style={{ display: 'none' }}
+                            type="file"
+                            className="imgInput"
+                            accept="image/*"
+                            id="arquivo"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => openFile(e)}
+                        />
+                        <Typography
+                            variant='subtitle2'
+                            sx={themeApp.configFontEscuro}
+                        >
+                            {nome}
+                        </Typography>
+                    </Paper>
+                </Item>
+
                 <Item
-                    xs={6}
-                    md={12}
+                    xs={12}
+                    md={6}
+                    sx={{
+                        marginTop: 1
+                    }}
                 >
                     <InputCuston
                         label={"E-mail"}
-                        readOnly={readOnly}
                         margin={.5}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                            setEmail(event.target.value)
+                        onChange={(value) =>
+                            setEmail(value)
                         }
                         fullWidth
                         type="email"
                         value={email}
                     />
+                    <Item
+                        sx={{
+                            marginTop: 2
+                        }}
+                    >
+                        <InputCuston
+                            label={"DDD"}
+                            margin={.5}
+                            onChange={(value) =>
+                                setDdd(value)
+                            }
+                            type="text"
+                            value={ddd}
+                        />
+                        <InputCuston
+                            label={"Telefone"}
+                            margin={.5}
+                            onChange={(value) =>
+                                setTelefone(value)
+                            }
+                            type="text"
+                            value={telefone}
+                        />
+                    </Item>
                 </Item>
-            </Grid>
 
-            <Grid
-                item
-                direction='row'
-                display='flex'
-                width='60%'
-                spacing={2}
-                padding={2}
-            >
-                <Item
-                    xs={6}
-                    md={12}
-                >
-                    <InputCuston
-                        label={"DDD"}
-                        readOnly={readOnly}
-                        margin={.5}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                            setDdd(event.target.value)
-                        }
-                        type="text"
-                        value={ddd}
-                    />
-                    <InputCuston
-                        label={"Telefone"}
-                        readOnly={readOnly}
-                        margin={.5}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                            setTelefone(event.target.value)
-                        }
-                        fullWidth
-                        type="text"
-                        value={telefone}
-                    />
-                </Item>
             </Grid>
             <Grid
                 item
                 direction='row'
                 display='flex'
                 alignItems="flex-end"
-                width='60%'
+                width='100%'
                 spacing={2}
                 padding={2}
             >
                 <Item
-                    xs={6}
+                    xs={12}
                     md={12}
                 >
                     <InputCuston
                         label={"Observação"}
-                        readOnly={readOnly}
                         margin={.5}
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                            setObservacao(event.target.value)
+                        onChange={(value) =>
+                            setObservacao(value)
                         }
+                        fullWidth
                         type="text"
                         value={observacao}
                     />
-                    {!readOnly &&
-                        <Box
-                            sx={{ marginLeft: '10px' , marginTop: '5px'}}
-                        >
-                            <ButtonCustom
-                                text="Editar"
-                                onClick={submit}
-                            />
-                        </Box>
-                    }
+
+
                 </Item>
             </Grid>
-
         </LayoutForm>
     );
 }

@@ -1,20 +1,28 @@
-import { Avatar, Box, Chip, Divider, Menu, MenuItem } from "@mui/material";
+import { Avatar, Box, Chip, Divider } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useThemeApp } from "../../hooks/use-theme-app";
 import { useState } from "react";
 import { PopoverCustom } from "../Popover";
+import { useNavigate } from "react-router-dom";
 
 interface IHeaderProps {
     text: string;
     open: boolean;
     openSidebar: () => void;
-    avatar?:string
+    avatar?: string
 };
 
 export function Header(props: IHeaderProps) {
 
     const themeApp = useThemeApp();
+    const navigate = useNavigate();
     const [openAvatar, setOpenAvatar] = useState<boolean>(false);
+
+    function handleNavigate(url : string){
+
+        setOpenAvatar(!openAvatar)
+        navigate(url)
+    }
 
     return (
         <Box
@@ -51,9 +59,10 @@ export function Header(props: IHeaderProps) {
                 <Avatar
                     sx={{ margin: '10px', cursor: 'pointer' }}
                     onClick={() => setOpenAvatar(!openAvatar)}
-                    src={props.avatar}
+                    src={"data:image/jpeg;base64," + props.avatar}
                 />
-                <PopoverCustom 
+                <PopoverCustom
+                    onNavigate={(value) => handleNavigate(value)}
                     open={openAvatar}
                     onClose={() => setOpenAvatar(!openAvatar)}
                 />
@@ -61,6 +70,7 @@ export function Header(props: IHeaderProps) {
             <Box>
                 <Divider>
                     <Chip
+                        sx={{ backgroundColor: themeApp.backgroudcolor.primary, color: themeApp.color.primary }}
                         label={props.text}
                     />
                 </Divider>

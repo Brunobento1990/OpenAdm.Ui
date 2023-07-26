@@ -6,6 +6,7 @@ import { useContextApp } from '../../hooks/use-context-app';
 interface IPropoverProps{
     open:boolean;
     onClose:() => void;
+    onNavigate:(url :string) => void;
 }
 
 export function PopoverCustom(props: IPropoverProps) {
@@ -59,7 +60,7 @@ export function PopoverCustom(props: IPropoverProps) {
                     }
                 }}
             >
-                <MenuItem onClick={() => navigate("/meu-perfil")}>
+                <MenuItem onClick={() => props.onNavigate("/meu-perfil")}>
                     Meu perfil
                 </MenuItem>
             </MenuList>

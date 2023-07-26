@@ -5,7 +5,7 @@ export interface InputCustomTypes {
     readonly?: boolean;
     value:any;
     onBlur?:(value: any) => void;
-    onChange?:(event: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?:(value: string) => void;
     readOnly?:boolean;
     step?:string;
     maxLength?:number;

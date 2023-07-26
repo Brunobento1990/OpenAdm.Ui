@@ -9,14 +9,14 @@ import { useThemeApp } from '../../hooks/use-theme-app';
 interface ISidebarProps {
     open: boolean;
     openSideBar: () => void;
-    width:string
+    width:string;
+    handleNavigate:(url:string) => void;
 }
 
 export function Siderbar(props: ISidebarProps) {
 
     const themeApp = useThemeApp();
     const theme = useTheme();
-
     const smDown = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
@@ -64,7 +64,9 @@ export function Siderbar(props: ISidebarProps) {
                 />
 
                 <Box flex={1}>
-                    <ListSidebar />
+                    <ListSidebar 
+                        onNavigate={(value) => props.handleNavigate(value)}
+                    />
                 </Box>
             </Box>
         </Drawer>

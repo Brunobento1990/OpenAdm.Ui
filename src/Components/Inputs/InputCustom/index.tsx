@@ -11,7 +11,7 @@ export function InputCuston(props: InputCustomTypes) {
             required={props.required}
             type={props.type}
             value={props.value}
-            onChange={props.onChange}
+            onChange={(value) => {if(props.onChange) props.onChange(value.target.value)}}
             size={props.size}
             fullWidth={props.fullWidth}
             inputProps={{
