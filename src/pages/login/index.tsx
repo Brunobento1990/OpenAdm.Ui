@@ -1,0 +1,217 @@
+import { useState, ReactNode, useEffect } from 'react'
+import authConfig from 'src/configs/auth'
+import Link from 'next/link'
+import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import Box, { BoxProps } from '@mui/material/Box'
+import { styled } from '@mui/material/styles'
+import InputAdornment from '@mui/material/InputAdornment'
+import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
+import CustomTextField from 'src/@core/components/mui/text-field'
+import Icon from 'src/@core/components/icon'
+import * as yup from 'yup'
+import { useForm, Controller } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useAuth } from 'src/hooks/useAuth'
+import themeConfig from 'src/configs/themeConfig'
+import BlankLayout from 'src/@core/layouts/BlankLayout'
+import { Logo } from 'src/@open-adm/logo'
+import AuthIllustrationV1Wrapper from './styles'
+import { Card, CardContent } from '@mui/material'
+
+const LoginIllustration = styled('img')(({ theme }) => ({
+  zIndex: 2,
+  maxHeight: 680,
+  marginTop: theme.spacing(12),
+  marginBottom: theme.spacing(12),
+  [theme.breakpoints.down(1540)]: {
+    maxHeight: 550
+  },
+  [theme.breakpoints.down('lg')]: {
+    maxHeight: 500
+  }
+}))
+
+const RightWrapper = styled(Box)<BoxProps>(({ theme }) => ({
+  width: '100%',
+  [theme.breakpoints.up('md')]: {
+    maxWidth: 450
+  },
+  [theme.breakpoints.up('lg')]: {
+    maxWidth: 600
+  },
+  [theme.breakpoints.up('xl')]: {
+    maxWidth: 750
+  }
+}))
+
+const LinkStyled = styled(Link)(({ theme }) => ({
+  textDecoration: 'none',
+  color: `${theme.palette.primary.main} !important`
+}))
+
+const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ theme }) => ({
+  '& .MuiFormControlLabel-label': {
+    color: theme.palette.text.secondary
+  }
+}))
+const messageRequered = "Este campo é obrigatório!";
+const schema = yup.object().shape({
+  email: yup.string().email("E-mail inválido!").required(messageRequered),
+  password: yup.string().required(messageRequered)
+})
+
+const defaultValues = {
+  password: '',
+  email: ''
+}
+
+interface FormData {
+  email: string
+  password: string
+}
+
+const LoginPage = () => {
+  const [rememberMe, setRememberMe] = useState<boolean>(true)
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+
+  // ** Hooks
+  const auth = useAuth()
+
+  useEffect(() => {
+    const lembreMe = window.localStorage.getItem(authConfig.lembreMe);
+    const lembreMeEmail = window.localStorage.getItem(authConfig.lembreMeEmail);
+
+    if (lembreMe === 'true' && lembreMeEmail) {
+      setRememberMe(true);
+      setValue("email", lembreMeEmail);
+    } else {
+      setRememberMe(false)
+    }
+  }, [])
+
+  const {
+    control,
+    setError,
+    handleSubmit,
+    formState: { errors },
+    setValue
+  } = useForm({
+    defaultValues,
+    mode: 'onBlur',
+    resolver: yupResolver(schema)
+  })
+
+  const onSubmit = (data: FormData) => {
+    const { email, password } = data
+    auth.login({ email, password, rememberMe }, (message) => {
+      setError('email', {
+        type: 'manual',
+        message: message ?? 'E-mail ou senha inválidos!'
+      })
+    })
+  }
+
+  return (
+    <Box className='content-center'>
+      <AuthIllustrationV1Wrapper>
+        <Card>
+          <CardContent sx={{ p: theme => `${theme.spacing(10.5, 8, 8)} !important` }}>
+            <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Logo />
+              <Typography variant='h3' sx={{ ml: 2.5, fontWeight: 700 }}>
+                {themeConfig.templateName}
+              </Typography>
+            </Box>
+            <Box sx={{ mb: 6 }}>
+              <Typography variant='h4' sx={{ mb: 1.5 }}>
+                {`Ben vindo a ${themeConfig.templateName}! 👋🏻`}
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
+                Por favor, efetue o login com suas credenciais de acesso !
+              </Typography>
+            </Box>
+            <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+              <Controller
+                name='email'
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange, onBlur } }) => (
+                  <CustomTextField
+                    fullWidth
+                    autoFocus
+                    label='Email'
+                    value={value}
+                    onBlur={onBlur}
+                    onChange={onChange}
+                    placeholder='admin@iscaslune.com'
+                    error={Boolean(errors.email)}
+                    {...(errors.email && { helperText: errors.email.message })}
+                  />
+                )} />
+              <Controller
+                name='password'
+                control={control}
+                rules={{ required: true }}
+                render={({ field: { value, onChange, onBlur } }) => (
+                  <CustomTextField
+                    fullWidth
+                    value={value}
+                    onBlur={onBlur}
+                    label='Senha'
+                    onChange={onChange}
+                    id='auth-login-v2-password'
+                    error={Boolean(errors.password)}
+                    {...(errors.password && { helperText: errors.password.message })}
+                    type={showPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <IconButton
+                            edge='end'
+                            onMouseDown={e => e.preventDefault()}
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            <Icon fontSize='1.25rem' icon={showPassword ? 'tabler:eye' : 'tabler:eye-off'} />
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                )}
+              />
+              <Box
+                sx={{
+                  mb: 1.75,
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <FormControlLabel
+                  label='Lembre me'
+                  control={<Checkbox checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} />}
+                />
+                <Typography component={LinkStyled} href='/pages/auth/forgot-password-v1'>
+                  Esqueceu sua senha?
+                </Typography>
+              </Box>
+              <Button fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
+                Login
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </AuthIllustrationV1Wrapper>
+    </Box>
+  )
+}
+
+LoginPage.getLayout = (page: ReactNode) => <BlankLayout>{page}</BlankLayout>
+
+LoginPage.guestGuard = true
+
+export default LoginPage
