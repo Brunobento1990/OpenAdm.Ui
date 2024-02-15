@@ -1,3 +1,4 @@
 {
-    "APIERROR011": "E-mail ou senha inválidos!"
+    "APIERROR011": "E-mail ou senha inválidos!",
+    "APIERROR014": "Não é possível atualizar um pedido com status entregue, caso necessário, exclua o pedido!"
 }

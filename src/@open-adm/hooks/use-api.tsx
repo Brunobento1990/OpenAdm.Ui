@@ -13,13 +13,13 @@ export function useApi<T = unknown>() {
   const loader = useLoader();
 
   function handleError(error?: any) {
-
+    console.log('error : ', error)
     if (!error) {
       snack.show();
       return;
     }
 
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === 401 || !error?.response) {
       window.localStorage.removeItem(authConfig.storageTokenKeyName);
       window.localStorage.removeItem(authConfig.keyUserdata);
       snack.show("É necessário efetuar o login novamente!")

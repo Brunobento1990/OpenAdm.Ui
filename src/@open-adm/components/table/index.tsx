@@ -63,7 +63,7 @@ const Table = (props: tableProps) => {
         try {
             setLoading(true);
             setOpen(false);
-            const response = await put('pedido/update-status', {
+            const response = await put('pedidos/update-status', {
                 pedidoId: pedido?.id,
                 statusPedido: parseInt(statusPedido)
             })
