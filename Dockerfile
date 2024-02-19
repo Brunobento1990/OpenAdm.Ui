@@ -11,4 +11,4 @@ WORKDIR /app
 COPY --from=build /app .
 EXPOSE 7154
 ENV TZ=America/Sao_Paulo
-CMD ["npm", "run","start"]
+CMD ["npm", "run","dev"]
