@@ -18,6 +18,22 @@ const navigation = (): VerticalNavItemsType => {
       path: '/banners',
       icon: 'material-symbols-light:planner-banner-ad-pt-outline',
     },
+    {
+      title: 'Estoque',
+      icon: 'healthicons:stock-out-outline',
+      children: [
+        {
+          'title': 'Categoria',
+          'path': '/estoque/categoria',
+          'icon': 'mdi:category-outline'
+        },
+        {
+          'title': 'Produto',
+          'path': '/estoque/produto',
+          'icon': 'fluent-mdl2:product-variant'
+        }
+      ]
+    }
   ]
 }
 

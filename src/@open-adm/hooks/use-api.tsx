@@ -70,7 +70,6 @@ export function useApi<T = unknown>() {
 
   async function post(url: string, body: T): Promise<T | undefined> {
     try {
-      console.log('process.env.NEXT_PUBLIC_URL_API : ', process.env.NEXT_PUBLIC_URL_API)
       loader.show();
       const api = axios.create({
         baseURL: process.env.NEXT_PUBLIC_URL_API,

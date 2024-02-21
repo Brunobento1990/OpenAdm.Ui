@@ -1,4 +1,4 @@
-import { Avatar, Checkbox } from "@mui/material"
+import { Box, Checkbox } from "@mui/material"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 
 export function useConfig() {
@@ -10,7 +10,11 @@ export function useConfig() {
             field: 'foto',
             headerName: 'Foto',
             renderCell: (params: GridRenderCellParams) => (
-                <Avatar src={`data:image/jpeg;base64,${params.row.foto}`} />
+                <Box
+                    component="img"
+                    src={`data:image/jpeg;base64,${params.row.foto}`}
+                    sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
+                />
             )
         },
         {
