@@ -31,6 +31,16 @@ const navigation = (): VerticalNavItemsType => {
           'title': 'Produto',
           'path': '/estoque/produto',
           'icon': 'fluent-mdl2:product-variant'
+        },
+        {
+          'title': 'Peso',
+          'path': '/estoque/peso',
+          'icon': 'game-icons:weight'
+        },
+        {
+          'title': 'Tamanho',
+          'path': '/estoque/tamanho',
+          'icon': 'bx:font-size'
         }
       ]
     }
