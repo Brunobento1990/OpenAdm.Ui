@@ -1,54 +1,55 @@
-import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Typography } from "@mui/material";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
 import CustomTextField from "src/@core/components/mui/text-field";
 import { Form } from "src/@open-adm/components/form";
-import { useSnackbar } from "src/@open-adm/components/snack";
 import { UploadImage } from "src/@open-adm/components/upload-image";
 import { useApi } from "src/@open-adm/hooks/use-api";
 import { IForm } from "src/@open-adm/types/form";
-import * as yup from 'yup';
 import { useRouter } from "next/router";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-
-const defaultValues = {
-    descricao: ''
-}
-
-const schema = yup.object().shape({
-    descricao: yup.string().length(255).required("Informe a pesquisa")
-})
+import { useFormik } from 'formik';
+import { defaultValues, schema } from "../config";
+import { useRouter as useRouterQuery } from 'next/router'
+import { ICategoria } from "src/@open-adm/types/categoria";
 
 export function FormCategoria(props: IForm) {
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-
-    console.log('matches : ', matches)
-
     const [foto, setFoto] = useState<string>('');
-    const { post } = useApi();
-    const snack = useSnackbar();
+    const { post, get, put } = useApi<ICategoria>();
     const router = useRouter();
+    const { query } = useRouterQuery();
+    const title = props.action === 'create' ? 'Adicionar nova categoria' : props.action === 'update' ? 'Editar categoria' : 'Visualizar categoria'
 
-    const {
-        control,
-        getValues
-    } = useForm({
-        defaultValues,
-        mode: 'onBlur',
-        resolver: yupResolver(schema)
-    })
+    const formik = useFormik({
+        initialValues: defaultValues,
+        validationSchema: schema,
+        onSubmit: (values, helpers) => onSubmit(values),
+    });
 
-    async function onSubmit() {
+    async function init() {
+        try {
+            if (props.action !== 'create') {
+                const response = await get(`categorias/get-categoria?id=${query.id}`);
+                if (response) {
+                    formik.setValues(response);
+                    if (response?.foto) {
+                        setFoto(`data:image/jpeg;base64,${response?.foto ?? ''}`);
+                    }
+                }
+            }
+        } catch (error) {
 
-        const descricao = getValues('descricao');
-        if (!descricao) {
-            snack.show('Informe a descrição!', 'info');
-            return;
         }
+    }
+
+    useEffect(() => {
+        init();
+    }, [])
+
+    async function onSubmit(values: any) {
 
         try {
 
@@ -58,11 +59,20 @@ export function FormCategoria(props: IForm) {
                 newFoto = foto.slice(index);
             }
 
-            await post('categorias/create', {
-                foto: newFoto,
-                descricao
-            })
+            if (props.action === "update") {
+                await put('categorias/update', {
+                    foto: newFoto,
+                    descricao: values.descricao,
+                    id: query.id
+                } as ICategoria)
+            }
 
+            if (props.action === 'create') {
+                await post('categorias/create', {
+                    foto: newFoto,
+                    descricao: values.descricao
+                } as ICategoria)
+            }
             router.replace('/estoque/categoria')
         } catch (error) {
 
@@ -71,26 +81,23 @@ export function FormCategoria(props: IForm) {
 
     return (
         <Form
-            title="Categorias"
+            title={title}
             action={props.action}
-            submit={onSubmit}
+            submit={formik.submitForm}
             urlVoltar="/estoque/categoria"
         >
             <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' gap={10}>
                 <Box sx={{ width: !matches ? '100%' : '80%' }}>
-                    <Controller
+                    <CustomTextField
+                        fullWidth
+                        label='Descrição *'
                         name='descricao'
-                        control={control}
-                        rules={{ required: true }}
-                        render={({ field: { value, onChange, onBlur } }) => (
-                            <CustomTextField
-                                fullWidth
-                                label='Descrição *'
-                                value={value}
-                                onBlur={onBlur}
-                                onChange={onChange}
-                            />
-                        )}
+                        id='descricao'
+                        value={formik.values.descricao}
+                        onBlur={formik.handleBlur}
+                        onChange={formik.handleChange}
+                        helperText={formik.touched.descricao && formik.errors.descricao}
+                        error={!!(formik.touched.descricao && formik.errors.descricao)}
                     />
                 </Box>
                 <Box width='100%' display='flex' alignItems='center' justifyContent='center' gap={10} flexDirection={!matches ? 'column' : undefined}>

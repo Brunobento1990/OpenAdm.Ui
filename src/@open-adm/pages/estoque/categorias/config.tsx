@@ -1,5 +1,6 @@
 import { Box } from "@mui/material"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
+import * as yup from 'yup';
 
 export const columns: GridColDef[] = [
     {
@@ -22,3 +23,14 @@ export const columns: GridColDef[] = [
         headerName: 'Descricao'
     }
 ]
+
+export const defaultValues = {
+    descricao: ''
+}
+
+export const schema = yup.object().shape({
+    descricao: yup
+        .string()
+        .max(255, "Campo máximo exedido!")
+        .required("Informe a descrição!")
+})

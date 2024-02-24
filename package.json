@@ -30,6 +30,7 @@
     "clipboard-copy": "4.0.1",
     "clsx": "1.2.1",
     "date-fns": "2.30.0",
+    "formik": "^2.4.5",
     "jsonwebtoken": "8.5.1",
     "next": "13.3.2",
     "nprogress": "0.2.0",
