@@ -1,5 +1,7 @@
 import { Box } from "@mui/material"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
+import { IProduto } from "src/@open-adm/types/produto";
+import * as yup from 'yup';
 
 export const columns: GridColDef[] = [
     {
@@ -28,3 +30,23 @@ export const columns: GridColDef[] = [
         headerName: 'Referencia'
     }
 ]
+
+export const defaultValues: IProduto = {
+    descricao: '',
+    foto: "",
+    categoriaId: "",
+    id: "",
+    dataDeCriacao: "",
+    dataDeAtualizacao: "",
+    numero: 0
+}
+
+export const schema = yup.object().shape({
+    descricao: yup
+        .string()
+        .max(255, "Campo máximo exedido!")
+        .required("Informe a descrição!"),
+    categoriaId: yup
+        .string()
+        .required("Informe a categoria!")
+})

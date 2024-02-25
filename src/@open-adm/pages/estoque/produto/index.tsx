@@ -9,10 +9,10 @@ export function Produtos() {
                 columns={columns}
                 title="Produtos"
                 url="produtos/paginacao"
-            // delete
-            // routeDelete="categorias/delete"
-            //add
-            //routeAdd="categoria/create"
+                // delete
+                // routeDelete="categorias/delete"
+                add
+                routeAdd="produto/create"
             // view
             // routeView="categorias/view"
             // edit

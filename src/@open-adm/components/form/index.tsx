@@ -8,6 +8,7 @@ interface propsForm {
     action: string;
     urlVoltar: string;
     submit: () => void;
+    gap?: number
 }
 
 export function Form(props: propsForm) {
@@ -15,7 +16,7 @@ export function Form(props: propsForm) {
     const router = useRouter();
 
     return (
-        <Card sx={{ padding: 5 }} >
+        <Card sx={{ padding: 5, gap: props.gap }} >
             <CardHeader
                 title={props.title}
             />

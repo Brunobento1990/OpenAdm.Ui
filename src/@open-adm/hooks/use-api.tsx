@@ -45,7 +45,10 @@ export function useApi<T = unknown>() {
     if (errorJson[error?.response?.data?.message]) {
       snack.show(errorJson[error?.response?.data?.message]);
     } else {
-      snack.show();
+      if (error?.response?.data?.message)
+        snack.show(error?.response?.data?.message);
+      else
+        snack.show();
     }
 
   }
@@ -56,7 +59,8 @@ export function useApi<T = unknown>() {
       const api = axios.create({
         baseURL: process.env.NEXT_PUBLIC_URL_API,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`
+          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
+          "Content-Type": 'application/json'
         }
       })
 
@@ -74,7 +78,8 @@ export function useApi<T = unknown>() {
       const api = axios.create({
         baseURL: process.env.NEXT_PUBLIC_URL_API,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`
+          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
+          "Content-Type": 'application/json'
         }
       })
 
@@ -92,7 +97,8 @@ export function useApi<T = unknown>() {
       const api = axios.create({
         baseURL: process.env.NEXT_PUBLIC_URL_API,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`
+          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
+          "Content-Type": 'application/json'
         }
       })
 
@@ -109,7 +115,8 @@ export function useApi<T = unknown>() {
       const api = axios.create({
         baseURL: process.env.NEXT_PUBLIC_URL_API,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`
+          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
+          "Content-Type": 'application/json'
         }
       })
 
