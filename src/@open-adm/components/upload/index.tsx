@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Icon from 'src/@core/components/icon'
@@ -14,6 +14,7 @@ interface propsFileUploaderSingle {
     title: string;
     maringTop?: number;
     setFoto: (foto: string) => void;
+    defaultValue?: string;
 }
 
 const FileUploaderSingle = (props: propsFileUploaderSingle) => {
@@ -62,6 +63,16 @@ const FileUploaderSingle = (props: propsFileUploaderSingle) => {
             reader.readAsDataURL(file);
         });
     };
+
+    useEffect(() => {
+        const init = () => {
+            // if(props.defaultValue){
+            //     setFiles()
+            // }
+        };
+
+        init();
+    },[])
 
     return (
         <Box {...getRootProps({ className: 'dropzone' })} sx={files.length ? { height: 450 } : {}}>

@@ -13,8 +13,8 @@ export function Produtos() {
                 // routeDelete="categorias/delete"
                 add
                 routeAdd="produto/create"
-            // view
-            // routeView="categorias/view"
+                view
+                routeView="produto/view"
             // edit
             // routeEdit="categorias/edit"
             />

@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { Box, Card, Grid } from "@mui/material";
 import { ITamanho } from "src/@open-adm/types/tamanho";
 import { IPeso } from "src/@open-adm/types/peso";
+import { useRouter as useRouterQuery } from 'next/router'
 
 export function FormProduto(props: IForm) {
 
@@ -24,6 +25,7 @@ export function FormProduto(props: IForm) {
     const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
     const { get, post } = useApi<any>();
     const router = useRouter();
+    const { query } = useRouterQuery();
 
     const formik = useFormik({
         initialValues: defaultValues,
@@ -54,6 +56,11 @@ export function FormProduto(props: IForm) {
 
     async function init() {
         try {
+            if (props.action !== 'create' && query.id) {
+                const responseProduto = await get(`produtos/get-produto?id=${query.id}`);
+                formik.setValues(responseProduto);
+            }
+
             const [categoriasResponse, pesosResponse, tamanhosResponse] =
                 await Promise.all([get('categorias/list'), get('pesos/list'), get('tamanhos/list')]);
 
@@ -68,6 +75,10 @@ export function FormProduto(props: IForm) {
     useEffect(() => {
         init();
     }, [])
+
+    if (categorias.length === 0) {
+        return <></>
+    }
 
     return (
         <Form
@@ -110,6 +121,7 @@ export function FormProduto(props: IForm) {
                         error={!!(formik.touched.categoriaId && formik.errors.categoriaId)}
                     />
                 }
+                defaultValue={formik.values.categoria}
             />
             <CustomTextField
                 fullWidth
@@ -153,6 +165,7 @@ export function FormProduto(props: IForm) {
                                 label='Selecione um tamanho'
                             />
                         }
+                        defaultValue={formik.values.tamanhos}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -170,6 +183,7 @@ export function FormProduto(props: IForm) {
                                 label='Selecione um peso'
                             />
                         }
+                        defaultValue={formik.values.pesos}
                     />
                 </Grid>
             </Grid>
@@ -190,16 +204,4 @@ export function FormProduto(props: IForm) {
             </Box>
         </Form >
     )
-}
-
-function base64ToByteArray(base64String: string) {
-    // Decodifica a string base64 para obter os dados binários
-    const binaryString = atob(base64String);
-    // Cria um array para armazenar os bytes
-    const byteArray = new Uint8Array(binaryString.length);
-    // Preenche o array de bytes com os bytes correspondentes
-    for (let i = 0; i < binaryString.length; i++) {
-        byteArray[i] = binaryString.charCodeAt(i);
-    }
-    return byteArray;
 }
