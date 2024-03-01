@@ -35,7 +35,10 @@ const FileUploaderSingle = (props: propsFileUploaderSingle) => {
             const index = newBase64Images[0].indexOf(',') + 1;
             const newFoto = newBase64Images[0].slice(index);
             props.setFoto(newFoto)
-            setFiles(acceptedFiles.map((file: File) => Object.assign(file)))
+            setFiles(acceptedFiles.map((file: File) => {
+                console.log('file : ', file)
+                return Object.assign(file)
+            }))
         }
     })
 
@@ -63,16 +66,26 @@ const FileUploaderSingle = (props: propsFileUploaderSingle) => {
             reader.readAsDataURL(file);
         });
     };
+    
+    const dataURLtoFile = (dataurl: any, filename: string) => {
+        const arr = dataurl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const buffer = Buffer.from(arr[1], 'base64');
+        const file = new File([buffer], filename, { type: mime });
+        return file;
+    }
 
     useEffect(() => {
         const init = () => {
-            // if(props.defaultValue){
-            //     setFiles()
-            // }
+            if (props.defaultValue) {
+                const base64 = `data:image/jpeg;base64,${props.defaultValue}`;
+                const file = dataURLtoFile(base64, 'foto.jpg');
+                setFiles([file])
+            }
         };
 
         init();
-    },[])
+    }, [])
 
     return (
         <Box {...getRootProps({ className: 'dropzone' })} sx={files.length ? { height: 450 } : {}}>

@@ -38,7 +38,16 @@ export const defaultValues: IProduto = {
     id: "",
     dataDeCriacao: "",
     dataDeAtualizacao: "",
-    numero: 0
+    numero: 0,
+    categoria: {
+        descricao: "",
+        id: "",
+        dataDeCriacao: "",
+        dataDeAtualizacao: "",
+        numero: 0
+    },
+    tamanhos: [],
+    pesos: []
 }
 
 export const schema = yup.object().shape({

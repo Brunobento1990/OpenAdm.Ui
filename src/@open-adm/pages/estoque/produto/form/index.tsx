@@ -10,7 +10,7 @@ import { defaultValues, schema } from "../config";
 import { IProduto } from "src/@open-adm/types/produto";
 import FileUploaderSingle from "src/@open-adm/components/upload";
 import { useRouter } from "next/router";
-import { Box, Card, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { ITamanho } from "src/@open-adm/types/tamanho";
 import { IPeso } from "src/@open-adm/types/peso";
 import { useRouter as useRouterQuery } from 'next/router'
@@ -100,7 +100,6 @@ export function FormProduto(props: IForm) {
                 error={!!(formik.touched.descricao && formik.errors.descricao)}
                 required
                 InputProps={{
-
                     readOnly: props.action === 'view'
                 }}
             />
@@ -121,6 +120,7 @@ export function FormProduto(props: IForm) {
                         error={!!(formik.touched.categoriaId && formik.errors.categoriaId)}
                     />
                 }
+                readOnly={props.action === 'view'}
                 defaultValue={formik.values.categoria}
             />
             <CustomTextField
@@ -132,7 +132,6 @@ export function FormProduto(props: IForm) {
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 InputProps={{
-
                     readOnly: props.action === 'view'
                 }}
             />
@@ -145,7 +144,6 @@ export function FormProduto(props: IForm) {
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 InputProps={{
-
                     readOnly: props.action === 'view'
                 }}
             />
@@ -153,6 +151,7 @@ export function FormProduto(props: IForm) {
                 <Grid item xs={12} sm={6}>
                     <SelectCustom
                         multiple
+                        readOnly={props.action === 'view'}
                         id='tamanhos'
                         onChange={(e, newValue) => {
                             setTamanhosSelect(newValue.map((x) => x.id));
@@ -171,6 +170,7 @@ export function FormProduto(props: IForm) {
                 <Grid item xs={12} sm={6}>
                     <SelectCustom
                         multiple
+                        readOnly={props.action === 'view'}
                         id='pesos'
                         getOptionLabel={option => option.descricao || ''}
                         onChange={(e, newValue) => {
@@ -200,6 +200,7 @@ export function FormProduto(props: IForm) {
                         ...formik.values,
                         foto: ft
                     })}
+                    defaultValue={formik.values.foto}
                 />
             </Box>
         </Form >

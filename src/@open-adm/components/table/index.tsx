@@ -95,13 +95,17 @@ const Table = (props: tableProps) => {
     }
 
     function excluir(id: string) {
-        modal.show({
-            async confirmed() {
-                modal.close();
-                await deleteApi(`${props.routeDelete}?id=${id}`)
-                await init();
-            },
-        })
+        try {
+            modal.show({
+                async confirmed() {
+                    modal.close();
+                    await deleteApi(`${props.routeDelete}?id=${id}`)
+                    setRows(rows.filter((x) => x.id !== id));
+                },
+            })
+        } catch (error) {
+
+        }
     }
 
     function optionsColumns(): GridColDef<any>[] {

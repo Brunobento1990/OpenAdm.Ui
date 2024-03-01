@@ -9,8 +9,8 @@ export function Produtos() {
                 columns={columns}
                 title="Produtos"
                 url="produtos/paginacao"
-                // delete
-                // routeDelete="categorias/delete"
+                delete
+                routeDelete="produtos/delete"
                 add
                 routeAdd="produto/create"
                 view
