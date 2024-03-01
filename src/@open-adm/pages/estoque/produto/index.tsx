@@ -15,8 +15,8 @@ export function Produtos() {
                 routeAdd="produto/create"
                 view
                 routeView="produto/view"
-            // edit
-            // routeEdit="categorias/edit"
+                edit
+                routeEdit="produto/edit"
             />
         </>
     )

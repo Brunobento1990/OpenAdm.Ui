@@ -43,6 +43,17 @@ const navigation = (): VerticalNavItemsType => {
           'icon': 'bx:font-size'
         }
       ]
+    },
+    {
+      'title': 'Vendas',
+      'icon': 'carbon:sales-ops',
+      'children': [
+        {
+          title: 'Tabela de preço',
+          icon: 'solar:tag-price-bold',
+          path: '/vendas/tabeladepreco'
+        }
+      ]
     }
   ]
 }

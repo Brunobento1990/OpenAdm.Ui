@@ -23,7 +23,7 @@ export function FormProduto(props: IForm) {
     const [pesosSelect, setPesosSelect] = useState<string[]>([]);
     const [tamanhosSelect, setTamanhosSelect] = useState<string[]>([]);
     const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
-    const { get, post } = useApi<any>();
+    const { get, post, put } = useApi<any>();
     const router = useRouter();
     const { query } = useRouterQuery();
 
@@ -35,6 +35,21 @@ export function FormProduto(props: IForm) {
 
     async function onSubmit(values: IProduto) {
         try {
+
+            if (props.action === 'update') {
+                const body = {
+                    id: query.id,
+                    descricao: values.descricao,
+                    referencia: values.referencia,
+                    especificacaoTecnica: values.especificacaoTecnica,
+                    foto: values.foto,
+                    categoriaId: categorias.find((x) => x.descricao === values.categoriaId)?.id,
+                    tamanhosIds: tamanhosSelect,
+                    pesosIds: pesosSelect
+                }
+                await put('produtos/update', body)
+            }
+
             if (props.action === 'create') {
                 const body = {
                     descricao: values.descricao,
@@ -47,8 +62,8 @@ export function FormProduto(props: IForm) {
                 }
                 await post('produtos/create', body)
 
-                router.replace('/estoque/produto')
             }
+            router.replace('/estoque/produto')
         } catch (error) {
 
         }
