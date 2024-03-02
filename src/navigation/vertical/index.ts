@@ -54,6 +54,17 @@ const navigation = (): VerticalNavItemsType => {
           path: '/vendas/tabeladepreco'
         }
       ]
+    },
+    {
+      'title': 'Configurações',
+      'icon': 'iwwa:settings',
+      children: [
+        {
+          title: 'E-mail',
+          icon: 'iconamoon:email-thin',
+          path: '/configuracao/email'
+        }
+      ]
     }
   ]
 }

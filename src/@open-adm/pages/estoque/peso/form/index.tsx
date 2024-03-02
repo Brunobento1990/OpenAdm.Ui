@@ -24,7 +24,7 @@ export function FormPeso(props: IForm) {
     const formik = useFormik({
         initialValues: defaultValues,
         validationSchema: schema,
-        onSubmit: (values, helpers) => onSubmit(values),
+        onSubmit: (values) => onSubmit(values),
     });
 
     async function init() {
@@ -87,7 +87,6 @@ export function FormPeso(props: IForm) {
                         error={!!(formik.touched.descricao && formik.errors.descricao)}
                         required
                         InputProps={{
-
                             readOnly: props.action === 'view'
                         }}
                     />

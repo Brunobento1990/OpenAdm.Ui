@@ -1,5 +1,24 @@
+import { Checkbox } from "@mui/material";
+import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import Table from "src/@open-adm/components/table";
-import { columns } from './config'
+
+const columns: GridColDef[] = [
+    {
+        flex: 0.200,
+        minWidth: 200,
+        field: 'descricao',
+        headerName: 'Descricao'
+    },
+    {
+        flex: 0.200,
+        minWidth: 200,
+        field: 'ativaEcommerce',
+        headerName: 'Ativa',
+        renderCell: (params: GridRenderCellParams) => (
+            <Checkbox checked={params.row.ativaEcommerce} />
+        )
+    }
+]
 
 export function TabelaDePrecoIndex() {
 
@@ -13,10 +32,10 @@ export function TabelaDePrecoIndex() {
                 // routeDelete="produtos/delete"
                 // add
                 // routeAdd="produto/create"
-                // view
-                // routeView="produto/view"
-                // edit
-                // routeEdit="produto/edit"
+                view
+                routeView="tabeladepreco/view"
+            // edit
+            // routeEdit="produto/edit"
             />
         </>
     )
