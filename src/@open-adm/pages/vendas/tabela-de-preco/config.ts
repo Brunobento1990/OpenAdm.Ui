@@ -2,7 +2,7 @@ import { ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
 import * as yup from 'yup';
 
 export const defaultValues: ITabelaDePreco = {
-    descricao: " ",
+    descricao: "",
     ativaEcommerce: false,
     id: "",
     dataDeCriacao: "",
@@ -11,8 +11,9 @@ export const defaultValues: ITabelaDePreco = {
     itensTabelaDePreco: []
 }
 
-export const schema = {
+export const schema = yup.object().shape({
     descricao: yup
         .string()
-        .required('Informe a descrição!')
-}
+        .max(255, "Campo máximo exedido!")
+        .required("Informe a descrição!"),
+})

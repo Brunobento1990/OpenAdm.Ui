@@ -34,8 +34,8 @@ export function TabelaDePrecoIndex() {
                 // routeAdd="produto/create"
                 view
                 routeView="tabeladepreco/view"
-            // edit
-            // routeEdit="produto/edit"
+                edit
+                routeEdit="tabeladepreco/edit"
             />
         </>
     )

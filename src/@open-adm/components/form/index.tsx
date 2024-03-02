@@ -16,7 +16,7 @@ export function Form(props: propsForm) {
     const router = useRouter();
 
     return (
-        <Card sx={{ padding: 5, gap: props.gap }} >
+        <Card sx={{ padding: 5, gap: props.gap, scrollBehavior: 'auto' }} >
             <CardHeader
                 title={props.title}
             />
