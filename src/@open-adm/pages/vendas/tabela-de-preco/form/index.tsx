@@ -47,6 +47,22 @@ export function TabelaDePrecoForm(props: IForm) {
                 })
             }
 
+            if (props.action === 'create') {
+                const body = {
+                    descricao: values.descricao,
+                    ativaEcommerce: values.ativaEcommerce,
+                    itensTabelaDePreco: values.itensTabelaDePreco.map((x) => {
+                        return {
+                            valorUnitario: x.valorUnitario,
+                            tamanhoId: x.tamanhoId,
+                            produtoId: x.produtoId,
+                            pesoId: x.pesoId
+                        }
+                    })
+                }
+                await post('tabelas-de-precos/create', body)
+            }
+
             router.replace('/vendas/tabeladepreco')
         } catch (error) {
 
@@ -67,28 +83,33 @@ export function TabelaDePrecoForm(props: IForm) {
             const response = await get(`tabelas-de-precos/get-tabela?id=${query.id}`);
             if (response)
                 formik.setValues(response);
+        } else {
+            formik.setValues(defaultValues);
         }
     }
 
     async function addItemTabelaDePreco() {
 
-        if (!item || item?.valorUnitario <= 0) {
-            snack.show('Informe o valo unitário!', 'info');
-            return;
-        }
+        try {
+            if (!item || item?.valorUnitario <= 0) {
+                snack.show('Informe o valo unitário!', 'info');
+                return;
+            }
 
-        if (!item?.produtoId) {
-            snack.show('Informe o produto!', 'info');
-            return;
-        }
+            if (!item?.produtoId) {
+                snack.show('Informe o produto!', 'info');
+                return;
+            }
 
-        if (props.action === 'update') {
-            setOpen(false)
             const body = {
                 ...item,
                 tabelaDePrecoId: formik.values.id
             }
-            await post('item-tabela-de-preco/create', body);
+
+            if (props.action === 'update') {
+                await post('item-tabela-de-preco/create', body);
+            }
+
             const tabela = formik.values;
             tabela.itensTabelaDePreco = [{
                 ...body,
@@ -96,8 +117,10 @@ export function TabelaDePrecoForm(props: IForm) {
                 numero: tabela.itensTabelaDePreco.reduce((a, b) => a + b.numero, 0)
             } as IItensTabelaDePreco, ...tabela.itensTabelaDePreco]
             formik.setValues(tabela)
+            setOpen(false)
             setItem(undefined);
-            return;
+        } catch (error) {
+
         }
     }
 
@@ -105,10 +128,10 @@ export function TabelaDePrecoForm(props: IForm) {
         try {
             if (props.action === 'update') {
                 await deleteApi(`item-tabela-de-preco/delete?id=${id}`)
-                const tabela = formik.values;
-                tabela.itensTabelaDePreco = [...tabela.itensTabelaDePreco.filter((x) => x.id !== id)]
-                formik.setValues(tabela)
             }
+            const tabela = formik.values;
+            tabela.itensTabelaDePreco = [...tabela.itensTabelaDePreco.filter((x) => x.id !== id)]
+            formik.setValues(tabela)
         } catch (error) {
 
         }

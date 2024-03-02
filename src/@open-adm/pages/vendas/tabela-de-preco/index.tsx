@@ -30,8 +30,8 @@ export function TabelaDePrecoIndex() {
                 url="tabelas-de-precos/paginacao"
                 // delete
                 // routeDelete="produtos/delete"
-                // add
-                // routeAdd="produto/create"
+                add
+                routeAdd="tabeladepreco/create"
                 view
                 routeView="tabeladepreco/view"
                 edit
