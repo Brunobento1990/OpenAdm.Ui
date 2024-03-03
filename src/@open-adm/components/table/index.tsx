@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 import { useModal } from '../modal/modal';
 import { useRouter } from 'next/router';
+import { generatePdfFromBase64 } from 'src/@open-adm/utils/download-pdf';
 
 const defaultValues = {
     search: ''
@@ -143,6 +144,17 @@ const Table = (props: tableProps) => {
                                     </IconButton>
                                 </Tooltip>
                             }
+                            {props.isPedido &&
+                                <Tooltip title="Download do pedido" placement="top">
+                                    <IconButton
+                                        onClick={() => downloadPedido(params.row.id)}
+                                    >
+                                        <IconifyIcon
+                                            icon='material-symbols-light:download'
+                                        />
+                                    </IconButton>
+                                </Tooltip>
+                            }
                             {props.view && props.routeView &&
                                 <Tooltip title="Visualizar" placement="top">
                                     <IconButton
@@ -206,6 +218,19 @@ const Table = (props: tableProps) => {
 
     const onSubmit = async () => {
         await init()
+    }
+
+    async function downloadPedido(id: string) {
+        const pdfBase64 = await get(`pedidos/download-pedido?pedidoId=${id}`) as any;
+        if (pdfBase64 && pdfBase64?.pdf) {
+            const pdf = await generatePdfFromBase64(pdfBase64.pdf);
+            const link = document.createElement('a');
+            link.href = pdf;
+            link.download = `${id}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     }
 
     useEffect(() => {
