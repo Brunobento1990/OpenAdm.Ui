@@ -66,7 +66,7 @@ const FileUploaderSingle = (props: propsFileUploaderSingle) => {
             reader.readAsDataURL(file);
         });
     };
-    
+
     const dataURLtoFile = (dataurl: any, filename: string) => {
         const arr = dataurl.split(',');
         const mime = arr[0].match(/:(.*?);/)[1];

@@ -6,7 +6,7 @@ interface propsForm {
     children: ReactNode,
     title: string;
     action: string;
-    urlVoltar: string;
+    urlVoltar?: string;
     submit: () => void;
     gap?: number
 }
@@ -24,11 +24,13 @@ export function Form(props: propsForm) {
                 {props.children}
             </form>
             <Box display='flex' justifyContent='space-between' sx={{ marginTop: 10 }}>
-                <Button
-                    onClick={() => router.replace(props.urlVoltar)}
-                >
-                    Voltar
-                </Button>
+                {props.urlVoltar &&
+                    <Button
+                        onClick={() => router.replace(props.urlVoltar ?? '/home')}
+                    >
+                        Voltar
+                    </Button>
+                }
                 {props.action !== 'view' &&
                     <Button
                         variant="contained"
