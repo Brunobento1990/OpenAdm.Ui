@@ -91,6 +91,8 @@ export function TabelaDePrecoForm(props: IForm) {
     async function addItemTabelaDePreco() {
 
         try {
+            setOpen(false);
+
             if (!item || item?.valorUnitario <= 0) {
                 snack.show('Informe o valo unitário!', 'info');
                 return;

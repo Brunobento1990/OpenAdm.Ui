@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, Dialog, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 let loaderHandler: (isLoading: boolean, message?: string) => void;
@@ -16,24 +16,23 @@ function LoaderComponent() {
     if (!loading) return null;
 
     return (
-        <Box
-            sx={{
-                display : 'flex',
-                position: 'absolute',
-                flexDirection: 'column',
-                zIndex: 2,
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(255, 255, 255, 0.6)',
-                height: '100vh',
-                width: '100vw',
-                top:0,
-                cursor: 'not-allowed',
-            }}
-        >
-            <CircularProgress color="secondary" />
-            <Typography>{message}</Typography>
-        </Box>
+        <Dialog open={true} fullScreen>
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    background: 'rgba(255, 255, 255, 0.6)',
+                    height: '100vh',
+                    width: '100%',
+                    cursor: 'not-allowed',
+                }}
+            >
+                <CircularProgress color="secondary" />
+                <Typography>{message}</Typography>
+            </Box>
+        </Dialog>
     );
 }
 
