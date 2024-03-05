@@ -11,7 +11,7 @@ export const columns: GridColDef[] = [
         renderCell: (params: GridRenderCellParams) => (
             <Box
                 component="img"
-                src={`data:image/jpeg;base64,${params.row.foto}`}
+                src={params.row.foto}
                 sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
             />
         )

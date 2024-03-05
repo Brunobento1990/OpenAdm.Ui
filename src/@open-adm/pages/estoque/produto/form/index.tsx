@@ -8,12 +8,12 @@ import { ICategoria } from "src/@open-adm/types/categoria";
 import { IForm } from "src/@open-adm/types/form";
 import { defaultValues, schema } from "../config";
 import { IProduto } from "src/@open-adm/types/produto";
-import FileUploaderSingle from "src/@open-adm/components/upload";
 import { useRouter } from "next/router";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { ITamanho } from "src/@open-adm/types/tamanho";
 import { IPeso } from "src/@open-adm/types/peso";
 import { useRouter as useRouterQuery } from 'next/router'
+import { UploadImage } from "src/@open-adm/components/upload-image";
 
 export function FormProduto(props: IForm) {
 
@@ -26,15 +26,20 @@ export function FormProduto(props: IForm) {
     const { get, post, put } = useApi<any>();
     const router = useRouter();
     const { query } = useRouterQuery();
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
     const formik = useFormik({
         initialValues: defaultValues,
         validationSchema: schema,
-        onSubmit: (values, helpers) => onSubmit(values),
+        onSubmit: (values) => onSubmit(values),
     });
 
     async function onSubmit(values: IProduto) {
         try {
+
+            const index = values.foto.indexOf(',') + 1;
+            const newFoto = values.foto.slice(index);
 
             if (props.action === 'update') {
                 const body = {
@@ -42,7 +47,7 @@ export function FormProduto(props: IForm) {
                     descricao: values.descricao,
                     referencia: values.referencia,
                     especificacaoTecnica: values.especificacaoTecnica,
-                    foto: values.foto,
+                    foto: values.foto.startsWith('https://') ? values.foto : newFoto,
                     categoriaId: categorias.find((x) => x.descricao === values.categoriaId)?.id,
                     tamanhosIds: tamanhosSelect,
                     pesosIds: pesosSelect
@@ -55,7 +60,7 @@ export function FormProduto(props: IForm) {
                     descricao: values.descricao,
                     referencia: values.referencia,
                     especificacaoTecnica: values.especificacaoTecnica,
-                    foto: values.foto,
+                    foto: newFoto,
                     categoriaId: categorias.find((x) => x.descricao === values.categoriaId)?.id,
                     tamanhosIds: tamanhosSelect,
                     pesosIds: pesosSelect
@@ -202,20 +207,22 @@ export function FormProduto(props: IForm) {
                     />
                 </Grid>
             </Grid>
-            <Box
-                sx={{
-                    height: '100%',
-                    marginBottom: 10
-                }}
-            >
-                <FileUploaderSingle
-                    title="Selecione uma foto para o produto"
-                    maringTop={5}
-                    setFoto={(ft: any) => formik.setValues({
-                        ...formik.values,
-                        foto: ft
-                    })}
-                    defaultValue={formik.values.foto}
+            <Box width='100%' display='flex' alignItems='center' justifyContent='center' gap={10} flexDirection={!matches ? 'column' : undefined} sx={{ marginTop: 5 }}>
+                <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column'>
+                    <UploadImage
+                        upload={(ft) => formik.setValues({
+                            ...formik.values,
+                            foto: ft
+                        })}
+                    />
+                    <Typography>
+                        Selecione uma imagem!
+                    </Typography>
+                </Box>
+                <Box
+                    component="img"
+                    src={formik.values.foto}
+                    sx={{ width: '200px', height: '200px', borderRadius: '5px' }}
                 />
             </Box>
         </Form >

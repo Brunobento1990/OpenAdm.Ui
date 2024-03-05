@@ -26,7 +26,7 @@ export function FormCategoria(props: IForm) {
     const formik = useFormik({
         initialValues: defaultValues,
         validationSchema: schema,
-        onSubmit: (values, helpers) => onSubmit(values),
+        onSubmit: (values) => onSubmit(values),
     });
 
     async function init() {
@@ -36,7 +36,7 @@ export function FormCategoria(props: IForm) {
                 if (response) {
                     formik.setValues(response);
                     if (response?.foto) {
-                        setFoto(`data:image/jpeg;base64,${response?.foto ?? ''}`);
+                        setFoto(response?.foto);
                     }
                 }
             }
