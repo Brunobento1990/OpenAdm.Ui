@@ -53,7 +53,8 @@ export function TabelaDePrecoForm(props: IForm) {
                     ativaEcommerce: values.ativaEcommerce,
                     itensTabelaDePreco: values.itensTabelaDePreco.map((x) => {
                         return {
-                            valorUnitario: x.valorUnitario,
+                            valorUnitarioAtacado: x.valorUnitarioAtacado,
+                            valorUnitarioVarejo: x.valorUnitarioVarejo,
                             tamanhoId: x.tamanhoId,
                             produtoId: x.produtoId,
                             pesoId: x.pesoId
@@ -93,9 +94,12 @@ export function TabelaDePrecoForm(props: IForm) {
         try {
             setOpen(false);
 
-            if (!item || item?.valorUnitario <= 0) {
-                snack.show('Informe o valo unitário!', 'info');
+            if (!item) {
                 return;
+            }
+
+            if (!item.valorUnitarioAtacado || !item.valorUnitarioVarejo) {
+                snack.show('Informe o vaor unitário do atacado ou do varejo!', 'info')
             }
 
             if (!item?.produtoId) {
@@ -143,6 +147,10 @@ export function TabelaDePrecoForm(props: IForm) {
         init();
         initDependencias();
     }, [])
+
+    if (tamanhos?.length === 0) {
+        return (<></>)
+    }
 
     return (
         <Box>
@@ -360,17 +368,33 @@ export function TabelaDePrecoForm(props: IForm) {
                     />
                     <CustomTextField
                         fullWidth
-                        label='Vlr unitário'
-                        name='valorUnitario'
-                        id='valorUnitario'
-                        value={item?.valorUnitario ?? 0}
+                        label='Vlr unitário atacado'
+                        name='valorUnitarioAtacado'
+                        id='valorUnitarioAtacado'
+                        value={item?.valorUnitarioAtacado ?? 0}
                         onChange={(e) => {
                             setItem({
                                 ...item,
-                                valorUnitario: parseFloat(e.target.value)
+                                valorUnitarioAtacado: parseFloat(e.target.value)
                             } as IItensTabelaDePreco)
                         }}
-                        required
+                        type="number"
+                        InputProps={{
+                            readOnly: props.action === 'view'
+                        }}
+                    />
+                    <CustomTextField
+                        fullWidth
+                        label='Vlr unitário varejo'
+                        name='valorUnitarioVarejo'
+                        id='valorUnitarioVarejo'
+                        value={item?.valorUnitarioVarejo ?? 0}
+                        onChange={(e) => {
+                            setItem({
+                                ...item,
+                                valorUnitarioVarejo: parseFloat(e.target.value)
+                            } as IItensTabelaDePreco)
+                        }}
                         type="number"
                         InputProps={{
                             readOnly: props.action === 'view'

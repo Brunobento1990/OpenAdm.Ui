@@ -1,6 +1,6 @@
 import { Box } from "@mui/material"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
-import { IProduto } from "src/@open-adm/types/produto";
+import { ICreateProdutoDto, IProduto } from "src/@open-adm/types/produto";
 import * as yup from 'yup';
 
 export const columns: GridColDef[] = [
@@ -32,14 +32,10 @@ export const columns: GridColDef[] = [
     }
 ]
 
-export const defaultValues: IProduto = {
+export const defaultValues: ICreateProdutoDto = {
     descricao: '',
     foto: "",
     categoriaId: "",
-    id: "",
-    dataDeCriacao: "",
-    dataDeAtualizacao: "",
-    numero: 0,
     categoria: {
         descricao: "",
         id: "",
@@ -48,7 +44,30 @@ export const defaultValues: IProduto = {
         numero: 0
     },
     tamanhos: [],
-    pesos: []
+    pesos: [],
+    vinculoProdutoTabelaDePreco: {
+        tabelaDePrecoId: "",
+        itens: []
+    }
+}
+
+export const defaultValuesEdit: IProduto = {
+    descricao: '',
+    foto: "",
+    categoriaId: "",
+    categoria: {
+        descricao: "",
+        id: "",
+        dataDeCriacao: "",
+        dataDeAtualizacao: "",
+        numero: 0
+    },
+    tamanhos: [],
+    pesos: [],
+    id: "",
+    dataDeCriacao: "",
+    dataDeAtualizacao: "",
+    numero: 0
 }
 
 export const schema = yup.object().shape({

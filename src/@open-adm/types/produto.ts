@@ -11,5 +11,29 @@ export interface IProduto extends IBase {
     categoriaId: string;
     categoria: ICategoria;
     tamanhos: ITamanho[];
-    pesos: IPeso[]
+    pesos: IPeso[];
+}
+
+export interface ICreateProdutoDto {
+    descricao: string;
+    foto: string;
+    referencia?: string;
+    especificacaoTecnica?: string;
+    categoriaId: string;
+    categoria: ICategoria;
+    tamanhos: ITamanho[];
+    pesos: IPeso[];
+    vinculoProdutoTabelaDePreco: IVinculoProdutoTabelaDePrecoDto;
+}
+
+export interface IVinculoProdutoItemTabelaDePrecoDto {
+    valorUnitarioAtacado?: number;
+    valorUnitarioVarejo?: number;
+    pesoId?: string
+    tamanhoId?: string
+}
+
+export interface IVinculoProdutoTabelaDePrecoDto {
+    tabelaDePrecoId: string;
+    itens: IVinculoProdutoItemTabelaDePrecoDto[]
 }
