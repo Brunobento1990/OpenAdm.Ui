@@ -8,6 +8,8 @@ export function EstoqueProduto() {
                 columns={columns}
                 title="Posições de estoque"
                 url="estoques/paginacao"
+                edit
+                routeEdit="posicao-estoque/edit"
             />
         </>
     )

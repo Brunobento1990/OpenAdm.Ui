@@ -1,6 +1,8 @@
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import { StatusObj } from "../../pedidos/config";
 import CustomChip from 'src/@open-adm/components/chip'
+import { IEstoqueEdit } from "src/@open-adm/types/estoque";
+import * as yup from 'yup';
 
 export const quantidade: StatusObj = {
     0: { title: 'Em aberto', color: 'warning' },
@@ -35,3 +37,14 @@ export const columns: GridColDef[] = [
         }
     },
 ]
+
+export const defaultValues: IEstoqueEdit = {
+    produtoId: "",
+    quantidade: 0
+}
+
+export const schema = yup.object().shape({
+    produtoId: yup
+        .string()
+        .required("Informe o produto!"),
+})

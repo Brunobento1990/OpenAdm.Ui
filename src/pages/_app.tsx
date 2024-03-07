@@ -123,7 +123,7 @@ const App = (props: ExtendedAppProps) => {
 
     <CacheProvider value={emotionCache}>
       <Head>
-        <title>{`${themeConfig.templateName} - Administração de ecommerce Open adm`}</title>
+        <title>{`${themeConfig.templateName} - Administração de e-commerce Open adm`}</title>
         {/* <meta
             name='description'
             content={`${themeConfig.templateName} – Material Design React Admin Dashboard Template – is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.`}

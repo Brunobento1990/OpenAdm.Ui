@@ -79,6 +79,8 @@ export function MovimentacaoDeProdutoForm() {
                         onBlur={formik.handleBlur}
                         onChange={formik.handleChange}
                         type="number"
+                        helperText={formik.touched.quantidade && formik.errors.quantidade}
+                        error={!!(formik.touched.quantidade && formik.errors.quantidade)}
                     />
                 </Grid>
                 <Grid item xs={12} sx={{ padding: 5 }}>
