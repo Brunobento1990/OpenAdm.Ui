@@ -41,6 +41,16 @@ const navigation = (): VerticalNavItemsType => {
           'title': 'Tamanho',
           'path': '/estoque/tamanho',
           'icon': 'bx:font-size'
+        },
+        {
+          title: 'Movimento produto',
+          path: '/estoque/movimentacao-produto',
+          icon: 'arcticons:stockswidget'
+        },
+        {
+          title: 'Posição estoque',
+          path: '/estoque/posicao-estoque',
+          icon: 'icon-park-outline:database-position'
         }
       ]
     },

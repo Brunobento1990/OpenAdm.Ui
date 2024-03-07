@@ -38,7 +38,7 @@ export function useConfig() {
     }
 }
 
-interface StatusObj {
+export interface StatusObj {
     [key: number]: {
         title: string
         color: ThemeColor
