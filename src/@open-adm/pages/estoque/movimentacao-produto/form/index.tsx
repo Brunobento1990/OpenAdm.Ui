@@ -9,10 +9,14 @@ import { FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup } fro
 import SelectCustom from "src/@open-adm/components/select";
 import CustomTextField from "src/@core/components/mui/text-field";
 import { useRouter } from "next/router";
+import { IPeso } from "src/@open-adm/types/peso";
+import { ITamanho } from "src/@open-adm/types/tamanho";
 
 export function MovimentacaoDeProdutoForm() {
 
     const [produtos, setProdutos] = useState<IProduto[]>([]);
+    const [pesos, setPesos] = useState<IPeso[]>([]);
+    const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
     const { get, put } = useApi<any>();
     const router = useRouter();
 
@@ -28,9 +32,18 @@ export function MovimentacaoDeProdutoForm() {
     }
 
     async function init() {
-        const responseProdutos = await get('produtos/all-list');
+        const [responseProdutos, responsePesos, responseTamanhos] = await
+            Promise.all([get('produtos/all-list'), get('pesos/list'), get('tamanhos/list')]);
         if (responseProdutos) {
             setProdutos(responseProdutos)
+        }
+
+        if (responsePesos) {
+            setPesos(responsePesos)
+        }
+
+        if (responseTamanhos) {
+            setTamanhos(responseTamanhos)
         }
     }
 
@@ -51,7 +64,7 @@ export function MovimentacaoDeProdutoForm() {
             <Grid container spacing={6}>
                 <Grid item xs={12} sm={6}>
                     <SelectCustom
-                        id='categorias'
+                        id='produtos'
                         getOptionLabel={option => option.descricao || ''}
                         onInputChange={(event, newInputValue) => formik.setValues({
                             ...formik.values,
@@ -81,6 +94,40 @@ export function MovimentacaoDeProdutoForm() {
                         type="number"
                         helperText={formik.touched.quantidade && formik.errors.quantidade}
                         error={!!(formik.touched.quantidade && formik.errors.quantidade)}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <SelectCustom
+                        id='pesos'
+                        getOptionLabel={option => option.descricao || ''}
+                        onInputChange={(event, newInputValue) => formik.setValues({
+                            ...formik.values,
+                            pesoId: pesos.find((x) => x.descricao === newInputValue)?.id ?? ''
+                        })}
+                        options={pesos}
+                        renderInput={params =>
+                            <CustomTextField
+                                {...params}
+                                label='Selecione um peso'
+                            />
+                        }
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <SelectCustom
+                        id='tamanhos'
+                        getOptionLabel={option => option.descricao || ''}
+                        onInputChange={(event, newInputValue) => formik.setValues({
+                            ...formik.values,
+                            tamanhoId: tamanhos.find((x) => x.descricao === newInputValue)?.id ?? ''
+                        })}
+                        options={tamanhos}
+                        renderInput={params =>
+                            <CustomTextField
+                                {...params}
+                                label='Selecione um tamanho'
+                            />
+                        }
                     />
                 </Grid>
                 <Grid item xs={12} sx={{ padding: 5 }}>

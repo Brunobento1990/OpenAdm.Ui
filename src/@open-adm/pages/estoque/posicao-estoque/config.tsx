@@ -19,6 +19,18 @@ export const columns: GridColDef[] = [
     {
         flex: 0.200,
         minWidth: 200,
+        field: 'peso',
+        headerName: 'Peso',
+    },
+    {
+        flex: 0.200,
+        minWidth: 200,
+        field: 'tamanho',
+        headerName: 'Tamanho',
+    },
+    {
+        flex: 0.200,
+        minWidth: 200,
         field: 'quantidade',
         headerName: 'Posição do estoque',
         renderCell: (params: GridRenderCellParams) => {
