@@ -53,7 +53,7 @@ export function FormBanner(props: IForm) {
                 const response = await get(`banners/get-banner?id=${query.id}`);
                 if (response && !banner) {
                     setBanner(response);
-                    setFoto(`data:image/jpeg;base64,${response?.foto ?? ''}`);
+                    setFoto(response?.foto);
                 }
             }
         } catch (error) {
