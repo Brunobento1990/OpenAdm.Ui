@@ -19,6 +19,11 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'material-symbols-light:planner-banner-ad-pt-outline',
     },
     {
+      title: 'Lojas parceiras',
+      path: '/lojas-parceiras',
+      icon: 'mdi:store-check-outline'
+    },
+    {
       title: 'Estoque',
       icon: 'healthicons:stock-out-outline',
       children: [
