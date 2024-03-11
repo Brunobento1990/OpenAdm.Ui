@@ -14,7 +14,7 @@ interface IOptions {
   loading?: boolean
 }
 
-const URL_API = '	https://api.open-adm.tech/api/v1/'
+const URL_API = 'https://api.open-adm.tech/api/v1/'
 
 export function useApi() {
 
@@ -122,7 +122,7 @@ export function useApi() {
           "Content-Type": 'application/json'
         }
       })
-
+      console.log(URL_API)
       return (await api.post(url, body)).data as T
     } catch (error: any) {
       handleError(error)
