@@ -1,6 +1,12 @@
-import { IProdutosMaisVendidos } from "./produtos-mais-vendidos";
+import { IBase } from "./base";
 
 export interface IHome {
-    quantidadeVendasNoMes: number,
-    produtosMaisVendidosViewModel: IProdutosMaisVendidos[]
+    topUsuariosTotalCompra: ITopUsuarios[],
+    topUsuariosTotalPedido: ITopUsuarios[]
+}
+
+export interface ITopUsuarios extends IBase {
+    totalCompra: number,
+    totalPedidos: number,
+    usuario: string
 }
