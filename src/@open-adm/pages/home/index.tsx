@@ -27,7 +27,7 @@ export function HomePage() {
             <Grid item xs={12} sm={6}>
                 <Card>
                     <CardHeader
-                        title='Top 3 clientes com compras mais gastos $'
+                        title='Top 3 clientes com mais gastos $'
                     />
                     <CardContent>
                         {home?.topUsuariosTotalCompra.map((topUsuario) => (
