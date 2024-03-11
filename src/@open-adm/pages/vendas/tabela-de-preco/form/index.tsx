@@ -16,16 +16,18 @@ import { IProduto } from "src/@open-adm/types/produto";
 import SelectCustom from "src/@open-adm/components/select";
 import IconifyIcon from "src/@core/components/icon";
 import { useSnackbar } from "src/@open-adm/components/snack";
+import { IPeso } from "src/@open-adm/types/peso";
+import { ITamanho } from "src/@open-adm/types/tamanho";
 
 export function TabelaDePrecoForm(props: IForm) {
 
     const snack = useSnackbar();
     const [open, setOpen] = useState(false);
     const [produtos, setProdutos] = useState<IProduto[]>([]);
-    const [pesos, setPesos] = useState<IProduto[]>([]);
-    const [tamanhos, setTamanhos] = useState<IProduto[]>([]);
+    const [pesos, setPesos] = useState<IPeso[]>([]);
+    const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
     const [item, setItem] = useState<IItensTabelaDePreco>();
-    const { get, post, deleteApi, put } = useApi<any>();
+    const { get, post, deleteApi, put } = useApi();
     const router = useRouter();
     const { query } = useRouterQuery();
 
@@ -72,7 +74,7 @@ export function TabelaDePrecoForm(props: IForm) {
 
     async function initDependencias() {
         const [responseProdutos, responsePesos, responseTamanhos]
-            = await Promise.all([get('produtos/all-list'), get('pesos/list'), get('tamanhos/list')])
+            = await Promise.all([get<IProduto[]>('produtos/all-list'), get<IPeso[]>('pesos/list'), get<ITamanho[]>('tamanhos/list')])
 
         setProdutos(responseProdutos ?? []);
         setTamanhos(responseTamanhos ?? []);
@@ -81,7 +83,7 @@ export function TabelaDePrecoForm(props: IForm) {
 
     async function init() {
         if (props.action !== 'create' && query.id) {
-            const response = await get(`tabelas-de-precos/get-tabela?id=${query.id}`);
+            const response = await get<ITabelaDePreco>(`tabelas-de-precos/get-tabela?id=${query.id}`);
             if (response)
                 formik.setValues(response);
         } else {

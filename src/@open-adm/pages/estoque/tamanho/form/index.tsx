@@ -16,7 +16,7 @@ export function FormTamanho(props: IForm) {
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const { post, get, put } = useApi<ITamanho>();
+    const { post, get, put } = useApi();
     const router = useRouter();
     const { query } = useRouterQuery();
     const title = props.action === 'create' ? 'Adicionar novo tamanho' : props.action === 'update' ? 'Editar tamanho' : 'Visualizar tamanho'
@@ -30,7 +30,7 @@ export function FormTamanho(props: IForm) {
     async function init() {
         try {
             if (props.action !== 'create') {
-                const response = await get(`tamanhos/get-tamanho?id=${query.id}`);
+                const response = await get<ITamanho>(`tamanhos/get-tamanho?id=${query.id}`);
                 if (response) {
                     formik.setValues(response);
                 }

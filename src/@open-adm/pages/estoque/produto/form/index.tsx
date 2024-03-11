@@ -23,7 +23,7 @@ export function FormProduto(props: IForm) {
     const [pesosSelect, setPesosSelect] = useState<string[]>([]);
     const [tamanhosSelect, setTamanhosSelect] = useState<string[]>([]);
     const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
-    const { get, put } = useApi<any>();
+    const { get, put } = useApi();
     const router = useRouter();
     const { query } = useRouterQuery();
     const theme = useTheme();
@@ -64,14 +64,14 @@ export function FormProduto(props: IForm) {
     async function init() {
         try {
             if (props.action !== 'create' && query.id) {
-                const responseProduto = await get(`produtos/get-produto?id=${query.id}`);
+                const responseProduto = await get<any>(`produtos/get-produto?id=${query.id}`);
                 setTamanhosSelect(responseProduto.tamanhos.map((x: any) => x.id));
                 setPesosSelect(responseProduto.pesos.map((x: any) => x.id));
                 formik.setValues(responseProduto);
             }
 
             const [categoriasResponse, pesosResponse, tamanhosResponse] =
-                await Promise.all([get('categorias/list'), get('pesos/list'), get('tamanhos/list')]);
+                await Promise.all([get<any>('categorias/list'), get<any>('pesos/list'), get<any>('tamanhos/list')]);
 
             setTamanhos(tamanhosResponse);
             setPesos(pesosResponse);

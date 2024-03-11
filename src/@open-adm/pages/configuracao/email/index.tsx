@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 
 export function ConfiguracaoEmail() {
 
-    const { get, post } = useApi<IConfiguracaoDeEmail>();
+    const { get, post } = useApi();
     const router = useRouter();
 
     const formik = useFormik({
@@ -30,7 +30,7 @@ export function ConfiguracaoEmail() {
 
     async function init() {
         try {
-            const response = await get('configuracoes-de-email/get-configuracao')
+            const response = await get<IConfiguracaoDeEmail>('configuracoes-de-email/get-configuracao')
             if (response)
                 formik.setValues(response);
         } catch (error) {

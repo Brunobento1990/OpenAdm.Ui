@@ -17,7 +17,7 @@ export function MovimentacaoDeProdutoForm() {
     const [produtos, setProdutos] = useState<IProduto[]>([]);
     const [pesos, setPesos] = useState<IPeso[]>([]);
     const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
-    const { get, put } = useApi<any>();
+    const { get, put } = useApi();
     const router = useRouter();
 
     const formik = useFormik({
@@ -33,7 +33,7 @@ export function MovimentacaoDeProdutoForm() {
 
     async function init() {
         const [responseProdutos, responsePesos, responseTamanhos] = await
-            Promise.all([get('produtos/all-list'), get('pesos/list'), get('tamanhos/list')]);
+            Promise.all([get<IProduto[]>('produtos/all-list'), get<IPeso[]>('pesos/list'), get<ITamanho[]>('tamanhos/list')]);
         if (responseProdutos) {
             setProdutos(responseProdutos)
         }

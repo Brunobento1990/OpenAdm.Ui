@@ -12,7 +12,7 @@ import { Box } from "@mui/system";
 
 export function FormEstoque() {
 
-    const { get, put } = useApi<any>();
+    const { get, put } = useApi();
     const router = useRouter();
     const { query } = useRouterQuery();
 
@@ -28,7 +28,7 @@ export function FormEstoque() {
     }
 
     async function init() {
-        const estoqueResponse = await get(`estoques/get-estoque?id=${query.id}`);
+        const estoqueResponse = await get<any>(`estoques/get-estoque?id=${query.id}`);
 
         if (estoqueResponse) {
             formik.setValues(estoqueResponse);

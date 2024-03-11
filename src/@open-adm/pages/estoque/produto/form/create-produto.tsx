@@ -57,7 +57,7 @@ export function CreateProduto() {
     const [pesosSelect, setPesosSelect] = useState<string[]>([]);
     const [tamanhosSelect, setTamanhosSelect] = useState<string[]>([]);
     const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
-    const { get, post } = useApi<any>();
+    const { get, post } = useApi();
     const router = useRouter();
     const snack = useSnackbar();
     const theme = useTheme();
@@ -266,12 +266,20 @@ export function CreateProduto() {
     async function init() {
         try {
             const [categoriasResponse, pesosResponse, tamanhosResponse, tabelasDePrecosResponse] =
-                await Promise.all([get('categorias/list'), get('pesos/list'), get('tamanhos/list'), get('tabelas-de-precos/list')]);
+                await Promise.all([get<ICategoria[]>('categorias/list'), get<IPeso[]>('pesos/list'), get<ITamanho[]>('tamanhos/list'), get<ITabelaDePreco[]>('tabelas-de-precos/list')]);
 
-            setTamanhos(tamanhosResponse);
-            setPesos(pesosResponse);
-            setCategorias(categoriasResponse);
-            setTabelaDePreco(tabelasDePrecosResponse);
+            if (tamanhosResponse) {
+                setTamanhos(tamanhosResponse);
+            }
+            if (pesosResponse) {
+                setPesos(pesosResponse);
+            }
+            if (categoriasResponse) {
+                setCategorias(categoriasResponse);
+            }
+            if (tabelasDePrecosResponse) {
+                setTabelaDePreco(tabelasDePrecosResponse);
+            }
         } catch (error) {
 
         }

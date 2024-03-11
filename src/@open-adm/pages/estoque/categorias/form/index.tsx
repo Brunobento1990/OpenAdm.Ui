@@ -18,7 +18,7 @@ export function FormCategoria(props: IForm) {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const [foto, setFoto] = useState<string>('');
-    const { post, get, put } = useApi<ICategoria>();
+    const { post, get, put } = useApi();
     const router = useRouter();
     const { query } = useRouterQuery();
     const title = props.action === 'create' ? 'Adicionar nova categoria' : props.action === 'update' ? 'Editar categoria' : 'Visualizar categoria'
@@ -32,7 +32,7 @@ export function FormCategoria(props: IForm) {
     async function init() {
         try {
             if (props.action !== 'create') {
-                const response = await get(`categorias/get-categoria?id=${query.id}`);
+                const response = await get<ICategoria>(`categorias/get-categoria?id=${query.id}`);
                 if (response) {
                     formik.setValues(response);
                     if (response?.foto) {

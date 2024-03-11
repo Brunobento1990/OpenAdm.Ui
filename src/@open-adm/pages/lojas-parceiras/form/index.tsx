@@ -14,7 +14,7 @@ import { UploadImage } from "src/@open-adm/components/upload-image";
 
 export function FormLojasParceiras(props: IForm) {
 
-    const { post, get, put } = useApi<ILojasParceiras>();
+    const { post, get, put } = useApi();
     const router = useRouter();
     const { query } = useRouterQuery();
     const title = props.action === 'create' ? 'Adicionar loja parceira' : props.action === 'update' ? 'Editar loja parceira' : 'Visualizar loja parceira'
@@ -54,7 +54,7 @@ export function FormLojasParceiras(props: IForm) {
 
     async function init() {
         if (props.action !== 'create' && query.id) {
-            const response = await get(`lojas-parceiras/get-loja?id=${query.id}`);
+            const response = await get<ILojasParceiras>(`lojas-parceiras/get-loja?id=${query.id}`);
             if (response) {
                 formik.setValues(response);
             }

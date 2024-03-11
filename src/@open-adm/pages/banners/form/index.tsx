@@ -15,7 +15,7 @@ export function FormBanner(props: IForm) {
     const router = useRouter();
     const snack = useSnackbar();
     const { query } = useRouterQuery();
-    const { post, get, put } = useApi<IBanner>();
+    const { post, get, put } = useApi();
     const title = props.action === 'create' ? 'Adicionar novo banner' : props.action === 'update' ? 'Editar banner' : 'Visualizar banner'
 
     async function submit() {
@@ -50,7 +50,7 @@ export function FormBanner(props: IForm) {
     async function init() {
         try {
             if (props.action !== 'create') {
-                const response = await get(`banners/get-banner?id=${query.id}`);
+                const response = await get<IBanner>(`banners/get-banner?id=${query.id}`);
                 if (response && !banner) {
                     setBanner(response);
                     setFoto(response?.foto);

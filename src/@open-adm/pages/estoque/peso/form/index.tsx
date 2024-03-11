@@ -16,7 +16,7 @@ export function FormPeso(props: IForm) {
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const { post, get, put } = useApi<IPeso>();
+    const { post, get, put } = useApi();
     const router = useRouter();
     const { query } = useRouterQuery();
     const title = props.action === 'create' ? 'Adicionar novo peso' : props.action === 'update' ? 'Editar peso' : 'Visualizar peso'
@@ -30,7 +30,7 @@ export function FormPeso(props: IForm) {
     async function init() {
         try {
             if (props.action !== 'create') {
-                const response = await get(`pesos/get-peso?id=${query.id}`);
+                const response = await get<IPeso>(`pesos/get-peso?id=${query.id}`);
                 if (response) {
                     formik.setValues(response);
                 }

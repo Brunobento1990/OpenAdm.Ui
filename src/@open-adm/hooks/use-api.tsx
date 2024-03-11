@@ -2,13 +2,21 @@ import axios from 'axios'
 import { useRouter } from 'next/router';
 import authConfig from 'src/configs/auth'
 import { useSnackbar } from '../components/snack';
-import * as Error from '../Error/ErrorApi.json'
 import { useLoader } from '../components/loader';
-const errorJson = Error as any;
+const errorJson: any = {
+  "APIERROR011": "E-mail ou senha inválidos!",
+  "APIERROR014": "Não é possível atualizar um pedido com status entregue, caso necessário, exclua o pedido!",
+  "APIERROR010": "Telefone inválido!",
+  "APIERROR020": "Este e-mail já se encontra cadastrado!"
+};
+
+interface IOptions {
+  loading?: boolean
+}
 
 const URL_API = '	https://api.open-adm.tech/api/v1/'
 
-export function useApi<T = unknown>() {
+export function useApi() {
 
   const router = useRouter();
   const snack = useSnackbar();
@@ -55,9 +63,17 @@ export function useApi<T = unknown>() {
 
   }
 
-  async function get(url: string): Promise<T | undefined> {
+  async function get<T>(url: string, options?: IOptions): Promise<T | undefined> {
     try {
-      loader.show();
+
+      if (!options) {
+        loader.show();
+      } else {
+        if (options.loading) {
+          loader.show();
+        }
+      }
+
       const api = axios.create({
         baseURL: URL_API,
         headers: {
@@ -74,9 +90,30 @@ export function useApi<T = unknown>() {
     }
   }
 
-  async function post(url: string, body: T): Promise<T | undefined> {
-    try {
+  async function getCnpj(cnpj?: string) {
+    if (!cnpj || cnpj?.length < 14)
+      return;
 
+    loader.show();
+
+    try {
+      const api = axios.create({
+        baseURL: 'https://api-publica.speedio.com.br',
+        headers: {
+          "Content-Type": 'application/json'
+        }
+      })
+
+      return (await api.get(`/buscarcnpj?cnpj=${cnpj}`)).data
+    } catch (error) {
+      snack.show('Ocorreu um erro ao consultar o CNPJ!');
+    } finally {
+      loader.hide();
+    }
+  }
+
+  async function post<T>(url: string, body: T): Promise<T | undefined> {
+    try {
       loader.show();
       const api = axios.create({
         baseURL: URL_API,
@@ -94,7 +131,7 @@ export function useApi<T = unknown>() {
     }
   }
 
-  async function put(url: string, body: T): Promise<T | undefined> {
+  async function put<T>(url: string, body: T): Promise<T | undefined> {
     try {
       loader.show();
       const api = axios.create({
@@ -112,7 +149,7 @@ export function useApi<T = unknown>() {
       loader.hide();
     }
   }
-  async function deleteApi(url: string): Promise<T | undefined> {
+  async function deleteApi<T>(url: string): Promise<T | undefined> {
     try {
       loader.show();
       const api = axios.create({
@@ -135,6 +172,7 @@ export function useApi<T = unknown>() {
     get,
     post,
     put,
-    deleteApi
+    deleteApi,
+    getCnpj
   }
 }

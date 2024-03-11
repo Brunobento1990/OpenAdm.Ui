@@ -82,7 +82,7 @@ const Table = (props: tableProps) => {
     async function init() {
         try {
             setLoading(true)
-            const response: any = await get(`${props.url}?skip=${page - 1}${statusPedidoFiltro !== '0' && props.isPedido ? `&statusPedido=${parseInt(statusPedidoFiltro) - 1}` : ''}&search=${getValues('search')}`);
+            const response = await get<any>(`${props.url}?skip=${page - 1}${statusPedidoFiltro !== '0' && props.isPedido ? `&statusPedido=${parseInt(statusPedidoFiltro) - 1}` : ''}&search=${getValues('search')}`);
             if (response?.values) {
                 setRows(response.values);
                 setTotal(response.totalPage)

@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 
 export function ConfiguracaoPedido() {
 
-    const { get, put } = useApi<IConfiguracaoDePedido>();
+    const { get, put } = useApi();
     const router = useRouter();
 
     const formik = useFormik({
@@ -26,7 +26,7 @@ export function ConfiguracaoPedido() {
     }
 
     async function init() {
-        const response = await get('configuracoes-de-pedido/get-configuracoes')
+        const response = await get<IConfiguracaoDePedido>('configuracoes-de-pedido/get-configuracoes')
         if (response) {
             formik.setValues(response);
         }
