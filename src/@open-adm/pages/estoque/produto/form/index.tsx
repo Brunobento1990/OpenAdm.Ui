@@ -65,6 +65,8 @@ export function FormProduto(props: IForm) {
         try {
             if (props.action !== 'create' && query.id) {
                 const responseProduto = await get(`produtos/get-produto?id=${query.id}`);
+                setTamanhosSelect(responseProduto.tamanhos.map((x: any) => x.id));
+                setPesosSelect(responseProduto.pesos.map((x: any) => x.id));
                 formik.setValues(responseProduto);
             }
 

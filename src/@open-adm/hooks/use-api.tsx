@@ -6,6 +6,8 @@ import * as Error from '../Error/ErrorApi.json'
 import { useLoader } from '../components/loader';
 const errorJson = Error as any;
 
+const URL_API = '	https://api.open-adm.tech/api/v1/'
+
 export function useApi<T = unknown>() {
 
   const router = useRouter();
@@ -57,7 +59,7 @@ export function useApi<T = unknown>() {
     try {
       loader.show();
       const api = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_URL_API,
+        baseURL: URL_API,
         headers: {
           Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
           "Content-Type": 'application/json'
@@ -74,10 +76,10 @@ export function useApi<T = unknown>() {
 
   async function post(url: string, body: T): Promise<T | undefined> {
     try {
-      console.log('debug :', process.env.NEXT_PUBLIC_URL_API)
+
       loader.show();
       const api = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_URL_API,
+        baseURL: URL_API,
         headers: {
           Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
           "Content-Type": 'application/json'
@@ -96,7 +98,7 @@ export function useApi<T = unknown>() {
     try {
       loader.show();
       const api = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_URL_API,
+        baseURL: URL_API,
         headers: {
           Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
           "Content-Type": 'application/json'
@@ -114,7 +116,7 @@ export function useApi<T = unknown>() {
     try {
       loader.show();
       const api = axios.create({
-        baseURL: process.env.NEXT_PUBLIC_URL_API,
+        baseURL: URL_API,
         headers: {
           Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
           "Content-Type": 'application/json'
