@@ -23,10 +23,12 @@ export function TabelaDePrecoForm(props: IForm) {
 
     const snack = useSnackbar();
     const [open, setOpen] = useState(false);
+    const [search, setSearch] = useState<string>()
     const [produtos, setProdutos] = useState<IProduto[]>([]);
     const [pesos, setPesos] = useState<IPeso[]>([]);
     const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
     const [item, setItem] = useState<IItensTabelaDePreco>();
+    const [itens, setItens] = useState<IItensTabelaDePreco[]>([]);
     const { get, post, deleteApi, put } = useApi();
     const router = useRouter();
     const { query } = useRouterQuery();
@@ -84,15 +86,16 @@ export function TabelaDePrecoForm(props: IForm) {
     async function init() {
         if (props.action !== 'create' && query.id) {
             const response = await get<ITabelaDePreco>(`tabelas-de-precos/get-tabela?id=${query.id}`);
-            if (response)
+            if (response) {
                 formik.setValues(response);
+                setItens(response?.itensTabelaDePreco ?? [])
+            }
         } else {
             formik.setValues(defaultValues);
         }
     }
 
     async function addItemTabelaDePreco() {
-
         try {
             setOpen(false);
 
@@ -198,18 +201,28 @@ export function TabelaDePrecoForm(props: IForm) {
                     </Grid>
                 </Grid>
                 {props.action !== 'view' &&
-                    <Button
-                        variant="contained"
-                        sx={{
-                            margin: [5, 0, 5]
-                        }}
-                        onClick={() => setOpen(true)}
-                    >
-                        Adicionar novo produto
-                    </Button>
+                    <>
+                        <Button
+                            variant="contained"
+                            sx={{
+                                margin: [5, 0, 5]
+                            }}
+                            onClick={() => setOpen(true)}
+                        >
+                            Adicionar novo produto
+                        </Button>
+                        <CustomTextField
+                            label='Pesquisar'
+                            name='pesquisar'
+                            id='pesquisar'
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </>
+
                 }
                 <DataGrid
-                    rows={formik.values.itensTabelaDePreco}
+                    rows={search ? itens.filter((item) => item.produto.descricao.toLowerCase().includes(search.toLocaleLowerCase())) : formik.values.itensTabelaDePreco}
                     columns={[
                         {
                             field: 'numero',

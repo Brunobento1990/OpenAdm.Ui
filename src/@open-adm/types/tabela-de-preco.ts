@@ -13,7 +13,7 @@ export interface IItensTabelaDePreco extends IBase {
     valorUnitarioAtacado?: number;
     valorUnitarioVarejo?: number;
     produtoId: string;
-    propduto: IProduto;
+    produto: IProduto;
     tabelaDePrecoId: string;
     tamanhoId?: string;
     tamanho?: ITamanho;
