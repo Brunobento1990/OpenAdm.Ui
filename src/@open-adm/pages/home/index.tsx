@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Grid, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardHeader, Grid, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useApi } from "src/@open-adm/hooks/use-api";
 import { IHome } from "src/@open-adm/types/home";
@@ -25,10 +25,10 @@ export function HomePage() {
     return (
         <Grid container spacing={5} padding={9}>
             <Grid item xs={12} sm={6}>
-                <Card>
-                    <CardHeader
-                        title='Top 3 clientes com mais gastos $'
-                    />
+                <Box>
+                    <Typography variant='h5' color='text.primary'>
+                        Top 3 clientes com mais gastos $
+                    </Typography>
                     <CardContent>
                         {home?.topUsuariosTotalCompra.map((topUsuario) => (
                             <>
@@ -41,13 +41,13 @@ export function HomePage() {
                             </>
                         ))}
                     </CardContent>
-                </Card>
+                </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <Card>
-                    <CardHeader
-                        title='Top 3 clientes com mais pedidos'
-                    />
+                <Box>
+                    <Typography variant='h5' color='text.primary'>
+                        Top 3 clientes com mais pedidos
+                    </Typography>
                     <CardContent>
                         {home?.topUsuariosTotalPedido.map((topUsuario) => (
                             <>
@@ -60,7 +60,7 @@ export function HomePage() {
                             </>
                         ))}
                     </CardContent>
-                </Card>
+                </Box>
             </Grid>
         </Grid>
     )
