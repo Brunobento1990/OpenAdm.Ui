@@ -17,14 +17,14 @@ export const columns: GridColDef[] = [
         headerName: 'Produto'
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        flex: 0.100,
+        minWidth: 100,
         field: 'peso',
         headerName: 'Peso',
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        flex: 0.100,
+        minWidth: 100,
         field: 'tamanho',
         headerName: 'Tamanho',
     },
@@ -48,6 +48,16 @@ export const columns: GridColDef[] = [
             )
         }
     },
+    {
+        flex: 0.175,
+        minWidth: 140,
+        field: 'dataDeAtualizacao',
+        headerName: 'Ultima movimentação',
+        valueGetter: (params: any) => {
+            const newValue = params?.row?.dataDeAtualizacao?.slice(0, 10).split('-')
+            return `${newValue[2]}/${newValue[1]}/${newValue[0]}`
+        }
+    }
 ]
 
 export const defaultValues: IEstoqueEdit = {

@@ -6,7 +6,7 @@ import SelectCustom from "src/@open-adm/components/select";
 import { useApi } from "src/@open-adm/hooks/use-api";
 import { ICategoria } from "src/@open-adm/types/categoria";
 import { IForm } from "src/@open-adm/types/form";
-import { defaultValuesEdit, schema } from "../config";
+import { defaultValuesEdit, handleItensTabelaDePreco, schema } from "../config";
 import { IProduto } from "src/@open-adm/types/produto";
 import { useRouter } from "next/router";
 import { Box, Chip, Divider, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
@@ -14,15 +14,7 @@ import { ITamanho } from "src/@open-adm/types/tamanho";
 import { IPeso } from "src/@open-adm/types/peso";
 import { useRouter as useRouterQuery } from 'next/router'
 import { UploadImage } from "src/@open-adm/components/upload-image";
-import { IItensTabelaDePreco, ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
-
-interface IHandleItensTabelaDePreco {
-    find: (item: IItensTabelaDePreco) => boolean;
-    newValue?: string;
-    pesoId?: string;
-    tamanhoId?: string;
-    isVarejo: boolean
-}
+import { ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
 
 export function FormProduto(props: IForm) {
 
@@ -103,47 +95,6 @@ export function FormProduto(props: IForm) {
 
         } catch (error) {
 
-        }
-    }
-
-    function handleItensTabelaDePreco(params: IHandleItensTabelaDePreco) {
-        let newItens = tabelaDePreco?.itensTabelaDePreco ?? [];
-        const newValue = params.newValue ? parseFloat(params.newValue) : undefined;
-        const indexOnChange = tabelaDePreco?.itensTabelaDePreco?.findIndex(params.find)
-        if (indexOnChange === -1) {
-            newItens.push({
-                produtoId: formik.values.id as string ?? '',
-                tabelaDePrecoId: tabelaDePreco?.id ?? '',
-                id: "",
-                dataDeCriacao: "",
-                dataDeAtualizacao: "",
-                numero: 0,
-                pesoId: params.pesoId,
-                tamanhoId: params.tamanhoId,
-                valorUnitarioVarejo: params.isVarejo ? newValue : undefined,
-                valorUnitarioAtacado: params.isVarejo ? undefined : newValue
-            } as IItensTabelaDePreco)
-
-            setTabelaDePreco({
-                ...tabelaDePreco,
-                itensTabelaDePreco: newItens
-            } as ITabelaDePreco)
-
-            return;
-        }
-
-        if (indexOnChange !== undefined && indexOnChange >= 0) {
-
-            if (params.isVarejo) {
-                newItens[indexOnChange].valorUnitarioVarejo = newValue;
-            } else {
-                newItens[indexOnChange].valorUnitarioAtacado = newValue;
-            }
-
-            setTabelaDePreco({
-                ...tabelaDePreco,
-                itensTabelaDePreco: newItens
-            } as ITabelaDePreco);
         }
     }
 
@@ -285,7 +236,7 @@ export function FormProduto(props: IForm) {
                         />
                     </Box>
                 </Box>
-                <Divider>
+                <Divider sx={{ marginTop: 2 }}>
                     <Chip label={`Tabela de preço: ${tabelaDePreco?.descricao}`} size="small" />
                 </Divider>
                 <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' gap='10px'>
@@ -308,12 +259,16 @@ export function FormProduto(props: IForm) {
                                         inputProps={{
                                             step: "2"
                                         }}
-                                        onChange={(e) => handleItensTabelaDePreco({
-                                            find: (itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id && itemTabelaDePreco.produtoId === query.id,
-                                            newValue: e.target.value,
-                                            isVarejo: false,
-                                            tamanhoId: tamanho.id
-                                        })}
+                                        onChange={(e) => setTabelaDePreco(
+                                            handleItensTabelaDePreco({
+                                                find: (itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id && itemTabelaDePreco.produtoId === query.id,
+                                                newValue: e.target.value,
+                                                isVarejo: false,
+                                                tamanhoId: tamanho.id,
+                                                tabelaDePreco,
+                                                produtoId: query.id as string ?? ''
+                                            })
+                                        )}
                                         InputProps={{
                                             readOnly: props.action === 'view'
                                         }}
@@ -327,12 +282,16 @@ export function FormProduto(props: IForm) {
                                         inputProps={{
                                             step: "2"
                                         }}
-                                        onChange={(e) => handleItensTabelaDePreco({
-                                            find: (itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id && itemTabelaDePreco.produtoId === query.id,
-                                            newValue: e.target.value,
-                                            isVarejo: true,
-                                            tamanhoId: tamanho.id
-                                        })}
+                                        onChange={(e) => setTabelaDePreco(
+                                            handleItensTabelaDePreco({
+                                                find: (itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id && itemTabelaDePreco.produtoId === query.id,
+                                                newValue: e.target.value,
+                                                isVarejo: true,
+                                                tamanhoId: tamanho.id,
+                                                tabelaDePreco,
+                                                produtoId: query.id as string ?? ''
+                                            })
+                                        )}
                                         InputProps={{
                                             readOnly: props.action === 'view'
                                         }}
@@ -360,12 +319,16 @@ export function FormProduto(props: IForm) {
                                         inputProps={{
                                             step: "2"
                                         }}
-                                        onChange={(e) => handleItensTabelaDePreco({
-                                            find: (itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id && itemTabelaDePreco.produtoId === query.id,
-                                            newValue: e.target.value,
-                                            pesoId: peso.id,
-                                            isVarejo: false
-                                        })}
+                                        onChange={(e) => setTabelaDePreco(
+                                            handleItensTabelaDePreco({
+                                                find: (itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id && itemTabelaDePreco.produtoId === query.id,
+                                                newValue: e.target.value,
+                                                pesoId: peso.id,
+                                                isVarejo: false,
+                                                tabelaDePreco,
+                                                produtoId: query.id as string ?? ''
+                                            })
+                                        )}
                                         InputProps={{
                                             readOnly: props.action === 'view'
                                         }}
@@ -379,12 +342,16 @@ export function FormProduto(props: IForm) {
                                         inputProps={{
                                             step: "2"
                                         }}
-                                        onChange={(e) => handleItensTabelaDePreco({
-                                            find: (itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id && itemTabelaDePreco.produtoId === query.id,
-                                            newValue: e.target.value,
-                                            pesoId: peso.id,
-                                            isVarejo: true
-                                        })}
+                                        onChange={(e) => setTabelaDePreco(
+                                            handleItensTabelaDePreco({
+                                                find: (itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id && itemTabelaDePreco.produtoId === query.id,
+                                                newValue: e.target.value,
+                                                pesoId: peso.id,
+                                                isVarejo: true,
+                                                tabelaDePreco,
+                                                produtoId: query.id as string ?? ''
+                                            })
+                                        )}
                                         InputProps={{
                                             readOnly: props.action === 'view'
                                         }}

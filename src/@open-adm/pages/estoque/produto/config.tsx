@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { ICreateProdutoDto, IProduto } from "src/@open-adm/types/produto";
+import { IItensTabelaDePreco, ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
 import * as yup from 'yup';
 
 export const columns: GridColDef[] = [
@@ -44,11 +45,7 @@ export const defaultValues: ICreateProdutoDto = {
         numero: 0
     },
     tamanhos: [],
-    pesos: [],
-    vinculoProdutoTabelaDePreco: {
-        tabelaDePrecoId: "",
-        itens: []
-    }
+    pesos: []
 }
 
 export const defaultValuesEdit: IProduto = {
@@ -86,29 +83,51 @@ export interface TabPanelProps {
     value: number;
 }
 
-export function a11yProps(index: number) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
+export interface IHandleItensTabelaDePreco {
+    find: (item: IItensTabelaDePreco) => boolean;
+    newValue?: string;
+    pesoId?: string;
+    tamanhoId?: string;
+    isVarejo: boolean;
+    tabelaDePreco?: ITabelaDePreco;
+    produtoId?: string
 }
 
-export function CustomTabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
+export function handleItensTabelaDePreco(params: IHandleItensTabelaDePreco): ITabelaDePreco | undefined {
+    let newItens = params.tabelaDePreco?.itensTabelaDePreco ?? [];
+    const newValue = params.newValue ? parseFloat(params.newValue) : undefined;
+    const indexOnChange = params.tabelaDePreco?.itensTabelaDePreco?.findIndex(params.find)
+    if (indexOnChange === -1) {
+        newItens.push({
+            produtoId: params.produtoId ?? '',
+            tabelaDePrecoId: params?.tabelaDePreco?.id ?? '',
+            id: "",
+            dataDeCriacao: "",
+            dataDeAtualizacao: "",
+            numero: 0,
+            pesoId: params.pesoId,
+            tamanhoId: params.tamanhoId,
+            valorUnitarioVarejo: params.isVarejo ? newValue : undefined,
+            valorUnitarioAtacado: params.isVarejo ? undefined : newValue
+        } as IItensTabelaDePreco)
 
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
+        return {
+            ...params.tabelaDePreco,
+            itensTabelaDePreco: newItens
+        } as ITabelaDePreco;
+    }
+
+    if (indexOnChange !== undefined && indexOnChange >= 0) {
+
+        if (params.isVarejo) {
+            newItens[indexOnChange].valorUnitarioVarejo = newValue;
+        } else {
+            newItens[indexOnChange].valorUnitarioAtacado = newValue;
+        }
+
+        return {
+            ...params.tabelaDePreco,
+            itensTabelaDePreco: newItens
+        } as ITabelaDePreco;
+    }
 }

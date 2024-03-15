@@ -23,17 +23,4 @@ export interface ICreateProdutoDto {
     categoria: ICategoria;
     tamanhos: ITamanho[];
     pesos: IPeso[];
-    vinculoProdutoTabelaDePreco: IVinculoProdutoTabelaDePrecoDto;
-}
-
-export interface IVinculoProdutoItemTabelaDePrecoDto {
-    valorUnitarioAtacado?: number;
-    valorUnitarioVarejo?: number;
-    pesoId?: string
-    tamanhoId?: string
-}
-
-export interface IVinculoProdutoTabelaDePrecoDto {
-    tabelaDePrecoId: string;
-    itens: IVinculoProdutoItemTabelaDePrecoDto[]
 }

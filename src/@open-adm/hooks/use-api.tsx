@@ -113,7 +113,7 @@ export function useApi() {
     }
   }
 
-  async function post<T>(url: string, body: T): Promise<T | undefined> {
+  async function post<T>(url: string, body: T, message?: string): Promise<T | undefined> {
     try {
       loader.show();
       const api = axios.create({
@@ -123,8 +123,11 @@ export function useApi() {
           "Content-Type": 'application/json'
         }
       })
-      console.log(URL_API)
-      return (await api.post(url, body)).data as T
+      const result = (await api.post(url, body)).data as T;
+      if (url !== 'login/funcionario') {
+        snack.show(message ?? 'Registro criado com sucesso!', 'success');
+      }
+      return result;
     } catch (error: any) {
       handleError(error)
     } finally {
@@ -132,7 +135,7 @@ export function useApi() {
     }
   }
 
-  async function put<T>(url: string, body: T): Promise<T | undefined> {
+  async function put<T>(url: string, body: T, message?: string): Promise<T | undefined> {
     try {
       loader.show();
       const api = axios.create({
@@ -142,15 +145,16 @@ export function useApi() {
           "Content-Type": 'application/json'
         }
       })
-
-      return (await api.put(url, body)).data as T
+      const result = (await api.put(url, body)).data as T;
+      snack.show(message ?? 'Registro editado com sucesso!', 'success');
+      return result;
     } catch (error: any) {
       handleError(error)
     } finally {
       loader.hide();
     }
   }
-  async function deleteApi<T>(url: string): Promise<T | undefined> {
+  async function deleteApi<T>(url: string, message?: string): Promise<T | undefined> {
     try {
       loader.show();
       const api = axios.create({
@@ -160,8 +164,9 @@ export function useApi() {
           "Content-Type": 'application/json'
         }
       })
-
-      return (await api.delete(url)).data as T
+      const result = (await api.delete(url)).data as T;
+      snack.show(message ?? 'Registro excluido com sucesso!', 'success');
+      return result;
     } catch (error: any) {
       handleError(error)
     } finally {
