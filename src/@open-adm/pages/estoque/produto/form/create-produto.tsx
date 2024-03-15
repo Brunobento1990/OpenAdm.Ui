@@ -14,39 +14,7 @@ import { IPeso } from "src/@open-adm/types/peso";
 import { UploadImage } from "src/@open-adm/components/upload-image";
 import { ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
 import { useSnackbar } from "src/@open-adm/components/snack";
-
-interface TabPanelProps {
-    children?: React.ReactNode;
-    index: number;
-    value: number;
-}
-
-function a11yProps(index: number) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
+import { CustomTabPanel, a11yProps } from '../config'
 
 export function CreateProduto() {
 
