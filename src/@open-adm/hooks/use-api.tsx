@@ -113,7 +113,7 @@ export function useApi() {
     }
   }
 
-  async function post<T>(url: string, body: T, message?: string): Promise<T | undefined> {
+  async function post<T>(url: string, body: T, message?: string, openMessage?: boolean): Promise<T | undefined> {
     try {
       loader.show();
       const api = axios.create({
@@ -124,7 +124,7 @@ export function useApi() {
         }
       })
       const result = (await api.post(url, body)).data as T;
-      if (url !== 'login/funcionario') {
+      if (url !== 'login/funcionario' && !openMessage) {
         snack.show(message ?? 'Registro criado com sucesso!', 'success');
       }
       return result;

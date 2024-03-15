@@ -63,7 +63,7 @@ export function FormProduto(props: IForm) {
                 await put('produtos/update', body)
 
                 if (itensTabelaDePreco.length > 0) {
-                    await post('item-tabela-de-preco/create-list', itensTabelaDePreco);
+                    await post('item-tabela-de-preco/create-list', itensTabelaDePreco, '', true);
                 }
             }
 
