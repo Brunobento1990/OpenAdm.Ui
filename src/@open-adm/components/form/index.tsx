@@ -8,7 +8,8 @@ interface propsForm {
     action: string;
     urlVoltar?: string;
     submit: () => void;
-    gap?: number
+    gap?: number;
+    titleButton?: string;
 }
 
 export function Form(props: propsForm) {
@@ -36,7 +37,7 @@ export function Form(props: propsForm) {
                         variant="contained"
                         onClick={props.submit}
                     >
-                        Salvar
+                        {props.titleButton ?? 'Salvar'}
                     </Button>
                 }
             </Box>

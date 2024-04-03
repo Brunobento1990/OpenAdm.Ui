@@ -67,6 +67,11 @@ const navigation = (): VerticalNavItemsType => {
           title: 'Tabela de preço',
           icon: 'solar:tag-price-bold',
           path: '/vendas/tabeladepreco'
+        },
+        {
+          title: 'Relatório por período',
+          icon: "tabler:report-search",
+          path: '/vendas/relatorio-por-periodo'
         }
       ]
     },
