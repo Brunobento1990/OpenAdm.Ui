@@ -50,4 +50,5 @@ export const statusPedido: StatusObj = {
     1: { title: 'Faturado', color: 'primary' },//success
     2: { title: 'Em entrega', color: 'info' },
     3: { title: 'Entregue', color: 'success' },//warning
+    4: { title: 'Cancelado', color: 'error' },//warning
 }
