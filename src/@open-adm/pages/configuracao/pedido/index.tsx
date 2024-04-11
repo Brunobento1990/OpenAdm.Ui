@@ -48,6 +48,32 @@ export function ConfiguracaoPedido() {
                         <Grid item xs={12} sm={6}>
                             <CustomTextField
                                 fullWidth
+                                label='Pedido mínimo atacado'
+                                name='pedidoMinimoAtacado'
+                                id='pedidoMinimoAtacado'
+                                value={formik.values.pedidoMinimoAtacado}
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                type="number"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <CustomTextField
+                                fullWidth
+                                label='Pedido mínimo varejo'
+                                name='pedidoMinimoVarejo'
+                                id='pedidoMinimoVarejo'
+                                value={formik.values.pedidoMinimoVarejo}
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                type="number"
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={6}>
+                        <Grid item xs={12} sm={6}>
+                            <CustomTextField
+                                fullWidth
                                 label='E-mail para receber o pedido'
                                 name='emailDeEnvio'
                                 id='emailDeEnvio'

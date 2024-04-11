@@ -4,4 +4,6 @@ export interface IConfiguracaoDePedido extends IBase {
     emailDeEnvio: string;
     ativo: boolean;
     logo?: string;
+    pedidoMinimoAtacado?: number;
+    pedidoMinimoVarejo?: number;
 }
