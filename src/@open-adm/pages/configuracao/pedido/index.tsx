@@ -1,34 +1,39 @@
-import { useFormik } from "formik";
 import { useApi } from "src/@open-adm/hooks/use-api"
 import { defaultValues, schema } from "./config";
 import { IConfiguracaoDePedido } from "src/@open-adm/types/configuracao-pedido";
 import { Form } from "src/@open-adm/components/form";
 import { Grid } from "@mui/material";
-import CustomTextField from "src/@core/components/mui/text-field";
 import FileUploaderSingle from "src/@open-adm/components/upload";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { InputCustom, MaskType } from "src/@open-adm/components/input";
+import { cleanFormatMoney } from "src/@open-adm/utils/format-money";
+import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
 
 export function ConfiguracaoPedido() {
 
     const { get, put } = useApi();
     const router = useRouter();
 
-    const formik = useFormik({
+    const formik = useFormikAdapter({
         initialValues: defaultValues,
         validationSchema: schema,
         onSubmit: (values) => onSubmit(values),
     });
 
     async function onSubmit(values: IConfiguracaoDePedido) {
-        await put('configuracoes-de-pedido/update', values);
+        await put('configuracoes-de-pedido/update', {
+            ...values,
+            pedidoMinimoAtacado: cleanFormatMoney(values.pedidoMinimoAtacado),
+            pedidoMinimoVarejo: cleanFormatMoney(values.pedidoMinimoVarejo),
+        });
         router.replace('/home');
     }
 
     async function init() {
         const response = await get<IConfiguracaoDePedido>('configuracoes-de-pedido/get-configuracoes')
         if (response) {
-            formik.setValues(response);
+            formik.setValue(response);
         }
     }
 
@@ -39,49 +44,50 @@ export function ConfiguracaoPedido() {
     return (
         <Form
             action="update"
-            submit={formik.submitForm}
+            submit={formik.onSubmit}
             title="Configurações de pedido"
         >
             {formik.values.emailDeEnvio &&
                 <>
                     <Grid container spacing={6}>
                         <Grid item xs={12} sm={6}>
-                            <CustomTextField
+                            <InputCustom
                                 fullWidth
                                 label='Pedido mínimo atacado'
                                 name='pedidoMinimoAtacado'
                                 id='pedidoMinimoAtacado'
                                 value={formik.values.pedidoMinimoAtacado}
-                                onBlur={formik.handleBlur}
-                                onChange={formik.handleChange}
-                                type="number"
+                                onBlur={formik.onBlur}
+                                onChange={formik.onChange}
+                                mask={MaskType.MONEY}
+                                type="text"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <CustomTextField
+                            <InputCustom
                                 fullWidth
                                 label='Pedido mínimo varejo'
                                 name='pedidoMinimoVarejo'
                                 id='pedidoMinimoVarejo'
                                 value={formik.values.pedidoMinimoVarejo}
-                                onBlur={formik.handleBlur}
-                                onChange={formik.handleChange}
-                                type="number"
+                                onBlur={formik.onBlur}
+                                onChange={formik.onChange}
+                                mask={MaskType.MONEY}
                             />
                         </Grid>
                     </Grid>
                     <Grid container spacing={6}>
                         <Grid item xs={12} sm={6}>
-                            <CustomTextField
+                            <InputCustom
                                 fullWidth
                                 label='E-mail para receber o pedido'
                                 name='emailDeEnvio'
                                 id='emailDeEnvio'
                                 value={formik.values.emailDeEnvio}
-                                onBlur={formik.handleBlur}
-                                onChange={formik.handleChange}
-                                helperText={formik.touched.emailDeEnvio && formik.errors.emailDeEnvio}
-                                error={!!(formik.touched.emailDeEnvio && formik.errors.emailDeEnvio)}
+                                onBlur={formik.onBlur}
+                                onChange={formik.onChange}
+                                helperText={formik.helperText("emailDeEnvio")}
+                                error={formik.error("emailDeEnvio")}
                                 required
                             />
                         </Grid>
@@ -89,8 +95,7 @@ export function ConfiguracaoPedido() {
                     <FileUploaderSingle
                         title="Selecione uma logo para o pdf de pedido"
                         maringTop={5}
-                        setFoto={(ft: any) => formik.setValues({
-                            ...formik.values,
+                        setFoto={(ft: any) => formik.setValue({
                             logo: ft
                         })}
                         defaultValue={formik.values.logo}

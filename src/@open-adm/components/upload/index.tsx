@@ -36,7 +36,6 @@ const FileUploaderSingle = (props: propsFileUploaderSingle) => {
             const newFoto = newBase64Images[0].slice(index);
             props.setFoto(newFoto)
             setFiles(acceptedFiles.map((file: File) => {
-                console.log('file : ', file)
                 return Object.assign(file)
             }))
         }

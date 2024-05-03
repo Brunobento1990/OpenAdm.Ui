@@ -88,6 +88,11 @@ const navigation = (): VerticalNavItemsType => {
           title: 'Pedidos',
           path: '/configuracao/pedido',
           icon: 'material-symbols:order-approve-outline',
+        },
+        {
+          title: "Mercado pago",
+          path: "/configuracao/mercado-pago",
+          icon: "simple-icons:mercadopago"
         }
       ]
     }
