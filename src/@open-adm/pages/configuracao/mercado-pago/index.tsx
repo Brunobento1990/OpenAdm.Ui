@@ -2,7 +2,7 @@ import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
 import { Form } from "src/@open-adm/components/form";
 import { initialValues, schema } from "./config";
 import { apiMercadoPago } from "./api-mercado-pago";
-import { Grid } from "@mui/material";
+import { Checkbox, FormControlLabel, Grid } from "@mui/material";
 import { InputCustom } from "src/@open-adm/components/input";
 import { useEffect } from "react";
 
@@ -17,9 +17,13 @@ export function MercadoPago() {
     });
 
     async function init() {
-        const response = await getConfig();
-        if (response) {
-            form.setValue(response);
+        try {
+            const response = await getConfig();
+            if (response) {
+                form.setValue(response);
+            }
+        } catch (error) {
+            console.log('123')
         }
     }
 
@@ -60,6 +64,32 @@ export function MercadoPago() {
                         helperText={form.helperText("accessToken")}
                         error={form.error("accessToken")}
                         required
+                    />
+                </Grid>
+            </Grid>
+            <Grid container spacing={6}>
+                <Grid item xs={12} sm={6}>
+                    <FormControlLabel
+                        label='Cobrar de CPF'
+                        control={
+                            <Checkbox
+                                checked={form.values?.cobrarCpf ?? false}
+                                onChange={e => form.setValue({
+                                    cobrarCpf: e.target.checked
+                                })} />
+                        }
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControlLabel
+                        label='Cobrar de CNPJ'
+                        control={
+                            <Checkbox
+                                checked={form.values?.cobrarCnpj ?? false}
+                                onChange={e => form.setValue({
+                                    cobrarCnpj: e.target.checked
+                                })} />
+                        }
                     />
                 </Grid>
             </Grid>

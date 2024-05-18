@@ -2,12 +2,20 @@ import axios from "axios";
 import authConfig from 'src/configs/auth';
 import { useSnackbar } from "../components/snack";
 
+const errorJson: any = {
+    "APIERROR011": "E-mail ou senha inválidos!",
+    "APIERROR014": "Não é possível atualizar um pedido com status entregue, caso necessário, exclua o pedido!",
+    "APIERROR010": "Telefone inválido!",
+    "APIERROR020": "Este e-mail já se encontra cadastrado!"
+};
+
 type TypeMethod = "GET" | "POST" | "PUT" | "DELETE";
 interface propsUseApi {
     method: TypeMethod;
     url: string;
     notHandleError?: boolean;
     notAlert?: boolean;
+    notLoading?: boolean;
 }
 
 interface propsFecth {
@@ -29,7 +37,7 @@ export function useNewApi(props: propsUseApi) {
 
     //const URL_API = 'https://api.open-adm.tech/api/v1/'
     //const URL_API = 'http://localhost:40332/api/v1/'
-    const URL_API = 'http://localhost:44400/api/v1/'
+    const URL_API = 'http://localhost:40332/api/v1/'
     const jwt = localStorage.getItem(authConfig.storageTokenKeyName);
 
     const api = axios.create({
@@ -41,6 +49,11 @@ export function useNewApi(props: propsUseApi) {
     };
 
     function handleError(error: any) {
+        if (errorJson[error?.response?.data?.message]) {
+            snack.show(errorJson[error?.response?.data?.message], "error");
+            return;
+        }
+
         if (error?.response?.data?.message) {
             snack.show(error?.response?.data?.message, "error");
             return;
@@ -75,7 +88,7 @@ export function useNewApi(props: propsUseApi) {
                 snack.show(message, "success");
             }
             return response?.data;
-        } catch (error) {
+        } catch (error: any) {
             if (!props.notHandleError) {
                 handleError(error);
             }
