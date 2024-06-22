@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import authConfig from 'src/configs/auth'
 import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './types'
 import { useApi } from 'src/@open-adm/hooks/use-api'
+import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
 
 const defaultProvider: AuthValuesType = {
   user: null,
@@ -26,7 +27,10 @@ const AuthProvider = ({ children }: Props) => {
 
   // ** Hooks
   const router = useRouter();
-  const { post } = useApi();
+  const { fecth } = useNewApi({
+    method: 'POST',
+    url: 'login/funcionario'
+  });
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
@@ -50,9 +54,11 @@ const AuthProvider = ({ children }: Props) => {
   const handleLogin = async (params: LoginParams, errorCallback?: ErrCallbackType) => {
 
     try {
-      const response: any = await post("login/funcionario", {
-        email: params.email,
-        senha: params.password
+      const response: any = await fecth({
+        body: {
+          email: params.email,
+          senha: params.password
+        }
       })
 
       if (response?.token) {

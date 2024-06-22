@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import Box, { BoxProps } from '@mui/material/Box'
+import Box from '@mui/material/Box'
 import { styled } from '@mui/material/styles'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiFormControlLabel, { FormControlLabelProps } from '@mui/material/FormControlLabel'
@@ -20,32 +20,6 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { Logo } from 'src/@open-adm/logo'
 import AuthIllustrationV1Wrapper from './styles'
 import { Card, CardContent } from '@mui/material'
-
-const LoginIllustration = styled('img')(({ theme }) => ({
-  zIndex: 2,
-  maxHeight: 680,
-  marginTop: theme.spacing(12),
-  marginBottom: theme.spacing(12),
-  [theme.breakpoints.down(1540)]: {
-    maxHeight: 550
-  },
-  [theme.breakpoints.down('lg')]: {
-    maxHeight: 500
-  }
-}))
-
-const RightWrapper = styled(Box)<BoxProps>(({ theme }) => ({
-  width: '100%',
-  [theme.breakpoints.up('md')]: {
-    maxWidth: 450
-  },
-  [theme.breakpoints.up('lg')]: {
-    maxWidth: 600
-  },
-  [theme.breakpoints.up('xl')]: {
-    maxWidth: 750
-  }
-}))
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -94,7 +68,6 @@ const LoginPage = () => {
 
   const {
     control,
-    setError,
     handleSubmit,
     formState: { errors },
     setValue
@@ -106,12 +79,7 @@ const LoginPage = () => {
 
   const onSubmit = (data: FormData) => {
     const { email, password } = data
-    auth.login({ email, password, rememberMe }, (message) => {
-      setError('email', {
-        type: 'manual',
-        message: message ?? 'E-mail ou senha inválidos!'
-      })
-    })
+    auth.login({ email, password, rememberMe });
   }
 
   return (

@@ -1,13 +1,8 @@
 import axios from "axios";
 import authConfig from 'src/configs/auth';
 import { useSnackbar } from "../components/snack";
-
-const errorJson: any = {
-    "APIERROR011": "E-mail ou senha inválidos!",
-    "APIERROR014": "Não é possível atualizar um pedido com status entregue, caso necessário, exclua o pedido!",
-    "APIERROR010": "Telefone inválido!",
-    "APIERROR020": "Este e-mail já se encontra cadastrado!"
-};
+import { useNavigateApp } from "./use-navigate-app";
+import { useAuth } from "src/hooks/useAuth";
 
 type TypeMethod = "GET" | "POST" | "PUT" | "DELETE";
 interface propsUseApi {
@@ -34,37 +29,26 @@ function getMessage(method: TypeMethod): string {
 
 export function useNewApi(props: propsUseApi) {
     const snack = useSnackbar();
+    const { navigate } = useNavigateApp();
+    const { logout } = useAuth()
 
     //const URL_API = 'https://api.open-adm.tech/api/v1/'
-    //const URL_API = 'http://localhost:40332/api/v1/'
-    const URL_API = 'http://localhost:40332/api/v1/'
-    const jwt = localStorage.getItem(authConfig.storageTokenKeyName);
+    const URL_API = 'http://localhost:8000/api/v1/'
 
     const api = axios.create({
         baseURL: URL_API,
     });
 
-    const headers = {
-        Authorization: `Bearer ${jwt}`,
-    };
-
     function handleError(error: any) {
-        if (errorJson[error?.response?.data?.message]) {
-            snack.show(errorJson[error?.response?.data?.message], "error");
+        if (error?.response?.status === 401) {
+            snack.show(error?.response?.data?.mensagem, "error");
+            logout();
+            navigate('/login');
             return;
         }
 
-        if (error?.response?.data?.message) {
-            snack.show(error?.response?.data?.message, "error");
-            return;
-        }
-
-        if (error?.response?.data?.errors) {
-            let message = "";
-            Object.keys(error?.response?.data?.errors).map((key) => {
-                message = `${message}\n${error?.response?.data?.errors[key]}`;
-            });
-            snack.show(message, "error");
+        if (error?.response?.data?.mensagem) {
+            snack.show(error?.response?.data?.mensagem, "error");
             return;
         }
 
@@ -75,6 +59,10 @@ export function useNewApi(props: propsUseApi) {
         propsFecth?: propsFecth
     ): Promise<T | undefined> {
         try {
+            const jwt = window.localStorage.getItem(authConfig.storageTokenKeyName);
+            const headers = {
+                Authorization: `Bearer ${jwt}`,
+            };
             const response = await api.request({
                 url: propsFecth?.urlParams
                     ? `${props.url}${propsFecth?.urlParams}`
