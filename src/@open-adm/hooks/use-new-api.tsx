@@ -60,8 +60,10 @@ export function useNewApi(props: propsUseApi) {
     ): Promise<T | undefined> {
         try {
             const jwt = window.localStorage.getItem(authConfig.storageTokenKeyName);
+            const xApi = window.localStorage.getItem(authConfig.xApy);
             const headers = {
                 Authorization: `Bearer ${jwt}`,
+                'X-Api': xApi
             };
             const response = await api.request({
                 url: propsFecth?.urlParams

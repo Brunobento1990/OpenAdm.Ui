@@ -29,7 +29,8 @@ const AuthProvider = ({ children }: Props) => {
   const router = useRouter();
   const { fecth } = useNewApi({
     method: 'POST',
-    url: 'login/funcionario'
+    url: 'login/funcionario',
+    notAlert: true
   });
 
   useEffect(() => {
@@ -58,7 +59,7 @@ const AuthProvider = ({ children }: Props) => {
         body: {
           email: params.email,
           senha: params.password
-        }
+        },
       })
 
       if (response?.token) {
@@ -72,6 +73,7 @@ const AuthProvider = ({ children }: Props) => {
         setUser(user)
 
         window.localStorage.setItem(authConfig.keyUserdata, JSON.stringify(user))
+        window.localStorage.setItem(authConfig.xApy, response.xApi)
 
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 

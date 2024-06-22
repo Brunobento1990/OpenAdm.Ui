@@ -2,9 +2,10 @@ export default {
   meEndpoint: '/auth/me',
   loginEndpoint: '/jwt/login',
   registerEndpoint: '/jwt/register',
-  storageTokenKeyName: 'accessToken',
-  onTokenExpiration: 'refreshToken', // logout | refreshToken
+  storageTokenKeyName: 'bb__tt',
+  onTokenExpiration: 'refreshToken',
   keyUserdata: 'userData',
   lembreMeEmail: 'lembreMeEmail',
-  lembreMe: 'lembreMe'
+  lembreMe: 'lembreMe',
+  xApy: '_aaP'
 }

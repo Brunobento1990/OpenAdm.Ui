@@ -1,16 +1,20 @@
-import { Box, Card, CardContent, CardHeader, Grid, Typography } from "@mui/material";
+import { Box, CardContent, Grid, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useApi } from "src/@open-adm/hooks/use-api";
+import { useNewApi } from "src/@open-adm/hooks/use-new-api";
 import { IHome } from "src/@open-adm/types/home";
 
 export function HomePage() {
 
-    const { get } = useApi();
+    const { fecth } = useNewApi({
+        method: 'GET',
+        url: 'home/adm',
+        notAlert: true
+    });
     const [home, setHome] = useState<IHome>();
 
     async function init() {
         try {
-            var response = await get<IHome>("home/adm");
+            var response = await fecth<IHome>();
             if (response)
                 setHome(response);
         } catch (error) {
