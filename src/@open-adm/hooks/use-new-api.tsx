@@ -3,6 +3,7 @@ import authConfig from 'src/configs/auth';
 import { useSnackbar } from "../components/snack";
 import { useNavigateApp } from "./use-navigate-app";
 import { useAuth } from "src/hooks/useAuth";
+import { useLocalStorage } from "src/hooks/useLocalStorage";
 
 type TypeMethod = "GET" | "POST" | "PUT" | "DELETE";
 interface propsUseApi {
@@ -30,9 +31,11 @@ function getMessage(method: TypeMethod): string {
 export function useNewApi(props: propsUseApi) {
     const snack = useSnackbar();
     const { navigate } = useNavigateApp();
-    const { logout } = useAuth()
+    const { logout } = useAuth();
+    const { getItem } = useLocalStorage();
 
     //const URL_API = 'https://api.open-adm.tech/api/v1/'
+    //const URL_API = 'http://localhost:8000/api/v1/'
     const URL_API = 'http://localhost:8000/api/v1/'
 
     const api = axios.create({
@@ -59,11 +62,9 @@ export function useNewApi(props: propsUseApi) {
         propsFecth?: propsFecth
     ): Promise<T | undefined> {
         try {
-            const jwt = window.localStorage.getItem(authConfig.storageTokenKeyName);
-            const xApi = window.localStorage.getItem(authConfig.xApy);
+            const jwt = getItem<string>(authConfig.storageTokenKeyName);
             const headers = {
                 Authorization: `Bearer ${jwt}`,
-                'X-Api': xApi
             };
             const response = await api.request({
                 url: propsFecth?.urlParams

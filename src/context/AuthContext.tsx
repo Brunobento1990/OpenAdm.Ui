@@ -2,8 +2,8 @@ import { createContext, useEffect, useState, ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import authConfig from 'src/configs/auth'
 import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './types'
-import { useApi } from 'src/@open-adm/hooks/use-api'
 import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
+import { useLocalStorage } from 'src/hooks/useLocalStorage'
 
 const defaultProvider: AuthValuesType = {
   user: null,
@@ -24,7 +24,7 @@ const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
-
+  const { setItem, remove, getItem } = useLocalStorage();
   // ** Hooks
   const router = useRouter();
   const { fecth } = useNewApi({
@@ -35,10 +35,11 @@ const AuthProvider = ({ children }: Props) => {
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
-      const storedToken = window.localStorage.getItem(authConfig.storageTokenKeyName)!
-      const user = window.localStorage.getItem(authConfig.keyUserdata);
+      const storedToken = getItem<string>(authConfig.storageTokenKeyName)!
+      const user = getItem<string>(authConfig.keyUserdata);
       if (storedToken && user) {
         setLoading(true)
+        console.log('user: ', user)
         setUser(JSON.parse(user));
         setLoading(false);
       } else {
@@ -63,26 +64,22 @@ const AuthProvider = ({ children }: Props) => {
       })
 
       if (response?.token) {
-        window
-          .localStorage
-          .setItem(authConfig.storageTokenKeyName, response.token)
-
-        const returnUrl = router.query.returnUrl
-
+        setItem(authConfig.storageTokenKeyName, response.token)
+        const returnUrl = router.query.returnUrl;
         const user = { ...response.userData, role: 'admin' };
         setUser(user)
-
-        window.localStorage.setItem(authConfig.keyUserdata, JSON.stringify(user))
-        window.localStorage.setItem(authConfig.xApy, response.xApi)
+        console.log('response: ', response)
+        setItem(authConfig.keyUserdata, user, true);
+        setItem(authConfig.xApy, response.xApi)
 
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 
         if (params.rememberMe) {
-          window.localStorage.setItem(authConfig.lembreMe, 'true');
-          window.localStorage.setItem(authConfig.lembreMeEmail, params.email);
+          setItem(authConfig.lembreMe, 'true');
+          setItem(authConfig.lembreMeEmail, params.email);
         } else {
-          window.localStorage.removeItem(authConfig.lembreMeEmail);
-          window.localStorage.removeItem(authConfig.lembreMe);
+          remove(authConfig.lembreMeEmail);
+          remove(authConfig.lembreMe);
         }
 
         router.replace(redirectURL as string)
@@ -96,8 +93,8 @@ const AuthProvider = ({ children }: Props) => {
 
   const handleLogout = () => {
     setUser(null)
-    window.localStorage.removeItem(authConfig.keyUserdata)
-    window.localStorage.removeItem(authConfig.storageTokenKeyName)
+    remove(authConfig.keyUserdata)
+    remove(authConfig.storageTokenKeyName)
     router.push('/login')
   }
 

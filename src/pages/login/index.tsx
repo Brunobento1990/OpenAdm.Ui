@@ -20,6 +20,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 import { Logo } from 'src/@open-adm/logo'
 import AuthIllustrationV1Wrapper from './styles'
 import { Card, CardContent } from '@mui/material'
+import { useLocalStorage } from 'src/hooks/useLocalStorage'
 
 const LinkStyled = styled(Link)(({ theme }) => ({
   textDecoration: 'none',
@@ -49,15 +50,15 @@ interface FormData {
 
 const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState<boolean>(true)
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { getItem } = useLocalStorage();
 
   // ** Hooks
   const auth = useAuth()
 
   useEffect(() => {
-    const lembreMe = window.localStorage.getItem(authConfig.lembreMe);
-    const lembreMeEmail = window.localStorage.getItem(authConfig.lembreMeEmail);
-
+    const lembreMe = getItem<string>(authConfig.lembreMe);
+    const lembreMeEmail = getItem<string>(authConfig.lembreMeEmail);
     if (lembreMe === 'true' && lembreMeEmail) {
       setRememberMe(true);
       setValue("email", lembreMeEmail);

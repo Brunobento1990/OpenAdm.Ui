@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import authConfig from 'src/configs/auth'
 import { useSnackbar } from '../components/snack';
 import { useLoader } from '../components/loader';
+import { useLocalStorage } from 'src/hooks/useLocalStorage';
 const errorJson: any = {
   "APIERROR011": "E-mail ou senha inválidos!",
   "APIERROR014": "Não é possível atualizar um pedido com status entregue, caso necessário, exclua o pedido!",
@@ -15,7 +16,7 @@ interface IOptions {
 }
 
 //const URL_API = 'https://api.open-adm.tech/api/v1/'
-const URL_API = 'http://localhost:40332/api/v1/'
+const URL_API = 'http://localhost:8000/api/v1/'
 //const URL_API = 'http://localhost:44400/api/v1/'
 
 export function useApi() {
@@ -23,6 +24,7 @@ export function useApi() {
   const router = useRouter();
   const snack = useSnackbar();
   const loader = useLoader();
+  const { remove, getItem } = useLocalStorage();
 
   function handleError(error?: any) {
     console.log('error : ', error)
@@ -32,10 +34,15 @@ export function useApi() {
     }
 
     if (error?.response?.status === 401 || !error?.response) {
-      window.localStorage.removeItem(authConfig.storageTokenKeyName);
-      window.localStorage.removeItem(authConfig.keyUserdata);
+      remove(authConfig.storageTokenKeyName);
+      remove(authConfig.keyUserdata);
       snack.show("É necessário efetuar o login novamente!")
       router.replace('/login')
+      return;
+    }
+
+    if (error?.response?.data?.mensagem) {
+      snack.show(error?.response?.data?.mensagem);
       return;
     }
 
@@ -75,12 +82,11 @@ export function useApi() {
           loader.show();
         }
       }
-
       const api = axios.create({
         baseURL: URL_API,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
-          "Content-Type": 'application/json'
+          Authorization: `Bearer ${getItem(authConfig.storageTokenKeyName)}`,
+          "Content-Type": 'application/json',
         }
       })
 
@@ -117,11 +123,13 @@ export function useApi() {
   async function post<T>(url: string, body: T, message?: string, openMessage?: boolean): Promise<T | undefined> {
     try {
       loader.show();
+      const xApi = getItem<string>(authConfig.xApy);
       const api = axios.create({
         baseURL: URL_API,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
-          "Content-Type": 'application/json'
+          Authorization: `Bearer ${getItem(authConfig.storageTokenKeyName)}`,
+          "Content-Type": 'application/json',
+          'X-Api': xApi,
         }
       })
       const result = (await api.post(url, body)).data as T;
@@ -142,7 +150,7 @@ export function useApi() {
       const api = axios.create({
         baseURL: URL_API,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
+          Authorization: `Bearer ${getItem(authConfig.storageTokenKeyName)}`,
           "Content-Type": 'application/json'
         }
       })
@@ -161,7 +169,7 @@ export function useApi() {
       const api = axios.create({
         baseURL: URL_API,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem(authConfig.storageTokenKeyName)}`,
+          Authorization: `Bearer ${getItem(authConfig.storageTokenKeyName)}`,
           "Content-Type": 'application/json'
         }
       })

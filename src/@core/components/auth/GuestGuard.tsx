@@ -2,6 +2,7 @@ import { ReactNode, ReactElement, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from 'src/hooks/useAuth'
 import authConfig from 'src/configs/auth'
+import { useLocalStorage } from 'src/hooks/useLocalStorage'
 
 interface GuestGuardProps {
   children: ReactNode
@@ -12,13 +13,14 @@ const GuestGuard = (props: GuestGuardProps) => {
   const { children, fallback } = props
   const auth = useAuth()
   const router = useRouter()
+  const { getItem } = useLocalStorage();
 
   useEffect(() => {
     if (!router.isReady) {
       return
     }
 
-    if (window.localStorage.getItem(authConfig.keyUserdata)) {
+    if (getItem(authConfig.keyUserdata)) {
       router.replace('/')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

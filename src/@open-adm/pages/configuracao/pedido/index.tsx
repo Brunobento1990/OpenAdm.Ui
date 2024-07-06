@@ -47,61 +47,57 @@ export function ConfiguracaoPedido() {
             submit={formik.onSubmit}
             title="Configurações de pedido"
         >
-            {formik.values.emailDeEnvio &&
-                <>
-                    <Grid container spacing={6}>
-                        <Grid item xs={12} sm={6}>
-                            <InputCustom
-                                fullWidth
-                                label='Pedido mínimo atacado'
-                                name='pedidoMinimoAtacado'
-                                id='pedidoMinimoAtacado'
-                                value={formik.values.pedidoMinimoAtacado}
-                                onBlur={formik.onBlur}
-                                onChange={formik.onChange}
-                                mask={MaskType.MONEY}
-                                type="text"
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <InputCustom
-                                fullWidth
-                                label='Pedido mínimo varejo'
-                                name='pedidoMinimoVarejo'
-                                id='pedidoMinimoVarejo'
-                                value={formik.values.pedidoMinimoVarejo}
-                                onBlur={formik.onBlur}
-                                onChange={formik.onChange}
-                                mask={MaskType.MONEY}
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={6}>
-                        <Grid item xs={12} sm={6}>
-                            <InputCustom
-                                fullWidth
-                                label='E-mail para receber o pedido'
-                                name='emailDeEnvio'
-                                id='emailDeEnvio'
-                                value={formik.values.emailDeEnvio}
-                                onBlur={formik.onBlur}
-                                onChange={formik.onChange}
-                                helperText={formik.helperText("emailDeEnvio")}
-                                error={formik.error("emailDeEnvio")}
-                                required
-                            />
-                        </Grid>
-                    </Grid>
-                    <FileUploaderSingle
-                        title="Selecione uma logo para o pdf de pedido"
-                        maringTop={5}
-                        setFoto={(ft: any) => formik.setValue({
-                            logo: ft
-                        })}
-                        defaultValue={formik.values.logo}
+            <Grid container spacing={6}>
+                <Grid item xs={12} sm={6}>
+                    <InputCustom
+                        fullWidth
+                        label='Pedido mínimo atacado'
+                        name='pedidoMinimoAtacado'
+                        id='pedidoMinimoAtacado'
+                        value={formik.values.pedidoMinimoAtacado}
+                        onBlur={formik.onBlur}
+                        onChange={formik.onChange}
+                        mask={MaskType.MONEY}
+                        type="text"
                     />
-                </>
-            }
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <InputCustom
+                        fullWidth
+                        label='Pedido mínimo varejo'
+                        name='pedidoMinimoVarejo'
+                        id='pedidoMinimoVarejo'
+                        value={formik.values.pedidoMinimoVarejo}
+                        onBlur={formik.onBlur}
+                        onChange={formik.onChange}
+                        mask={MaskType.MONEY}
+                    />
+                </Grid>
+            </Grid>
+            <Grid container spacing={6}>
+                <Grid item xs={12} sm={6}>
+                    <InputCustom
+                        fullWidth
+                        label='E-mail para receber o pedido'
+                        name='emailDeEnvio'
+                        id='emailDeEnvio'
+                        value={formik.values.emailDeEnvio}
+                        onBlur={formik.onBlur}
+                        onChange={formik.onChange}
+                        helperText={formik.helperText("emailDeEnvio")}
+                        error={formik.error("emailDeEnvio")}
+                        required
+                    />
+                </Grid>
+            </Grid>
+            <FileUploaderSingle
+                title="Selecione uma logo para o pdf de pedido"
+                maringTop={5}
+                setFoto={(ft: any) => formik.setValue({
+                    logo: ft
+                })}
+                defaultValue={formik.values.logo}
+            />
         </Form>
     )
 }

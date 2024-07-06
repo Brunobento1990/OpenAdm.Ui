@@ -2,6 +2,7 @@ import { ReactNode, ReactElement, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from 'src/hooks/useAuth'
 import authConfig from 'src/configs/auth'
+import { useLocalStorage } from 'src/hooks/useLocalStorage'
 
 interface AuthGuardProps {
   children: ReactNode
@@ -11,14 +12,15 @@ interface AuthGuardProps {
 const AuthGuard = (props: AuthGuardProps) => {
   const { children, fallback } = props
   const auth = useAuth()
-  const router = useRouter()
+  const router = useRouter();
+  const { getItem } = useLocalStorage();
 
   useEffect(
     () => {
       if (!router.isReady) {
         return
       }
-      if (auth.user === null && !window.localStorage.getItem(authConfig.keyUserdata)) {
+      if (auth.user === null && !getItem(authConfig.keyUserdata)) {
         if (router.asPath !== '/') {
           router.replace({
             pathname: '/login',
