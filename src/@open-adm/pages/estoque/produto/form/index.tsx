@@ -58,7 +58,8 @@ export function FormProduto(props: IForm) {
                     foto: values.foto.startsWith('https://') ? values.foto : newFoto,
                     categoriaId: categorias.find((x) => x.descricao === values.categoriaId)?.id,
                     tamanhosIds: tamanhosSelect,
-                    pesosIds: pesosSelect
+                    pesosIds: pesosSelect,
+                    peso: values.peso
                 }
                 await put('produtos/update', body)
 
@@ -153,18 +154,6 @@ export function FormProduto(props: IForm) {
                     />
                     <CustomTextField
                         fullWidth
-                        label='Referência'
-                        name='referencia'
-                        id='referencia'
-                        value={formik.values.referencia}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        InputProps={{
-                            readOnly: props.action === 'view'
-                        }}
-                    />
-                    <CustomTextField
-                        fullWidth
                         label='Especificação técnica'
                         name='especificacaoTecnica'
                         id='especificacaoTecnica'
@@ -175,6 +164,31 @@ export function FormProduto(props: IForm) {
                             readOnly: props.action === 'view'
                         }}
                     />
+                    <Grid container spacing={5}>
+                        <Grid item xs={12} sm={6}>
+                            <CustomTextField
+                                fullWidth
+                                label='Peso para frete (gramas)'
+                                name='peso'
+                                id='peso'
+                                value={formik.values.peso}
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                type="number"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <CustomTextField
+                                fullWidth
+                                label='Referência'
+                                name='referencia'
+                                id='referencia'
+                                value={formik.values.referencia}
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                            />
+                        </Grid>
+                    </Grid>
                     <Grid container spacing={5}>
                         <Grid item xs={12} sm={6}>
                             <SelectCustom

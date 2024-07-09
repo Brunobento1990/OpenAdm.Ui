@@ -47,7 +47,8 @@ export function CreateProduto() {
                 foto: newFoto,
                 categoriaId: categorias.find((x) => x.descricao === values.categoriaId)?.id,
                 tamanhosIds: tamanhosSelect,
-                pesosIds: pesosSelect
+                pesosIds: pesosSelect,
+                peso: values.peso
             }
 
             const produtoView = await post<IProduto>('produtos/create', body as unknown as IProduto)
@@ -149,15 +150,6 @@ export function CreateProduto() {
                 />
                 <CustomTextField
                     fullWidth
-                    label='Referência'
-                    name='referencia'
-                    id='referencia'
-                    value={formik.values.referencia}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                />
-                <CustomTextField
-                    fullWidth
                     label='Especificação técnica'
                     name='especificacaoTecnica'
                     id='especificacaoTecnica'
@@ -165,6 +157,31 @@ export function CreateProduto() {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                 />
+                <Grid container spacing={5}>
+                    <Grid item xs={12} sm={6}>
+                        <CustomTextField
+                            fullWidth
+                            label='Peso para frete (gramas)'
+                            name='peso'
+                            id='peso'
+                            value={formik.values.peso}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <CustomTextField
+                            fullWidth
+                            label='Referência'
+                            name='referencia'
+                            id='referencia'
+                            value={formik.values.referencia}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                        />
+                    </Grid>
+                </Grid>
                 <Grid container spacing={5}>
                     <Grid item xs={12} sm={6}>
                         <SelectCustom

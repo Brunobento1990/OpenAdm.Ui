@@ -12,6 +12,7 @@ export interface IProduto extends IBase {
     categoria: ICategoria;
     tamanhos: ITamanho[];
     pesos: IPeso[];
+    peso?: number;
 }
 
 export interface ICreateProdutoDto {
@@ -23,4 +24,5 @@ export interface ICreateProdutoDto {
     categoria: ICategoria;
     tamanhos: ITamanho[];
     pesos: IPeso[];
+    peso?: number;
 }
