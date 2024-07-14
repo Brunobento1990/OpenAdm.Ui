@@ -15,7 +15,7 @@ const TopClientesMaisGastos = (props: propsTopClientesMaisGastos) => {
         },
         labels: props.topUsuarios.map((x) => x.usuario),
         title: {
-            text: 'Top 3 Clientes com Mais Pedidos'
+            text: 'Top 3 Clientes com mais gastos'
         }
     };
 

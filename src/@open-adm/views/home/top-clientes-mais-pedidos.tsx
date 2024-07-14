@@ -13,7 +13,7 @@ const TopClientesMaisPedidos = (props: propsTopClientesMaisPedidos) => {
             type: 'bar'
         },
         title: {
-            text: 'Top 3 Clientes com Mais Pedidos'
+            text: 'Top 3 Clientes com mais pedidos'
         },
         xaxis: {
             categories: props.topUsuarios.map((x) => x.usuario)
