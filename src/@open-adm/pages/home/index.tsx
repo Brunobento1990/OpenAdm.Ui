@@ -1,7 +1,16 @@
-import { Box, CardContent, Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { useNewApi } from "src/@open-adm/hooks/use-new-api";
 import { IHome } from "src/@open-adm/types/home";
+
+const TopClientesMaisGastos = dynamic(() => import('src/@open-adm/views/home/top-clientes-mais-gastos'), {
+    ssr: false,
+});
+
+const TopClientesMaisPedidos = dynamic(() => import('src/@open-adm/views/home/top-clientes-mais-pedidos'), {
+    ssr: false,
+});
 
 export function HomePage() {
 
@@ -27,44 +36,13 @@ export function HomePage() {
     }, [])
 
     return (
-        <Grid container spacing={5} padding={9}>
+        <Grid container spacing={5} padding={2}>
             <Grid item xs={12} sm={6}>
-                <Box>
-                    <Typography variant='h5' color='text.primary'>
-                        Top 3 clientes com mais gastos $
-                    </Typography>
-                    <CardContent>
-                        {home?.topUsuariosTotalCompra.map((topUsuario) => (
-                            <>
-                                <Typography variant='h5' color='text.primary'>
-                                    {topUsuario.usuario}
-                                </Typography>
-                                <Typography variant='subtitle1' color='text.primary'>
-                                    Total gastos: R$ {topUsuario.totalCompra.toString().replace('.', ',')}
-                                </Typography>
-                            </>
-                        ))}
-                    </CardContent>
-                </Box>
+                <TopClientesMaisGastos topUsuarios={home?.topUsuariosTotalCompra ?? []} />
+
             </Grid>
             <Grid item xs={12} sm={6}>
-                <Box>
-                    <Typography variant='h5' color='text.primary'>
-                        Top 3 clientes com mais pedidos
-                    </Typography>
-                    <CardContent>
-                        {home?.topUsuariosTotalPedido.map((topUsuario) => (
-                            <>
-                                <Typography variant='h5' color='text.primary'>
-                                    {topUsuario.usuario}
-                                </Typography>
-                                <Typography variant='subtitle1' color='text.primary'>
-                                    Total de pedidos: {topUsuario.totalPedidos}
-                                </Typography>
-                            </>
-                        ))}
-                    </CardContent>
-                </Box>
+                <TopClientesMaisPedidos topUsuarios={home?.topUsuariosTotalPedido ?? []} />
             </Grid>
         </Grid>
     )
