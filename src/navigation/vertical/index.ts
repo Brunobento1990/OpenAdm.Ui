@@ -93,6 +93,11 @@ const navigation = (): VerticalNavItemsType => {
           title: "Mercado pago",
           path: "/configuracao/mercado-pago",
           icon: "simple-icons:mercadopago"
+        },
+        {
+          title: "Frete",
+          path: "/configuracao/frete",
+          icon: "fluent:vehicle-truck-cube-24-regular"
         }
       ]
     }
