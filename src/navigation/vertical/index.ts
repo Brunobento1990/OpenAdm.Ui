@@ -72,6 +72,11 @@ const navigation = (): VerticalNavItemsType => {
           title: 'Relatório por período',
           icon: "tabler:report-search",
           path: '/vendas/relatorio-por-periodo'
+        },
+        {
+          title: 'Clientes',
+          icon: "solar:user-id-linear",
+          path: '/vendas/cliente'
         }
       ]
     },
