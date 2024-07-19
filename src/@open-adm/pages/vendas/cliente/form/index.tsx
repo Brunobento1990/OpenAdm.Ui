@@ -10,6 +10,7 @@ import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { useState } from "react";
 
 export function FormCliente() {
+    const urlVoltar = "/vendas/cliente";
     const { navigate } = useNavigateApp();
     const { show } = useSnackbar();
     const { create } = useApiCliente();
@@ -42,7 +43,7 @@ export function FormCliente() {
                 telefone: clearMaskPhone(values.telefone)
             });
 
-            navigate("/vendas/cliente");
+            navigate(urlVoltar);
         } catch (error) {
 
         } finally {
@@ -51,7 +52,7 @@ export function FormCliente() {
     }
 
     return (
-        <Form loading={loading} action="create" title="Cadastrar novo cliente" submit={form.onSubmit} width="100%">
+        <Form urlVoltar={urlVoltar} loading={loading} action="create" title="Cadastrar novo cliente" submit={form.onSubmit} width="100%">
             <GridCustom withItem spacing={3} xs={12} sm={6}>
                 {[
                     <InputCustom
