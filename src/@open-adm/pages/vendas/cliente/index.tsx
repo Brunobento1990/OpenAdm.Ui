@@ -7,6 +7,8 @@ export function ClientePaginacao() {
             columns={columns}
             title="Clientes"
             url="usuarios/paginacao"
+            add
+            routeAdd="cliente/create"
         />
     )
 }

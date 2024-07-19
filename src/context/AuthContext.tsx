@@ -39,7 +39,6 @@ const AuthProvider = ({ children }: Props) => {
       const user = getItem<string>(authConfig.keyUserdata);
       if (storedToken && user) {
         setLoading(true)
-        console.log('user: ', user)
         setUser(JSON.parse(user));
         setLoading(false);
       } else {

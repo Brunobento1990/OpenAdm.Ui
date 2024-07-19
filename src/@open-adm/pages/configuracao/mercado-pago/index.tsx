@@ -23,7 +23,6 @@ export function MercadoPago() {
                 form.setValue(response);
             }
         } catch (error) {
-            console.log('123')
         }
     }
 

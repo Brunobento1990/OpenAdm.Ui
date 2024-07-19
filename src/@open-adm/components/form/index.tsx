@@ -10,6 +10,8 @@ interface propsForm {
     submit: () => void;
     gap?: number;
     titleButton?: string;
+    width?: string;
+    loading?: boolean;
 }
 
 export function Form(props: propsForm) {
@@ -17,7 +19,7 @@ export function Form(props: propsForm) {
     const router = useRouter();
 
     return (
-        <Card sx={{ padding: 5, gap: props.gap, scrollBehavior: 'auto' }} >
+        <Card sx={{ padding: 5, gap: props.gap, scrollBehavior: 'auto', width: props.width }} >
             <CardHeader
                 title={props.title}
             />
@@ -34,6 +36,7 @@ export function Form(props: propsForm) {
                 }
                 {props.action !== 'view' &&
                     <Button
+                        disabled={props.loading}
                         variant="contained"
                         onClick={props.submit}
                     >
