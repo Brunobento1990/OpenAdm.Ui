@@ -9,6 +9,8 @@ export function ClientePaginacao() {
             url="usuarios/paginacao"
             add
             routeAdd="cliente/create"
+            view
+            routeView="cliente/view"
         />
     )
 }
