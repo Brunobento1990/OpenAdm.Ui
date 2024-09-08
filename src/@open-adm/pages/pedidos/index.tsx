@@ -6,15 +6,15 @@ export function Pedidos() {
     const config = useConfig();
 
     return (
-        <>
-            <Table
-                columns={config.columns}
-                title="Pedidos"
-                url="pedidos/paginacao"
-                isPedido
-                delete
-                routeDelete="pedidos/delete"
-            />
-        </>
+        <Table
+            columns={config.columns}
+            title="Pedidos"
+            url="pedidos/paginacao"
+            isPedido
+            delete
+            routeDelete="pedidos/delete"
+            routeView="pedidos/view"
+            view
+        />
     )
 }
