@@ -22,5 +22,5 @@ export type AuthValuesType = {
   user: UserDataType | null
   setLoading: (value: boolean) => void
   setUser: (value: UserDataType | null) => void
-  login: (params: LoginParams, errorCallback?: ErrCallbackType) => void
+  login: (params: LoginParams, errorCallback?: ErrCallbackType) => Promise<void>
 }

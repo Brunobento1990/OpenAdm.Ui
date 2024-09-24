@@ -51,6 +51,7 @@ interface FormData {
 const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState<boolean>(true)
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { getItem } = useLocalStorage();
 
   // ** Hooks
@@ -78,9 +79,11 @@ const LoginPage = () => {
     resolver: yupResolver(schema)
   })
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
+    setLoading(true);
     const { email, password } = data
-    auth.login({ email, password, rememberMe });
+    await auth.login({ email, password, rememberMe });
+    setLoading(false);
   }
 
   return (
@@ -168,8 +171,8 @@ const LoginPage = () => {
                   Esqueceu sua senha?
                 </Typography>
               </Box>
-              <Button fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
-                Login
+              <Button disabled={loading} fullWidth type='submit' variant='contained' sx={{ mb: 4 }}>
+                {loading ? 'Aguarde...' : 'Login'}
               </Button>
             </form>
           </CardContent>

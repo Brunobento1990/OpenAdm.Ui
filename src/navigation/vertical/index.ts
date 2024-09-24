@@ -9,19 +9,20 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'clarity:home-line',
     },
     {
-      title: 'Pedidos',
-      path: '/pedidos',
-      icon: 'material-symbols:order-approve-outline',
-    },
-    {
-      title: 'Banners',
-      path: '/banners',
-      icon: 'material-symbols-light:planner-banner-ad-pt-outline',
-    },
-    {
-      title: 'Lojas parceiras',
-      path: '/lojas-parceiras',
-      icon: 'mdi:store-check-outline'
+      title: 'Ecommerce',
+      icon: 'icon-park-outline:shopping',
+      children: [
+        {
+          title: 'Banners',
+          path: '/banners',
+          icon: 'material-symbols-light:planner-banner-ad-pt-outline',
+        },
+        {
+          title: 'Lojas parceiras',
+          path: '/lojas-parceiras',
+          icon: 'mdi:store-check-outline'
+        },
+      ]
     },
     {
       title: 'Estoque',
@@ -63,6 +64,11 @@ const navigation = (): VerticalNavItemsType => {
       'title': 'Vendas',
       'icon': 'carbon:sales-ops',
       'children': [
+        {
+          title: 'Pedidos',
+          path: '/pedidos',
+          icon: 'material-symbols:order-approve-outline',
+        },
         {
           title: 'Tabela de preço',
           icon: 'solar:tag-price-bold',

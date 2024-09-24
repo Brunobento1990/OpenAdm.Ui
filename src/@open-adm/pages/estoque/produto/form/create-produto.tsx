@@ -8,11 +8,12 @@ import { ICategoria } from "src/@open-adm/types/categoria";
 import { defaultValues, handleItensTabelaDePreco, schema } from "../config";
 import { ICreateProdutoDto, IProduto } from "src/@open-adm/types/produto";
 import { useRouter } from "next/router";
-import { Box, Chip, Divider, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Alert, AlertTitle, Box, Chip, Divider, Grid, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { ITamanho } from "src/@open-adm/types/tamanho";
 import { IPeso } from "src/@open-adm/types/peso";
 import { UploadImage } from "src/@open-adm/components/upload-image";
 import { ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
+import { useSnackbar } from "src/@open-adm/components/snack";
 
 export function CreateProduto() {
 
@@ -24,6 +25,7 @@ export function CreateProduto() {
     const [tamanhosSelect, setTamanhosSelect] = useState<string[]>([]);
     const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
     const { get, post } = useApi();
+    const { show } = useSnackbar();
     const router = useRouter();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
@@ -40,6 +42,11 @@ export function CreateProduto() {
             const index = values.foto.indexOf(',') + 1;
             const newFoto = values.foto.slice(index);
 
+            if (!newFoto) {
+                show('Informe a foto do produto!', 'error');
+                return;
+            }
+
             const body = {
                 descricao: values.descricao,
                 referencia: values.referencia,
@@ -53,7 +60,7 @@ export function CreateProduto() {
 
             const produtoView = await post<IProduto>('produtos/create', body as unknown as IProduto)
 
-            if (produtoView && produtoView.id) {
+            if (produtoView && produtoView.id && tabelaDePreco?.numero && tabelaDePreco?.numero > 0) {
                 const itensTabelaDePreco = tabelaDePreco
                     ?.itensTabelaDePreco
                     ?.map((item) => {
@@ -117,6 +124,9 @@ export function CreateProduto() {
             gap={2}
         >
             <Box sx={{ width: '100%' }}>
+                {!tabelaDePreco?.numero &&
+                    <Alert severity="warning" sx={{ marginBottom: '10px' }}>Não há uma tabela de preço cadastrada!</Alert>
+                }
                 <CustomTextField
                     fullWidth
                     label='Descrição'
@@ -238,115 +248,107 @@ export function CreateProduto() {
                         sx={{ width: '200px', height: '200px', borderRadius: '5px' }}
                     />
                 </Box>
-                <Divider sx={{ marginTop: 2 }}>
-                    <Chip label={`Tabela de preço: ${tabelaDePreco?.descricao}`} size="small" />
-                </Divider>
-                <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' gap='10px'>
-                    {tamanhos && tamanhosSelect.length > 0 &&
-                        <>
-                            <Typography sx={{ marginTop: 2 }}>
-                                Preços por tamanhos
-                            </Typography>
-                            {tamanhos.filter((x) => tamanhosSelect.some((y) => x.id === y)).map((tamanho, index) => (
-                                <Box display='flex' alignItems='center' justifyContent='center' gap='10px'>
-                                    <Typography>
-                                        {tamanho.descricao}
-                                    </Typography>
-                                    <CustomTextField
-                                        label='Vlr un atacado'
-                                        name={tamanho.descricao + index}
-                                        id={tamanho.descricao + index}
-                                        value={tabelaDePreco?.itensTabelaDePreco?.find((itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id)?.valorUnitarioAtacado}
-                                        type="number"
-                                        inputProps={{
-                                            step: "2"
-                                        }}
-                                        onChange={(e) => setTabelaDePreco(
-                                            handleItensTabelaDePreco({
-                                                find: (itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id,
-                                                newValue: e.target.value,
-                                                isVarejo: false,
-                                                tamanhoId: tamanho.id,
-                                                tabelaDePreco
-                                            })
-                                        )}
-                                    />
-                                    <CustomTextField
-                                        label='Vlr un varejo'
-                                        name={tamanho.descricao + index}
-                                        id={tamanho.descricao + index}
-                                        value={tabelaDePreco?.itensTabelaDePreco?.find((itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id)?.valorUnitarioVarejo}
-                                        type="number"
-                                        inputProps={{
-                                            step: "2"
-                                        }}
-                                        onChange={(e) => setTabelaDePreco(
-                                            handleItensTabelaDePreco({
-                                                find: (itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id,
-                                                newValue: e.target.value,
-                                                isVarejo: true,
-                                                tamanhoId: tamanho.id,
-                                                tabelaDePreco
-                                            })
-                                        )}
-                                    />
-                                </Box>
-                            ))}
-                        </>
-                    }
-                    {pesos && pesosSelect.length > 0 &&
-                        <>
-                            <Typography sx={{ marginTop: 2 }}>
-                                Preços por pesos
-                            </Typography>
-                            {pesos.filter((x) => pesosSelect.some((y) => x.id === y)).map((peso, index) => (
-                                <Box display='flex' alignItems='center' justifyContent='center' gap='10px'>
-                                    <Typography>
-                                        {peso.descricao}
-                                    </Typography>
-                                    <CustomTextField
-                                        label='Vlr un atacado'
-                                        name={peso.descricao + index}
-                                        id={peso.descricao + index}
-                                        value={tabelaDePreco?.itensTabelaDePreco?.find((itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id)?.valorUnitarioAtacado}
-                                        type="number"
-                                        inputProps={{
-                                            step: "2"
-                                        }}
-                                        onChange={(e) => setTabelaDePreco(
-                                            handleItensTabelaDePreco({
-                                                find: (itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id,
-                                                newValue: e.target.value,
-                                                pesoId: peso.id,
-                                                isVarejo: false,
-                                                tabelaDePreco
-                                            })
-                                        )}
-                                    />
-                                    <CustomTextField
-                                        label='Vlr un varejo'
-                                        name={peso.descricao + index}
-                                        id={peso.descricao + index}
-                                        value={tabelaDePreco?.itensTabelaDePreco?.find((itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id)?.valorUnitarioVarejo}
-                                        type="number"
-                                        inputProps={{
-                                            step: "2"
-                                        }}
-                                        onChange={(e) => setTabelaDePreco(
-                                            handleItensTabelaDePreco({
-                                                find: (itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id,
-                                                newValue: e.target.value,
-                                                pesoId: peso.id,
-                                                isVarejo: true,
-                                                tabelaDePreco
-                                            })
-                                        )}
-                                    />
-                                </Box>
-                            ))}
-                        </>
-                    }
-                </Box>
+                {tabelaDePreco?.numero && tabelaDePreco?.numero > 0 ?
+                    (<Divider sx={{ marginTop: 2 }}>
+                        <Chip label={`Tabela de preço: ${tabelaDePreco?.descricao}`} size="small" />
+                    </Divider>) : <></>
+                }
+                {tabelaDePreco?.numero && tabelaDePreco?.numero > 0 ? (
+                    <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' gap='10px'>
+                        {tamanhos && tamanhosSelect.length > 0 &&
+                            <>
+                                <Typography sx={{ marginTop: 2 }}>
+                                    Preços por tamanhos
+                                </Typography>
+                                {tamanhos.filter((x) => tamanhosSelect.some((y) => x.id === y)).map((tamanho, index) => (
+                                    <Box display='flex' alignItems='center' justifyContent='center' gap='10px'>
+                                        <Typography>
+                                            {tamanho.descricao}
+                                        </Typography>
+                                        <CustomTextField
+                                            label='Vlr un atacado'
+                                            name={tamanho.descricao + index}
+                                            id={tamanho.descricao + index}
+                                            value={tabelaDePreco?.itensTabelaDePreco?.find((itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id)?.valorUnitarioAtacado}
+                                            type="number"
+                                            onChange={(e) => setTabelaDePreco(
+                                                handleItensTabelaDePreco({
+                                                    find: (itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id,
+                                                    newValue: e.target.value,
+                                                    isVarejo: false,
+                                                    tamanhoId: tamanho.id,
+                                                    tabelaDePreco
+                                                })
+                                            )}
+                                        />
+                                        <CustomTextField
+                                            label='Vlr un varejo'
+                                            name={tamanho.descricao + index}
+                                            id={tamanho.descricao + index}
+                                            value={tabelaDePreco?.itensTabelaDePreco?.find((itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id)?.valorUnitarioVarejo}
+                                            type="number"
+                                            onChange={(e) => setTabelaDePreco(
+                                                handleItensTabelaDePreco({
+                                                    find: (itemTabelaDePreco) => itemTabelaDePreco.tamanhoId === tamanho.id,
+                                                    newValue: e.target.value,
+                                                    isVarejo: true,
+                                                    tamanhoId: tamanho.id,
+                                                    tabelaDePreco
+                                                })
+                                            )}
+                                        />
+                                    </Box>
+                                ))}
+                            </>
+                        }
+                        {pesos && pesosSelect.length > 0 &&
+                            <>
+                                <Typography sx={{ marginTop: 2 }}>
+                                    Preços por pesos
+                                </Typography>
+                                {pesos.filter((x) => pesosSelect.some((y) => x.id === y)).map((peso, index) => (
+                                    <Box display='flex' alignItems='center' justifyContent='center' gap='10px'>
+                                        <Typography>
+                                            {peso.descricao}
+                                        </Typography>
+                                        <CustomTextField
+                                            label='Vlr un atacado'
+                                            name={peso.descricao + index}
+                                            id={peso.descricao + index}
+                                            value={tabelaDePreco?.itensTabelaDePreco?.find((itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id)?.valorUnitarioAtacado}
+                                            type="number"
+                                            onChange={(e) => setTabelaDePreco(
+                                                handleItensTabelaDePreco({
+                                                    find: (itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id,
+                                                    newValue: e.target.value,
+                                                    pesoId: peso.id,
+                                                    isVarejo: false,
+                                                    tabelaDePreco
+                                                })
+                                            )}
+                                        />
+                                        <CustomTextField
+                                            label='Vlr un varejo'
+                                            name={peso.descricao + index}
+                                            id={peso.descricao + index}
+                                            value={tabelaDePreco?.itensTabelaDePreco?.find((itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id)?.valorUnitarioVarejo}
+                                            type="number"
+                                            onChange={(e) => setTabelaDePreco(
+                                                handleItensTabelaDePreco({
+                                                    find: (itemTabelaDePreco) => itemTabelaDePreco.pesoId === peso.id,
+                                                    newValue: e.target.value,
+                                                    pesoId: peso.id,
+                                                    isVarejo: true,
+                                                    tabelaDePreco
+                                                })
+                                            )}
+                                        />
+                                    </Box>
+                                ))}
+                            </>
+                        }
+                    </Box>
+                ) : (<></>)}
             </Box>
         </Form >
     )

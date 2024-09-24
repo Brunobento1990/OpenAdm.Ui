@@ -23,7 +23,10 @@ export function Form(props: propsForm) {
             <CardHeader
                 title={props.title}
             />
-            <form autoComplete='off' onSubmit={props.submit}>
+            <form autoComplete='off' onSubmit={(e) => {
+                e.preventDefault();
+                props.submit();
+            }}>
                 {props.children}
             </form>
             <Box display='flex' justifyContent='space-between' sx={{ marginTop: 10 }}>
