@@ -12,6 +12,10 @@ const TopClientesMaisPedidos = dynamic(() => import('src/@open-adm/views/home/to
     ssr: false,
 });
 
+const Movimentos = dynamic(() => import('src/@open-adm/views/home/movimentos'), {
+    ssr: false,
+});
+
 export function HomePage() {
 
     const { fecth } = useNewApi({
@@ -36,14 +40,20 @@ export function HomePage() {
     }, [])
 
     return (
-        <Grid container spacing={5} padding={2}>
-            <Grid item xs={12} sm={6}>
-                <TopClientesMaisGastos topUsuarios={home?.topUsuariosTotalCompra ?? []} />
-
+        <>
+            <Grid container spacing={5} padding={2}>
+                <Grid item xs={12} sm={6}>
+                    <TopClientesMaisGastos topUsuarios={home?.topUsuariosTotalCompra ?? []} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TopClientesMaisPedidos topUsuarios={home?.topUsuariosTotalPedido ?? []} />
+                </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <TopClientesMaisPedidos topUsuarios={home?.topUsuariosTotalPedido ?? []} />
+            <Grid container spacing={5} padding={2}>
+                <Grid item xs={12} sm={6}>
+                    <Movimentos movimentos={home?.movimentos ?? []} />
+                </Grid>
             </Grid>
-        </Grid>
+        </>
     )
 }

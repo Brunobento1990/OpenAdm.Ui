@@ -1,28 +1,27 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
-import { ITopUsuarios } from 'src/@open-adm/types/home';
 
 interface propsTopClientesMaisPedidos {
-    topUsuarios: ITopUsuarios[];
+    movimentos: any[];
 }
 
-const TopClientesMaisPedidos = (props: propsTopClientesMaisPedidos) => {
+const Movimentos = (props: propsTopClientesMaisPedidos) => {
     const options: ApexCharts.ApexOptions = {
         chart: {
             type: 'bar'
         },
         title: {
-            text: 'Top 3 Clientes com mais pedidos'
+            text: 'Movimento produto dos ultimos 3 meses'
         },
         xaxis: {
-            categories: props.topUsuarios.map((x) => x.usuario)
+            categories: props.movimentos.map((x) => x.mes)
         }
     };
 
     const series: ApexAxisChartSeries | ApexNonAxisChartSeries = [
         {
-            name: 'Pedidos',
-            data: props.topUsuarios.map((x) => x.totalPedidos)
+            name: 'Total',
+            data: props.movimentos.map((x) => x.count)
         }
     ];
 
@@ -31,4 +30,4 @@ const TopClientesMaisPedidos = (props: propsTopClientesMaisPedidos) => {
     );
 };
 
-export default TopClientesMaisPedidos;
+export default Movimentos;

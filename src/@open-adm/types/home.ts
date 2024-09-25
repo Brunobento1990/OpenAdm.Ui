@@ -2,7 +2,8 @@ import { IBase } from "./base";
 
 export interface IHome {
     topUsuariosTotalCompra: ITopUsuarios[],
-    topUsuariosTotalPedido: ITopUsuarios[]
+    topUsuariosTotalPedido: ITopUsuarios[],
+    movimentos: any[]
 }
 
 export interface ITopUsuarios extends IBase {
