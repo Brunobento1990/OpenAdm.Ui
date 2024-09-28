@@ -54,6 +54,11 @@ const navigation = (): VerticalNavItemsType => {
           icon: 'arcticons:stockswidget'
         },
         {
+          title: 'Relatório de estoque',
+          icon: "tabler:report-search",
+          path: '/estoque/relatorio-estoque'
+        },
+        {
           title: 'Posição estoque',
           path: '/estoque/posicao-estoque',
           icon: 'icon-park-outline:database-position'

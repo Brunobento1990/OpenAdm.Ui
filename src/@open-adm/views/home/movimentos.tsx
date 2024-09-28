@@ -11,7 +11,7 @@ const Movimentos = (props: propsTopClientesMaisPedidos) => {
             type: 'bar'
         },
         title: {
-            text: 'Movimento produto dos ultimos 3 meses'
+            text: `Movimento produto dos ultimos ${props.movimentos.length} meses`
         },
         xaxis: {
             categories: props.movimentos.map((x) => x.mes)
