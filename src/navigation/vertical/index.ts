@@ -54,9 +54,15 @@ const navigation = (): VerticalNavItemsType => {
           icon: 'arcticons:stockswidget'
         },
         {
-          title: 'Relatório de estoque',
-          icon: "tabler:report-search",
-          path: '/estoque/relatorio-estoque'
+          title: 'Relatórios',
+          icon: "mdi:report-finance",
+          children: [
+            {
+              title: 'Relatório de estoque',
+              icon: "tabler:report-search",
+              path: '/estoque/relatorio-estoque'
+            },
+          ]
         },
         {
           title: 'Posição estoque',
