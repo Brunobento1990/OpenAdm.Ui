@@ -54,6 +54,11 @@ const navigation = (): VerticalNavItemsType => {
           icon: 'arcticons:stockswidget'
         },
         {
+          title: 'Posição estoque',
+          path: '/estoque/posicao-estoque',
+          icon: 'icon-park-outline:database-position'
+        },
+        {
           title: 'Relatórios',
           icon: "mdi:report-finance",
           children: [
@@ -64,11 +69,6 @@ const navigation = (): VerticalNavItemsType => {
             },
           ]
         },
-        {
-          title: 'Posição estoque',
-          path: '/estoque/posicao-estoque',
-          icon: 'icon-park-outline:database-position'
-        }
       ]
     },
     {

@@ -83,7 +83,7 @@ export function useNewApi(props: propsUseApi) {
             if (!props.notHandleError) {
                 handleError(error);
             }
-            throw error;
+            return undefined;
         }
     }
 

@@ -1,4 +1,4 @@
-import { Card, CardHeader, Box, Button } from "@mui/material";
+import { Card, CardHeader, Box, Button, CircularProgress } from "@mui/material";
 import { ReactNode } from "react";
 import { useRouter } from "next/router";
 
@@ -43,7 +43,7 @@ export function Form(props: propsForm) {
                         variant="contained"
                         onClick={props.submit}
                     >
-                        {props.titleButton ?? 'Salvar'}
+                        {props.loading ? <>Aguarde ... <CircularProgress size={20} /></> : props.titleButton ?? 'Salvar'}
                     </Button>
                 }
             </Box>
