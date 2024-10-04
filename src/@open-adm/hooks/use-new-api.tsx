@@ -5,7 +5,7 @@ import { useNavigateApp } from "./use-navigate-app";
 import { useAuth } from "src/hooks/useAuth";
 import { useLocalStorage } from "src/hooks/useLocalStorage";
 
-type TypeMethod = "GET" | "POST" | "PUT" | "DELETE";
+export type TypeMethod = "GET" | "POST" | "PUT" | "DELETE";
 interface propsUseApi {
     method: TypeMethod;
     url: string;

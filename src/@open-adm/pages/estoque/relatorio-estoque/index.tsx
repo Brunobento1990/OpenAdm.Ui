@@ -1,7 +1,9 @@
-import { Grid } from "@mui/material";
+import { Divider, Grid } from "@mui/material";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
+import { DividerApp } from "src/@open-adm/components/divider";
+import { DropDownMultiple } from "src/@open-adm/components/drop-down-scroll/dorp-down-multiple";
 import { Form } from "src/@open-adm/components/form";
 import { InputDate } from "src/@open-adm/components/input/input-date";
 import { useNewApi } from "src/@open-adm/hooks/use-new-api";
@@ -14,6 +16,9 @@ const defaultValues = {
 
 export function RelatorioEstoque() {
     const [loading, setLoading] = useState(false);
+    const [pesosId, setPesosId] = useState<string[]>([]);
+    const [tamanhosId, setTamanhosId] = useState<string[]>([]);
+    const [produtosId, setProdutosId] = useState<string[]>([]);
     const api = useNewApi({
         method: 'POST',
         url: 'movimentacao-de-produto/relatorio',
@@ -29,7 +34,10 @@ export function RelatorioEstoque() {
         setLoading(true);
         const response = await api.fecth<any>({
             body: {
-                ...formik.values
+                ...formik.values,
+                pesosId,
+                tamanhosId,
+                produtosId
             },
             message: 'Download efetuado com sucesso!'
         });
@@ -88,6 +96,39 @@ export function RelatorioEstoque() {
                                 dataFinal: value
                             })
                         }}
+                    />
+                </Grid>
+            </Grid>
+            <DividerApp chip="Filtros" />
+            <Grid container spacing={5}>
+                <Grid item xs={12} sm={4}>
+                    <DropDownMultiple
+                        id="produtoId"
+                        label="Produtos"
+                        primeiraKey="numero"
+                        segundaKey="descricao"
+                        onChange={setProdutosId}
+                        url="produtos/all-list"
+                    />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                    <DropDownMultiple
+                        id="pesoId"
+                        label="Pesos"
+                        primeiraKey="numero"
+                        segundaKey="descricao"
+                        onChange={setPesosId}
+                        url="pesos/list"
+                    />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                    <DropDownMultiple
+                        id="tamanhoId"
+                        label="Tamanhos"
+                        primeiraKey="numero"
+                        segundaKey="descricao"
+                        onChange={setTamanhosId}
+                        url="tamanhos/list"
                     />
                 </Grid>
             </Grid>
