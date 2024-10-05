@@ -67,6 +67,11 @@ const navigation = (): VerticalNavItemsType => {
               icon: "tabler:report-search",
               path: '/estoque/relatorio-estoque'
             },
+            {
+              title: 'Relatório de produção',
+              icon: "tabler:report-search",
+              path: '/estoque/relatorio-producao'
+            },
           ]
         },
       ]

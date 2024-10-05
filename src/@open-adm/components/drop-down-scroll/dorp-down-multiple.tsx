@@ -11,11 +11,13 @@ interface propsDropDownMultiple {
     defaultValue?: any[];
     onChange: (newValues: any[]) => void;
     url: string;
-    method?: TypeMethod
+    method?: TypeMethod;
+    retornarObjetoCompleto?: boolean;
 }
 
 export function DropDownMultiple(props: propsDropDownMultiple) {
     const [options, setOptions] = useState<any[]>([]);
+    const [optionsComplete, setOptionsComplete] = useState<any[]>([]);
     const { fecth } = useNewApi({
         method: props.method ?? 'GET',
         url: props.url,
@@ -27,6 +29,9 @@ export function DropDownMultiple(props: propsDropDownMultiple) {
         const response = await fecth<any[]>();
         if (response) {
             setOptions(response)
+            if (props.retornarObjetoCompleto) {
+                setOptionsComplete(response)
+            }
         }
     }
 
@@ -40,6 +45,10 @@ export function DropDownMultiple(props: propsDropDownMultiple) {
             id={props.id}
             getOptionLabel={option => props.segundaKey ? `${option[props.primeiraKey]} - ${option[props.segundaKey]}` : option[props.primeiraKey] || ''}
             onChange={(_, newValue) => {
+                if (props.retornarObjetoCompleto) {
+                    props.onChange(optionsComplete.filter((x) => newValue.some((y) => x?.id === y?.id)))
+                    return;
+                }
                 props.onChange(newValue.map((x) => x.id));
             }}
             options={options}
