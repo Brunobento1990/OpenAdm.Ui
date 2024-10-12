@@ -67,7 +67,6 @@ const AuthProvider = ({ children }: Props) => {
         const returnUrl = router.query.returnUrl;
         const user = { ...response.userData, role: 'admin' };
         setUser(user)
-        console.log('response: ', response)
         setItem(authConfig.keyUserdata, user, true);
         setItem(authConfig.xApy, response.xApi)
 

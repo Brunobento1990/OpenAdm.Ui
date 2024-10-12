@@ -127,6 +127,17 @@ const navigation = (): VerticalNavItemsType => {
           icon: "fluent:vehicle-truck-cube-24-regular"
         }
       ]
+    },
+    {
+      title: 'Financeiro',
+      icon: 'rivet-icons:money',
+      children: [
+        {
+          title: 'Fatura contas a receber',
+          icon: 'solar:hand-money-outline',
+          path: '/financeiro/contas-a-receber'
+        }
+      ]
     }
   ]
 }

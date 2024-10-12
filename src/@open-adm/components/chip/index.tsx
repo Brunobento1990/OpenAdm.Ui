@@ -43,4 +43,22 @@ const Chip = (props: CustomChipProps) => {
   )
 }
 
+interface propsStatusApp {
+  cor: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning";
+  titulo?: string;
+}
+
+export function StatusApp(props: propsStatusApp) {
+  return (
+    <Chip
+      rounded
+      size='small'
+      skin='light'
+      color={props.cor}
+      label={props.titulo}
+      sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+    />
+  )
+}
+
 export default Chip

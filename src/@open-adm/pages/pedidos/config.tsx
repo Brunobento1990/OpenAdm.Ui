@@ -1,33 +1,48 @@
+import { IconButton, Tooltip } from '@mui/material'
 import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import IconifyIcon from 'src/@core/components/icon'
 import { ThemeColor } from 'src/@core/layouts/types'
-import CustomChip from 'src/@open-adm/components/chip'
+import { StatusApp } from 'src/@open-adm/components/chip'
+import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
 
 export function useConfig() {
-
+    const { navigate } = useNavigateApp();
     const columns: GridColDef[] = [
         {
             flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'usuario',
             headerName: 'Cliente',
         },
         {
             flex: 0.175,
-            minWidth: 140,
+            width: 10,
             field: 'status',
             headerName: 'Status',
             renderCell: (params: GridRenderCellParams) => {
                 const status = statusPedido[params.row.statusPedido]
 
                 return (
-                    <CustomChip
-                        rounded
-                        size='small'
-                        skin='light'
-                        color={status.color}
-                        label={status.title}
-                        sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                    <StatusApp
+                        cor={status.color}
+                        titulo={status.title}
                     />
+                )
+            }
+        },
+        {
+            field: 'status2',
+            headerName: 'Baixar',
+            align: 'center',
+            renderCell: (params) => {
+                return (
+                    <Tooltip title="Modificar status do pedido" placement="top">
+                        <IconButton onClick={() => navigate(`/pedidos/modificar-status-pedido/${params.row.id}`)}>
+                            <IconifyIcon
+                                icon='fe:app-menu'
+                            />
+                        </IconButton>
+                    </Tooltip>
                 )
             }
         }

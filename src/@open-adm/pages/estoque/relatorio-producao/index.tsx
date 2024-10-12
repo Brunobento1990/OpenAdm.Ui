@@ -39,8 +39,6 @@ export function RelatorioProducao() {
         setLoading(false);
     }
 
-    console.log(pedidos)
-
     return (
         <Form
             action="create"

@@ -6,7 +6,7 @@ interface propsUseFormikAdapter {
   onSubmit: (value: any) => void;
 }
 
-export function useFormikAdapter(props: propsUseFormikAdapter) {
+export function useFormikAdapter<T = any>(props: propsUseFormikAdapter) {
   const formik = useFormik({
     initialValues: props.initialValues,
     validationSchema: props.validationSchema,
@@ -35,6 +35,6 @@ export function useFormikAdapter(props: propsUseFormikAdapter) {
     onChange,
     helperText: (key: string): any => formik.touched[key] && formik.errors[key],
     error: (key: string) => !!(formik.touched[key] && formik.errors[key]),
-    values: formik.values
+    values: formik.values as T
   };
 }

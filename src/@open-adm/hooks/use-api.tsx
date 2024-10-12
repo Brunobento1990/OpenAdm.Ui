@@ -27,7 +27,6 @@ export function useApi() {
   const { remove, getItem } = useLocalStorage();
 
   function handleError(error?: any) {
-    console.log('error : ', error)
     if (!error) {
       snack.show();
       return;

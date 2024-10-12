@@ -4,7 +4,6 @@ import CardHeader from '@mui/material/CardHeader'
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import { useApi } from 'src/@open-adm/hooks/use-api';
 import { Box, Button, FormControl, FormControlLabel, FormLabel, Grid, IconButton, Pagination, Radio, RadioGroup, Skeleton, Tooltip, Typography } from '@mui/material';
-import { ModalWithChildren } from '../modal';
 import IconifyIcon from 'src/@core/components/icon';
 import { Controller, useForm } from 'react-hook-form';
 import CustomTextField from 'src/@core/components/mui/text-field';
@@ -39,18 +38,13 @@ interface tableProps {
 }
 
 const Table = (props: tableProps) => {
-
-
-    const { get, put, deleteApi } = useApi();
+    const { get, deleteApi } = useApi();
     const router = useRouter();
     const modal = useModal();
     const [rows, setRows] = useState<any[]>([]);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
-    const [statusPedido, setStatusPedido] = useState<string>('0');
     const [statusPedidoFiltro, setStatusPedidoFiltro] = useState<string>('0');
-    const [pedido, setPedido] = useState<any>();
-    const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const handleChangePagination = (
@@ -59,25 +53,6 @@ const Table = (props: tableProps) => {
     ) => {
         setPage(value);
     };
-
-    async function updateStatus() {
-        try {
-            setLoading(true);
-            setOpen(false);
-            const response = await put('pedidos/update-status', {
-                pedidoId: pedido?.id,
-                statusPedido: parseInt(statusPedido)
-            })
-
-            if (response) {
-                await init();
-            }
-        } catch (error) {
-
-        } finally {
-            setLoading(false)
-        }
-    }
 
     async function init() {
         try {
@@ -129,21 +104,6 @@ const Table = (props: tableProps) => {
                 renderCell: (params: GridRenderCellParams) => {
                     return (
                         <>
-                            {props.isPedido &&
-                                <Tooltip title="Modificar status do pedido" placement="top">
-                                    <IconButton
-                                        onClick={() => {
-                                            setOpen(true);
-                                            setPedido(params.row);
-                                            setStatusPedido(params.row.statusPedido)
-                                        }}
-                                    >
-                                        <IconifyIcon
-                                            icon='fe:app-menu'
-                                        />
-                                    </IconButton>
-                                </Tooltip>
-                            }
                             {props.isPedido &&
                                 <Tooltip title="Download do pedido" placement="top">
                                     <IconButton
@@ -248,8 +208,6 @@ const Table = (props: tableProps) => {
     })
 
     return (
-
-
         <>
             <Card>
                 <CardHeader title={props.title} />
@@ -336,41 +294,6 @@ const Table = (props: tableProps) => {
                     onChange={handleChangePagination}
                 />
             </Card>
-            {props.isPedido &&
-                <ModalWithChildren
-                    close={() => setOpen(false)}
-                    confimerd={updateStatus}
-                    open={open}
-                >
-                    <Grid container spacing={6}>
-                        <Grid item xs={12}>
-                            <Box sx={{ mb: 4, textAlign: 'center' }}>
-                                <Typography variant='h3' sx={{ mb: 3 }}>
-                                    Selecione o status do pedido!
-                                </Typography>
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Box sx={{ mb: 4, textAlign: 'center' }}>
-                                <Typography variant='h4' sx={{ mb: 3 }}>
-                                    #{pedido?.numero}
-                                </Typography>
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControl>
-                                <FormLabel component='legend'>Status</FormLabel>
-                                <RadioGroup aria-label='status' name='status' row value={statusPedido} onChange={(e) => setStatusPedido(e.target.value)}>
-                                    <FormControlLabel value='0' control={<Radio />} label='Em aberto' />
-                                    <FormControlLabel value='1' control={<Radio />} label='Faturado' />
-                                    <FormControlLabel value='2' control={<Radio />} label='Em entrega' />
-                                    <FormControlLabel value='3' control={<Radio />} label='Entregue' />
-                                </RadioGroup>
-                            </FormControl>
-                        </Grid>
-                    </Grid>
-                </ModalWithChildren>
-            }
         </>
     )
 }
