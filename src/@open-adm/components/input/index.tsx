@@ -28,6 +28,7 @@ interface InputCustomProps {
     placeholder?: string;
     isPassword?: boolean;
     mask?: MaskType;
+    readonly?: boolean;
 }
 
 export function InputCustom(props: InputCustomProps) {
@@ -73,6 +74,7 @@ export function InputCustom(props: InputCustomProps) {
             required={props.required}
             inputProps={{ maxLength: props.maxLength }}
             InputProps={{
+                readOnly: props.readonly,
                 endAdornment: props.isPassword && (
                     <InputAdornment position="end">
                         <IconButton

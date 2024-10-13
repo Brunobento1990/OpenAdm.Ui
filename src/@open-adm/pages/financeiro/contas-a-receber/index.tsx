@@ -1,7 +1,7 @@
 import Table from "src/@open-adm/components/table";
 import { formatMoney } from "src/@open-adm/utils/format-money";
 import { StatusObj } from "../../pedidos/config";
-import CustomChip from 'src/@open-adm/components/chip'
+import CustomChip, { StatusApp } from 'src/@open-adm/components/chip'
 import { formatDate } from "src/@open-adm/utils/convert-date";
 
 export const statusFatura: StatusObj = {
@@ -34,16 +34,8 @@ export function ContasAReceberPaginacao() {
                         headerName: 'Status',
                         renderCell: (params) => {
                             const status = statusFatura[params.row.status]
-
                             return (
-                                <CustomChip
-                                    rounded
-                                    size='small'
-                                    skin='light'
-                                    color={status.color}
-                                    label={status.title}
-                                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
-                                />
+                                <StatusApp cor={status.color} titulo={status.title} />
                             )
                         }
                     },
@@ -56,14 +48,12 @@ export function ContasAReceberPaginacao() {
                 ]}
                 title="Faturas contas a receber"
                 url="fatura-contas-a-receber/paginacao"
-                delete
-                routeDelete="banners/delete"
-                add
-                routeAdd="banners/create"
+                // add
+                // routeAdd="banners/create"
                 view
-                routeView="banners/view"
+                routeView="contas-a-receber/view"
                 edit
-                routeEdit="banners/edit"
+                routeEdit="contas-a-receber/edit"
             />
         </>
     )

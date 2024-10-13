@@ -9,6 +9,15 @@ export function maskPhone(value?: string): string | undefined {
     return match[1] ? `(${match[1]}` + (match[2] ? `) ${match[2]}` + (match[3] ? `-${match[3]}` : '') : '') : '';
 }
 
+export function clearMaskMoney(money?: any) {
+    if (typeof money === 'string') {
+        const newMoney = money.replaceAll('.', '').replaceAll(',', '.').replace('R$', '').replace(' ', '')
+        return parseFloat(newMoney)
+    }
+
+    return money
+}
+
 export function clearMaskCnpj(cnpj?: string): string | undefined {
     if (!cnpj) return undefined;
 

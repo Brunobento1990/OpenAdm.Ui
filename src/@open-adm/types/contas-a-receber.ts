@@ -35,6 +35,17 @@ export const meiosDePagamentos: any[] = [
     }
 ]
 
+export const statusFaturaAReceber: any[] = [
+    {
+        id: 0,
+        descricao: 'Pendente'
+    },
+    {
+        id: 1,
+        descricao: 'Pago'
+    }
+];
+
 export interface IPagarFaturaAReceber {
     id: string,
     desconto?: number,
@@ -51,5 +62,7 @@ export interface IFaturaContasAReceber extends IBase {
     desconto?: number,
     observacao?: string,
     contasAReceberId: string,
-    contasAReceber: IContasAReceber
+    contasAReceber: IContasAReceber,
+    vencida?: boolean,
+    dataDePagamento?: string;
 }

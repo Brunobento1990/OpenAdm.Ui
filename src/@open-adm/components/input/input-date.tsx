@@ -11,22 +11,27 @@ interface InputCustomProps {
     helperText?: any;
     error?: boolean;
     required?: boolean;
+    readonly?: boolean
 }
 
 export function InputDate(props: InputCustomProps) {
-
+    const valueSplit = props.value?.split('T');
+    const newValue = valueSplit && valueSplit.length > 0 ? valueSplit[0] : props.value;
     return (
         <CustomTextField
             fullWidth={props.fullWidth}
             label={props.label}
             name={props.name}
             id={props.id}
-            value={props.value}
+            value={newValue}
             onBlur={props.onBlur}
             onChange={(e) => {
                 if (props.onChange) {
                     props.onChange(props.id, e.target.value)
                 }
+            }}
+            InputProps={{
+                readOnly: props.readonly
             }}
             helperText={props.helperText}
             error={props.error}

@@ -139,6 +139,7 @@ export function ModificarStatusPedido() {
                             <TextApp texto={`Valor: ${formatMoney(fatura.valor)}`} />
                             <TextApp texto={`Data de cadastro: ${formatDate(fatura.dataDeCriacao)}`} />
                             <TextApp texto={`Data de vencimento: ${formatDate(fatura.dataDeVencimento)}`} />
+                            <TextApp texto={`Vencida: ${fatura.vencida ? 'Sim' : 'Não'}`} />
                             {statusFaturaLocal &&
                                 <BoxApp display="flex" gap='1rem'>
                                     <TextApp texto='Status: ' />

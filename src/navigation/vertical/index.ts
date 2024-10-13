@@ -69,7 +69,7 @@ const navigation = (): VerticalNavItemsType => {
             },
             {
               title: 'Relatório de produção',
-              icon: "tabler:report-search",
+              icon: "simple-icons:soundcharts",
               path: '/estoque/relatorio-producao'
             },
           ]
@@ -133,7 +133,7 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'rivet-icons:money',
       children: [
         {
-          title: 'Fatura contas a receber',
+          title: 'Contas a receber',
           icon: 'solar:hand-money-outline',
           path: '/financeiro/contas-a-receber'
         }

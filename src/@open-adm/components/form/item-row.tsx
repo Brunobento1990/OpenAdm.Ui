@@ -9,7 +9,7 @@ interface propsFormItemRow {
 
 export function FormItemRow(props: propsFormItemRow) {
     return (
-        <Grid item xs={props.xs} sm={props.sm}>
+        <Grid item xs={props.xs ?? 12} sm={props.sm ?? 4}>
             {props.children}
         </Grid>
     )
