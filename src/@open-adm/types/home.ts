@@ -4,7 +4,9 @@ export interface IHome {
     topUsuariosTotalCompra: ITopUsuarios[],
     topUsuariosTotalPedido: ITopUsuarios[],
     movimentos: any[],
-    faturas: any[]
+    faturas: any[],
+    totalAReceber: number,
+    pedidosEmAberto: number,
 }
 
 export interface ITopUsuarios extends IBase {

@@ -8,30 +8,32 @@ interface propsFaturasDashBoard {
 
 const FaturasDashBoard = (props: propsFaturasDashBoard) => {
     return (
-        <ResponsiveContainer width="100%" height="100%">
-            <>
-                <BoxApp width='100%' display='flex' alignItems='center' justifyContent='center'>
-                    <TextApp texto={`Faturas recebidas no últimos ${props.faturas.length} meses`} />
-                </BoxApp>
-                <AreaChart
-                    width={500}
-                    height={400}
-                    data={props.faturas}
-                    margin={{
-                        top: 10,
-                        right: 30,
-                        left: 0,
-                        bottom: 0,
-                    }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="mes" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="count" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
-                </AreaChart>
-            </>
-        </ResponsiveContainer>
+        <>
+            <ResponsiveContainer width="100%" height="100%">
+                <>
+                    <BoxApp width='100%' display='flex' alignItems='center' justifyContent='center'>
+                        <TextApp texto={`Faturas recebidas no últimos ${props.faturas.length} meses`} />
+                    </BoxApp>
+                    <AreaChart
+                        width={500}
+                        height={400}
+                        data={props.faturas}
+                        margin={{
+                            top: 10,
+                            right: 30,
+                            left: 0,
+                            bottom: 0,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="mes" />
+                        <YAxis />
+                        <Tooltip />
+                        <Area type="monotone" dataKey="count" stroke="#8884d8" fill="#8884d8" fillOpacity={0.3} />
+                    </AreaChart>
+                </>
+            </ResponsiveContainer>
+        </>
     )
 };
 

@@ -26,11 +26,13 @@ interface propsBoxApp {
     alignItems?: alignItems;
     justifyContent?: justifyContent;
     flexDirection?: flexDirection;
+    padding?: string;
 }
 
 export function BoxApp(props: propsBoxApp) {
     return (
         <Box
+            padding={props.padding}
             width={props.width}
             maxWidth={props.maxWidth}
             display={props.display}

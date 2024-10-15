@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
+import { BoxApp } from "src/@open-adm/components/box";
 import { useNewApi } from "src/@open-adm/hooks/use-new-api";
 import { IHome } from "src/@open-adm/types/home";
 
@@ -17,6 +18,14 @@ const Movimentos = dynamic(() => import('src/@open-adm/views/home/movimentos'), 
 });
 
 const Faturas = dynamic(() => import('src/@open-adm/views/home/faturas'), {
+    ssr: false,
+});
+
+const FaturasTotalizador = dynamic(() => import('src/@open-adm/views/home/totalizacao-faturas'), {
+    ssr: false,
+});
+
+const PedidosEmEbrtoGrafico = dynamic(() => import('src/@open-adm/views/home/pedidos-em-aberto-grafico'), {
     ssr: false,
 });
 
@@ -45,8 +54,22 @@ export function HomePage() {
 
     return (
         <>
+            <BoxApp padding="1rem">
+                <Grid container spacing={5} padding={2}>
+                    {home?.totalAReceber &&
+                        <Grid item xs={12} sm={6}>
+                            <FaturasTotalizador total={home.totalAReceber} />
+                        </Grid>
+                    }
+                    {home?.pedidosEmAberto &&
+                        <Grid item xs={12} sm={6}>
+                            <PedidosEmEbrtoGrafico total={home.pedidosEmAberto} />
+                        </Grid>
+                    }
+                </Grid>
+            </BoxApp>
             <Grid container spacing={5} padding={2}>
-                {home?.faturas &&
+                {home?.faturas && home.faturas?.length &&
                     <Grid item xs={12} sm={6}>
                         <Faturas faturas={home?.faturas ?? []} />
                     </Grid>
