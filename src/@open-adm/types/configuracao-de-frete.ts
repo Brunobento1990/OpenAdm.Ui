@@ -1,13 +1,14 @@
 export interface IConfiguracaoDeFrete {
     id: string,
-    dataDeCriacao: string,
-    dataDeAtualizacao: string,
-    numero: number,
     cepOrigem: string,
     alturaEmbalagem: string,
     larguraEmbalagem: string,
     comprimentoEmbalagem: string,
-    peso?: number
+    chaveApi: string,
+    peso?: number,
+    cobrarCpf?: boolean,
+    cobrarCnpj?: boolean,
+    inativo?: boolean
 }
 
 export interface IConfiguracaoDeFreteCreate {
@@ -15,5 +16,9 @@ export interface IConfiguracaoDeFreteCreate {
     alturaEmbalagem: string,
     larguraEmbalagem: string,
     comprimentoEmbalagem: string,
-    peso?: number
+    chaveApi: string,
+    peso?: number,
+    cobrarCpf?: boolean,
+    cobrarCnpj?: boolean,
+    inativo?: boolean
 }

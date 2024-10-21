@@ -5,19 +5,20 @@ export function apiMercadoPago() {
 
     const created = useNewApi({
         method: "POST",
-        url: "pagamento/configuracao-pagamento-mercado-pago/create-or-update",
+        url: "configuracao-de-pagamento/create-or-update",
     })
 
     const get = useNewApi({
         method: "GET",
-        url: "pagamento/configuracao-pagamento-mercado-pago/get",
+        url: "configuracao-de-pagamento/get",
         notAlert: true,
     })
 
     async function cretarOrUpdate(config: Partial<IConfiguracaoPagamentoMercadoPago>)
         : Promise<IConfiguracaoPagamentoMercadoPago | undefined> {
         return created.fecth<IConfiguracaoPagamentoMercadoPago>({
-            body: config
+            body: config,
+            message: 'Registro editado com sucesso!'
         });
     }
 

@@ -3,11 +3,14 @@ import { initialValues, schema } from "./config"
 import { useApiConfiguracaoDeFrete } from "./use-api-configuracao-de-frete";
 import { useEffect } from "react";
 import { Form } from "src/@open-adm/components/form";
-import { Grid } from "@mui/material";
+import { Checkbox, FormControlLabel, Grid } from "@mui/material";
 import { InputCustom } from "src/@open-adm/components/input";
+import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
+import { IConfiguracaoDeFrete } from "src/@open-adm/types/configuracao-de-frete";
 
 export function ConfiguracaoDeFrete() {
-    const form = useFormikAdapter({
+    const { navigate } = useNavigateApp();
+    const form = useFormikAdapter<IConfiguracaoDeFrete>({
         initialValues,
         validationSchema: schema,
         onSubmit: submit
@@ -16,21 +19,17 @@ export function ConfiguracaoDeFrete() {
     const { get, create } = useApiConfiguracaoDeFrete();
 
     async function init() {
-        try {
-            const response = await get();
-            if (response) {
-                form.setValue(response);
-            }
-        } catch (error) {
-
+        const response = await get();
+        if (response) {
+            form.setValue(response);
         }
+
     }
 
     async function submit(values: any) {
-        try {
-            await create(values);
-        } catch (error) {
-
+        const response = await create(values);
+        if (response) {
+            navigate("/home")
         }
     }
 
@@ -108,13 +107,62 @@ export function ConfiguracaoDeFrete() {
                 <Grid item xs={12} sm={6}>
                     <InputCustom
                         fullWidth
-                        label='Peso (kg)'
+                        label='Peso (gr)'
                         name='peso'
                         id='peso'
                         value={form.values.peso}
                         onBlur={form.onBlur}
                         onChange={form.onChange}
                         type="number"
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <InputCustom
+                        fullWidth
+                        label='Chave api'
+                        name='chaveApi'
+                        id='chaveApi'
+                        value={form.values.chaveApi}
+                        onBlur={form.onBlur}
+                        onChange={form.onChange}
+                    />
+                </Grid>
+            </Grid>
+            <Grid container spacing={6}>
+                <Grid item xs={12} sm={4}>
+                    <FormControlLabel
+                        label='Cobrar de CPF'
+                        control={
+                            <Checkbox
+                                checked={form.values.cobrarCpf ?? false}
+                                onChange={e => form.setValue({
+                                    cobrarCpf: e.target.checked
+                                })} />
+                        }
+                    />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                    <FormControlLabel
+                        label='Cobrar de CNPJ'
+                        control={
+                            <Checkbox
+                                checked={form.values.cobrarCnpj ?? false}
+                                onChange={e => form.setValue({
+                                    cobrarCnpj: e.target.checked
+                                })} />
+                        }
+                    />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                    <FormControlLabel
+                        label='Inativar'
+                        control={
+                            <Checkbox
+                                checked={form.values.inativo ?? false}
+                                onChange={e => form.setValue({
+                                    inativo: e.target.checked
+                                })} />
+                        }
                     />
                 </Grid>
             </Grid>

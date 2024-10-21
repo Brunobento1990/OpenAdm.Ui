@@ -4,19 +4,20 @@ import { IConfiguracaoDeFrete, IConfiguracaoDeFreteCreate } from "src/@open-adm/
 export function useApiConfiguracaoDeFrete() {
     const apiCreate = useNewApi({
         method: 'POST',
-        url: 'configuracao-de-frete'
+        url: 'configuracao-de-frete/create-or-update'
     });
 
     const apiGet = useNewApi({
         method: 'GET',
-        url: 'configuracao-de-frete',
+        url: 'configuracao-de-frete/get',
         notAlert: true,
         notLoading: true
     });
 
     async function create(body: IConfiguracaoDeFreteCreate): Promise<IConfiguracaoDeFrete | undefined> {
         return await apiCreate.fecth<IConfiguracaoDeFrete>({
-            body
+            body,
+            message: "Registro atualizado com sucesso!"
         });
     }
 

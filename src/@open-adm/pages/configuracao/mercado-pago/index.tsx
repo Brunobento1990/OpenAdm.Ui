@@ -17,12 +17,9 @@ export function MercadoPago() {
     });
 
     async function init() {
-        try {
-            const response = await getConfig();
-            if (response) {
-                form.setValue(response);
-            }
-        } catch (error) {
+        const response = await getConfig();
+        if (response) {
+            form.setValue(response);
         }
     }
 
