@@ -5,7 +5,8 @@ export const initialValues: IConfiguracaoDeFreteCreate = {
     cepOrigem: "",
     alturaEmbalagem: "",
     larguraEmbalagem: "",
-    comprimentoEmbalagem: ""
+    comprimentoEmbalagem: "",
+    chaveApi: ""
 }
 
 export const schema = new YupAdapter()
