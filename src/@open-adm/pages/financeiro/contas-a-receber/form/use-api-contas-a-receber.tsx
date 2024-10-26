@@ -4,25 +4,25 @@ import { IFaturaContasAReceber, IPagarFaturaAReceber } from "src/@open-adm/types
 export function useContasAReceber() {
     const apiFaturasPorPedido = useNewApi({
         method: 'GET',
-        url: 'fatura-contas-a-receber/pedido?pedidoId=',
+        url: 'fatura/pedido?pedidoId=',
         notAlert: true
     });
 
     const apiGet = useNewApi({
         method: 'GET',
-        url: 'fatura-contas-a-receber/get-by-id?id=',
+        url: 'fatura/get-by-id?id=',
         notAlert: true
     });
 
     const apiPagarFatura = useNewApi({
         method: 'PUT',
-        url: 'fatura-contas-a-receber/pagar',
+        url: 'fatura/pagar',
         notAlert: true
     });
 
     const apiEdit = useNewApi({
         method: 'PUT',
-        url: 'fatura-contas-a-receber/edit'
+        url: 'fatura/edit'
     });
 
     async function faturasDoPedido(pedidoId: string, statusFatura?: number): Promise<IFaturaContasAReceber[] | undefined> {

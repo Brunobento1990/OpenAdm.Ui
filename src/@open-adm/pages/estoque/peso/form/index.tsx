@@ -11,6 +11,8 @@ import { useFormik } from 'formik';
 import { defaultValues, schema } from "../config";
 import { useRouter as useRouterQuery } from 'next/router'
 import { IPeso } from "src/@open-adm/types/peso";
+import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
+import { InputCustom } from "src/@open-adm/components/input";
 
 export function FormPeso(props: IForm) {
 
@@ -21,10 +23,10 @@ export function FormPeso(props: IForm) {
     const { query } = useRouterQuery();
     const title = props.action === 'create' ? 'Adicionar novo peso' : props.action === 'update' ? 'Editar peso' : 'Visualizar peso'
 
-    const formik = useFormik({
+    const formik = useFormikAdapter<IPeso>({
         initialValues: defaultValues,
         validationSchema: schema,
-        onSubmit: (values) => onSubmit(values),
+        onSubmit: onSubmit,
     });
 
     async function init() {
@@ -32,7 +34,7 @@ export function FormPeso(props: IForm) {
             if (props.action !== 'create') {
                 const response = await get<IPeso>(`pesos/get-peso?id=${query.id}`);
                 if (response) {
-                    formik.setValues(response);
+                    formik.setValue(response);
                 }
             }
         } catch (error) {
@@ -44,20 +46,19 @@ export function FormPeso(props: IForm) {
         init();
     }, [])
 
-    async function onSubmit(values: any) {
+    async function onSubmit() {
 
         try {
 
             if (props.action === "update") {
                 await put('pesos/update', {
-                    descricao: values.descricao,
-                    id: query.id
+                    ...formik.values
                 } as IPeso)
             }
 
             if (props.action === 'create') {
                 await post('pesos/create', {
-                    descricao: values.descricao
+                    ...formik.values
                 } as IPeso)
             }
             router.replace('/estoque/peso')
@@ -70,25 +71,37 @@ export function FormPeso(props: IForm) {
         <Form
             title={title}
             action={props.action}
-            submit={formik.submitForm}
+            submit={formik.onSubmit}
             urlVoltar="/estoque/peso"
         >
             <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' gap={10}>
                 <Box sx={{ width: !matches ? '100%' : '80%' }}>
-                    <CustomTextField
+                    <InputCustom
                         fullWidth
                         label='Descrição'
                         name='descricao'
                         id='descricao'
                         value={formik.values.descricao}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        helperText={formik.touched.descricao && formik.errors.descricao}
-                        error={!!(formik.touched.descricao && formik.errors.descricao)}
+                        onBlur={formik.onBlur}
+                        onChange={formik.onChange}
+                        helperText={formik.helperText('descricao')}
+                        error={formik.error('descricao')}
                         required
-                        InputProps={{
-                            readOnly: props.action === 'view'
-                        }}
+                        maxLength={255}
+                        readonly={props.action === 'view'}
+                    />
+                </Box>
+                <Box sx={{ width: !matches ? '100%' : '80%' }}>
+                    <InputCustom
+                        fullWidth
+                        readonly={props.action === 'view'}
+                        label='Peso real (gramas)'
+                        name='pesoReal'
+                        id='pesoReal'
+                        value={formik.values.pesoReal}
+                        onBlur={formik.onBlur}
+                        onChange={formik.onChange}
+                        type="number"
                     />
                 </Box>
             </Box>

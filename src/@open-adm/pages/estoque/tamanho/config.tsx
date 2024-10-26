@@ -6,7 +6,14 @@ export const columns: GridColDef[] = [
         flex: 0.200,
         minWidth: 200,
         field: 'descricao',
-        headerName: 'Descricao'
+        headerName: 'Descricao',
+        sortable: true,
+    },
+    {
+        flex: 0.200,
+        minWidth: 200,
+        field: 'pesoReal',
+        headerName: 'Peso real'
     }
 ]
 

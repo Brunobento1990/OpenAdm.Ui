@@ -9,22 +9,24 @@ export function useConfig() {
             minWidth: 200,
             field: 'foto',
             headerName: 'Foto',
-            renderCell: (params: GridRenderCellParams) => (
+            renderCell: (params: any) => (
                 <Box
                     component="img"
-                    src={params.row.foto}
+                    src={params.foto}
                     sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
                 />
-            )
+            ),
+            sortable: true,
         },
         {
             flex: 0.200,
             minWidth: 200,
             field: 'ativo',
             headerName: 'Ativo',
-            renderCell: (params: GridRenderCellParams) => (
-                <Checkbox checked={params.row.ativo} />
-            )
+            renderCell: (params: any) => (
+                <Checkbox checked={params.ativo} />
+            ),
+            sortable: true,
         }
     ]
 

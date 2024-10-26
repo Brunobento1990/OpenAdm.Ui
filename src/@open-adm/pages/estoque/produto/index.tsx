@@ -1,23 +1,15 @@
-import Table from "src/@open-adm/components/table";
 import { columns } from './config'
+import { TableIndex } from "src/@open-adm/components/table-paginacao";
 
 export function Produtos() {
-
     return (
-        <>
-            <Table
-                columns={columns}
-                title="Produtos"
-                url="produtos/paginacao"
-                delete
-                routeDelete="produtos/delete"
-                add
-                routeAdd="produto/create"
-                view
-                routeView="produto/view"
-                edit
-                routeEdit="produto/edit"
-            />
-        </>
+        <TableIndex
+            columns={columns}
+            url="produtos/paginacao"
+            urlAdd="produto/create"
+            urlDelete="produtos/delete"
+            urlEdit="produto/edit"
+            urlView="produto/view"
+        />
     )
 }

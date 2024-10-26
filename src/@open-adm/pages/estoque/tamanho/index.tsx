@@ -1,23 +1,16 @@
-import Table from "src/@open-adm/components/table";
 import { columns } from './config'
+import { TableIndex } from "src/@open-adm/components/table-paginacao";
 
 export function Tamanhos() {
 
     return (
-        <>
-            <Table
-                columns={columns}
-                title="Tamanhos"
-                url="tamanhos/paginacao"
-                delete
-                routeDelete="tamanhos/delete"
-                add
-                routeAdd="tamanho/create"
-                view
-                routeView="tamanho/view"
-                edit
-                routeEdit="tamanho/edit"
-            />
-        </>
+        <TableIndex
+            url="tamanhos/paginacao"
+            columns={columns}
+            urlAdd="tamanho/create"
+            urlDelete="tamanhos/delete"
+            urlEdit="tamanho/edit"
+            urlView="tamanho/view"
+        />
     )
 }

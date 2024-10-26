@@ -1,25 +1,18 @@
-import Table from "src/@open-adm/components/table";
 import { useConfig } from "./config";
+import { TableIndex } from "src/@open-adm/components/table-paginacao";
 
 export function Banners() {
 
     const config = useConfig();
 
     return (
-        <>
-            <Table
-                columns={config.columns}
-                title="Banners"
-                url="banners/paginacao"
-                delete
-                routeDelete="banners/delete"
-                add
-                routeAdd="banners/create"
-                view
-                routeView="banners/view"
-                edit
-                routeEdit="banners/edit"
-            />
-        </>
+        <TableIndex
+            columns={config.columns}
+            url="banners/paginacao"
+            urlAdd="banners/create"
+            urlDelete="banners/delete"
+            urlView="banners/view"
+            urlEdit="banners/edit"
+        />
     )
 }

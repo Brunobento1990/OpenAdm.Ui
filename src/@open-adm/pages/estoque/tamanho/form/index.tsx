@@ -11,6 +11,8 @@ import { useFormik } from 'formik';
 import { defaultValues, schema } from "../config";
 import { useRouter as useRouterQuery } from 'next/router'
 import { ITamanho } from "src/@open-adm/types/tamanho";
+import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
+import { InputCustom } from "src/@open-adm/components/input";
 
 export function FormTamanho(props: IForm) {
 
@@ -21,10 +23,10 @@ export function FormTamanho(props: IForm) {
     const { query } = useRouterQuery();
     const title = props.action === 'create' ? 'Adicionar novo tamanho' : props.action === 'update' ? 'Editar tamanho' : 'Visualizar tamanho'
 
-    const formik = useFormik({
+    const formik = useFormikAdapter<ITamanho>({
         initialValues: defaultValues,
         validationSchema: schema,
-        onSubmit: (values, helpers) => onSubmit(values),
+        onSubmit: onSubmit,
     });
 
     async function init() {
@@ -32,7 +34,7 @@ export function FormTamanho(props: IForm) {
             if (props.action !== 'create') {
                 const response = await get<ITamanho>(`tamanhos/get-tamanho?id=${query.id}`);
                 if (response) {
-                    formik.setValues(response);
+                    formik.setValue(response);
                 }
             }
         } catch (error) {
@@ -44,21 +46,16 @@ export function FormTamanho(props: IForm) {
         init();
     }, [])
 
-    async function onSubmit(values: any) {
+    async function onSubmit() {
 
         try {
 
             if (props.action === "update") {
-                await put('tamanhos/update', {
-                    descricao: values.descricao,
-                    id: query.id
-                } as ITamanho)
+                await put('tamanhos/update', formik.values)
             }
 
             if (props.action === 'create') {
-                await post('tamanhos/create', {
-                    descricao: values.descricao
-                } as ITamanho)
+                await post('tamanhos/create', formik.values)
             }
             router.replace('/estoque/tamanho')
         } catch (error) {
@@ -70,26 +67,37 @@ export function FormTamanho(props: IForm) {
         <Form
             title={title}
             action={props.action}
-            submit={formik.submitForm}
+            submit={formik.onSubmit}
             urlVoltar="/estoque/tamanho"
         >
             <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' gap={10}>
                 <Box sx={{ width: !matches ? '100%' : '80%' }}>
-                    <CustomTextField
+                    <InputCustom
                         fullWidth
                         label='Descrição'
                         name='descricao'
                         id='descricao'
                         value={formik.values.descricao}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        helperText={formik.touched.descricao && formik.errors.descricao}
-                        error={!!(formik.touched.descricao && formik.errors.descricao)}
+                        onBlur={formik.onBlur}
+                        onChange={formik.onChange}
+                        helperText={formik.helperText('descricao')}
+                        error={formik.error('descricao')}
                         required
-                        InputProps={{
-
-                            readOnly: props.action === 'view'
-                        }}
+                        readonly={props.action === 'view'}
+                        maxLength={255}
+                    />
+                </Box>
+                <Box sx={{ width: !matches ? '100%' : '80%' }}>
+                    <InputCustom
+                        fullWidth
+                        label='Peso real (gramas)'
+                        name='pesoReal'
+                        id='pesoReal'
+                        value={formik.values.pesoReal}
+                        onBlur={formik.onBlur}
+                        onChange={formik.onChange}
+                        type="number"
+                        readonly={props.action === 'view'}
                     />
                 </Box>
             </Box>

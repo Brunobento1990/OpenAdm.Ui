@@ -1,16 +1,13 @@
-import Table from "src/@open-adm/components/table";
 import { columns } from "./config";
+import { TableIndex } from "src/@open-adm/components/table-paginacao";
 
 export function ClientePaginacao() {
     return (
-        <Table
+        <TableIndex
             columns={columns}
-            title="Clientes"
             url="usuarios/paginacao"
-            add
-            routeAdd="cliente/create"
-            view
-            routeView="cliente/view"
+            urlAdd="cliente/create"
+            urlView="cliente/view"
         />
     )
 }

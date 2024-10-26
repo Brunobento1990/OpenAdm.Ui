@@ -1,23 +1,16 @@
-import Table from "src/@open-adm/components/table";
 import { columns } from './config'
+import { TableIndex } from "src/@open-adm/components/table-paginacao";
 
 export function Pesos() {
 
     return (
-        <>
-            <Table
-                columns={columns}
-                title="Pesos"
-                url="pesos/paginacao"
-                delete
-                routeDelete="pesos/delete"
-                add
-                routeAdd="peso/create"
-                view
-                routeView="peso/view"
-                edit
-                routeEdit="peso/edit"
-            />
-        </>
+        <TableIndex
+            columns={columns}
+            url="pesos/paginacao"
+            urlAdd="peso/create"
+            urlDelete="pesos/delete"
+            urlEdit="peso/edit"
+            urlView="peso/view"
+        />
     )
 }

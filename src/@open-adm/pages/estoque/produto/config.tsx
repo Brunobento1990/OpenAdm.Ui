@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material"
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
+import { Box } from "@mui/material"
+import { GridColDef } from "@mui/x-data-grid"
 import { ICreateProdutoDto, IProduto } from "src/@open-adm/types/produto";
 import { IItensTabelaDePreco, ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
 import * as yup from 'yup';
@@ -10,11 +10,11 @@ export const columns: GridColDef[] = [
         minWidth: 200,
         field: 'foto',
         headerName: 'Foto',
-        renderCell: (params: GridRenderCellParams) => (
+        renderCell: (params: any) => (
             <Box
                 component="img"
                 loading="lazy"
-                src={params.row.foto}
+                src={params.foto}
                 sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
             />
         )
@@ -23,7 +23,8 @@ export const columns: GridColDef[] = [
         flex: 0.200,
         minWidth: 200,
         field: 'descricao',
-        headerName: 'Descricao'
+        headerName: 'Descricao',
+        sortable: true,
     },
     {
         flex: 0.200,

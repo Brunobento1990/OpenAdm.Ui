@@ -1,12 +1,32 @@
 import { IconButton, Tooltip } from '@mui/material'
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import { GridColDef } from '@mui/x-data-grid'
 import IconifyIcon from 'src/@core/components/icon'
 import { ThemeColor } from 'src/@core/layouts/types'
 import { StatusApp } from 'src/@open-adm/components/chip'
 import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
+import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
+import { generatePdfFromBase64 } from 'src/@open-adm/utils/download-pdf'
 
 export function useConfig() {
     const { navigate } = useNavigateApp();
+
+    async function downloadPedido(id: string) {
+        const api = useNewApi({
+            method: 'GET',
+            url: 'pedidos/download-pedido?pedidoId='
+        });
+        const pdfBase64 = await api.fecth<any>({ urlParams: `${id}` });
+        if (pdfBase64?.pdf) {
+            const pdf = await generatePdfFromBase64(pdfBase64.pdf);
+            const link = document.createElement('a');
+            link.href = pdf;
+            link.download = `${id}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+
     const columns: GridColDef[] = [
         {
             flex: 0.200,
@@ -19,8 +39,9 @@ export function useConfig() {
             width: 10,
             field: 'status',
             headerName: 'Status',
-            renderCell: (params: GridRenderCellParams) => {
-                const status = statusPedido[params.row.statusPedido]
+            sortable: true,
+            renderCell: (params: any) => {
+                const status = statusPedido[params.statusPedido]
 
                 return (
                     <StatusApp
@@ -37,9 +58,27 @@ export function useConfig() {
             renderCell: (params) => {
                 return (
                     <Tooltip title="Modificar status do pedido" placement="top">
-                        <IconButton onClick={() => navigate(`/pedidos/modificar-status-pedido/${params.row.id}`)}>
+                        <IconButton onClick={() => navigate(`/pedidos/modificar-status-pedido/${params.id}`)}>
                             <IconifyIcon
                                 icon='fe:app-menu'
+                            />
+                        </IconButton>
+                    </Tooltip>
+                )
+            }
+        },
+        {
+            field: 'status3',
+            headerName: 'PDF',
+            align: 'center',
+            renderCell: (params: any) => {
+                return (
+                    <Tooltip title="Download do pedido" placement="top">
+                        <IconButton
+                            onClick={() => downloadPedido(params.id)}
+                        >
+                            <IconifyIcon
+                                icon='material-symbols-light:download'
                             />
                         </IconButton>
                     </Tooltip>

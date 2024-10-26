@@ -27,6 +27,10 @@ interface propsBoxApp {
     justifyContent?: justifyContent;
     flexDirection?: flexDirection;
     padding?: string;
+    height?: string;
+    marginBottom?: string;
+    maxHeight?: string;
+    overflowy?: string;
 }
 
 export function BoxApp(props: propsBoxApp) {
@@ -41,6 +45,12 @@ export function BoxApp(props: propsBoxApp) {
             alignItems={props.alignItems}
             justifyContent={props.justifyContent}
             flexDirection={props.flexDirection}
+            height={props.height}
+            marginBottom={props.marginBottom}
+            maxHeight={props.maxHeight}
+            sx={{
+                overflowY: props.overflowy as any
+            }}
         >
             {props.children}
         </Box>

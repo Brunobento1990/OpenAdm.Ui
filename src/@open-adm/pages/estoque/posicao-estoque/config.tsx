@@ -33,8 +33,8 @@ export const columns: GridColDef[] = [
         minWidth: 200,
         field: 'quantidade',
         headerName: 'Posição do estoque',
-        renderCell: (params: GridRenderCellParams) => {
-            const status = quantidade[params.row.quantidade > 0 ? 1 : 0]
+        renderCell: (params: any) => {
+            const status = quantidade[params.quantidade > 0 ? 1 : 0]
 
             return (
                 <CustomChip
@@ -42,7 +42,7 @@ export const columns: GridColDef[] = [
                     size='small'
                     skin='light'
                     color={status.color}
-                    label={params.row.quantidade}
+                    label={params.quantidade}
                     sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
                 />
             )

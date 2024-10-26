@@ -11,10 +11,10 @@ export const columns: GridColDef[] = [
         minWidth: 200,
         field: 'foto',
         headerName: 'Foto',
-        renderCell: (params: GridRenderCellParams) => (
+        renderCell: (params: any) => (
             <Box
                 component="img"
-                src={params.row.foto}
+                src={params.foto}
                 sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
             />
         )
@@ -23,22 +23,23 @@ export const columns: GridColDef[] = [
         flex: 0.200,
         minWidth: 200,
         field: 'nome',
-        headerName: 'Nome'
+        headerName: 'Nome',
+        sortable: true,
     },
     {
         flex: 0.200,
         minWidth: 200,
         field: 'contato',
         headerName: 'Contato',
-        renderCell: (params: GridRenderCellParams) => (
+        renderCell: (params: any) => (
             <Typography>
-                {maskPhone(params.row.contato)}
+                {maskPhone(params.contato)}
             </Typography>
         )
     }
 ];
 
-export const defaultValues : ILojasParceiras = {
+export const defaultValues: ILojasParceiras = {
     nome: "",
     id: "",
     dataDeCriacao: "",

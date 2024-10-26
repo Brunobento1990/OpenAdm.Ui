@@ -1,16 +1,12 @@
-import Table from "src/@open-adm/components/table";
 import { columns } from "./config";
+import { TableIndex } from "src/@open-adm/components/table-paginacao";
 
 export function EstoqueProduto() {
     return (
-        <>
-            <Table
-                columns={columns}
-                title="Posições de estoque"
-                url="estoques/paginacao"
-                edit
-                routeEdit="posicao-estoque/edit"
-            />
-        </>
+        <TableIndex
+            columns={columns}
+            url="estoques/paginacao"
+            urlEdit="posicao-estoque/edit"
+        />
     )
 }

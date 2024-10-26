@@ -32,15 +32,16 @@ export const columns: GridColDef[] = [
         flex: 0.200,
         minWidth: 200,
         field: 'quantidadeMovimentada',
-        headerName: 'Quantidade movimentadao'
+        headerName: 'Quantidade movimentadao',
+        sortable: true,
     },
     {
         flex: 0.200,
         minWidth: 200,
         field: 'tipoMovimentacaoDeProduto',
         headerName: 'Tipo Movimentação',
-        renderCell: (params: GridRenderCellParams) => {
-            const status = tipoMovimentacaoDeProduto[params.row.tipoMovimentacaoDeProduto]
+        renderCell: (params: any) => {
+            const status = tipoMovimentacaoDeProduto[params.tipoMovimentacaoDeProduto]
 
             return (
                 <CustomChip
