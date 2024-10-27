@@ -130,7 +130,7 @@ export function CreateFatura(props: propsCreateFatura) {
                 <GridApp spacing={3} key={parcela.numeroDaFatura} marginTop="1rem">
                     <GridItemApp xs={12} sm={1}>
                         <BoxApp display="flex" alignItems="center" justifyContent="center" height="100%">
-                            <Typography>#{parcela.numeroDaFatura}</Typography>
+                            <Typography>Parcela: {parcela.numeroDaFatura}</Typography>
                         </BoxApp>
                     </GridItemApp>
                     <GridItemApp xs={12} sm={2}>
