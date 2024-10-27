@@ -2,31 +2,31 @@ import { useNewApi } from "src/@open-adm/hooks/use-new-api";
 import { IFaturaContasAReceber, IPagarFaturaAReceber } from "src/@open-adm/types/contas-a-receber";
 
 export function useContasAReceber() {
-    const apiFaturasPorPedido = useNewApi({
+    const apiParcelasPorPedido = useNewApi({
         method: 'GET',
-        url: 'fatura/pedido?pedidoId=',
+        url: 'parcela/pedido?pedidoId=',
         notAlert: true
     });
 
     const apiGet = useNewApi({
         method: 'GET',
-        url: 'fatura/get-by-id?id=',
+        url: 'parcela/get-by-id?id=',
         notAlert: true
     });
 
     const apiPagarFatura = useNewApi({
         method: 'PUT',
-        url: 'fatura/pagar',
+        url: 'parcela/pagar',
         notAlert: true
     });
 
     const apiEdit = useNewApi({
         method: 'PUT',
-        url: 'fatura/edit'
+        url: 'parcela/edit'
     });
 
-    async function faturasDoPedido(pedidoId: string, statusFatura?: number): Promise<IFaturaContasAReceber[] | undefined> {
-        return await apiFaturasPorPedido.fecth<IFaturaContasAReceber[]>({ urlParams: `${pedidoId}&statusFatura=${statusFatura ?? '0'}` })
+    async function parcelasDoPedido(pedidoId: string, statusFatura?: number): Promise<IFaturaContasAReceber[] | undefined> {
+        return await apiParcelasPorPedido.fecth<IFaturaContasAReceber[]>({ urlParams: `${pedidoId}&statusFatura=${statusFatura ?? '0'}` })
     }
 
     async function get(id: string): Promise<IFaturaContasAReceber | undefined> {
@@ -42,7 +42,7 @@ export function useContasAReceber() {
     }
 
     return {
-        faturasDoPedido,
+        parcelasDoPedido,
         pagar,
         get,
         edit

@@ -1,90 +1,148 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { TextField, Autocomplete, CircularProgress } from '@mui/material';
-import { ItensDropDown } from './itens';
-import { apiDropDown } from './api-drop-down';
+import { useState, useEffect } from 'react';
+import { Autocomplete } from '@mui/material';
+import { InputCustom } from '../input';
+import { useNewApi } from 'src/@open-adm/hooks/use-new-api';
+import CustomTextField from 'src/@core/components/mui/text-field';
 
 interface propsDropDownScroll {
+    id: string;
     url: string;
     keyLabel: string;
     label: string;
+    segundaKeyLabel?: string;
+    onChange?: (key: string, newValue?: any) => void;
+    requerid?: boolean;
+    helperText?: any;
+    error?: boolean;
+    value?: any;
+    readonly?: boolean;
+    width?: string;
+    retornarObjetoCompleto?: boolean;
 }
 
-const quantidadeDePagina = 10;
-
 export function DropDownScroll(props: propsDropDownScroll) {
+    const [search, setSearch] = useState<string>('');
     const [open, setOpen] = useState(false);
     const [options, setOptions] = useState<any[]>([]);
-    const [pagina, setPagina] = useState(0);
-    const [loading, setLoading] = useState(false);
-    const [hasMore, setHasMore] = useState(true);
-    const listboxRef = useRef<HTMLDivElement>(null);
-    const previousScrollTop = useRef(0);
-    const { fetchDropDown } = apiDropDown({
-        pagina,
-        quantidadeDePagina,
-        url: props.url
+    const [opcoesOriginais, setOpcoesOriginais] = useState<any[]>([]);
+    const [value, setValue] = useState<any>(props.value);
+    const { fecth } = useNewApi({
+        method: 'POST',
+        url: props.url,
+        notAlert: true,
     })
 
-    const loadMoreItems = useCallback(async () => {
-        if (loading || !hasMore) return;
-        setLoading(true);
+    async function getItens() {
+        if (props.readonly) return;
+        const newItems = await fecth<any>({
+            body: {
+                search
+            }
+        });
+        if (newItems) {
+            setOptions(newItems);
+            if (props.retornarObjetoCompleto) {
+                setOpcoesOriginais(newItems);
+            }
+        }
+    }
 
-        const newItems = await fetchDropDown();
-        setOptions((prev) => [...prev, ...newItems?.values ?? []]);
-
-        if (!newItems || newItems?.values?.length < quantidadeDePagina) {
-            setHasMore(false);
+    function getLabel(value: any) {
+        if (!value) return '';
+        if (
+            props.segundaKeyLabel &&
+            value[props.segundaKeyLabel] &&
+            value[props.keyLabel]
+        ) {
+            return `${value[props.keyLabel]} - ${value[props.segundaKeyLabel]}`;
         }
 
-        setPagina((prevPage) => prevPage + 1);
-        setLoading(false);
-    }, [loading, hasMore, pagina]);
+        if (value[props.keyLabel]) {
+            return value[props.keyLabel];
+        }
+
+        return '';
+    }
 
     useEffect(() => {
-        loadMoreItems();
-    }, []);
+        const initial = () => {
+            if (props.value) {
+                const newOption = {
+                    id: props?.value?.id,
+                    label: getLabel(props.value),
+                };
+                const newValue = options.find((x) => x?.id === props?.value?.id);
+                if (!newValue) {
+                    setOptions((state) => [...state, newOption]);
+                    if (props.retornarObjetoCompleto) {
+                        setOpcoesOriginais((state) => [...state, newOption]);
+                    }
+                }
+                setValue(newOption);
+                return;
+            }
+
+            setValue(undefined);
+        };
+        initial();
+    }, [props.value]);
 
     useEffect(() => {
-        if (listboxRef.current) {
-            listboxRef.current.scrollTop = previousScrollTop.current;
-        }
-    }, [options]);
-
-    const handleScroll = (event: any) => {
-        const listboxNode = event.currentTarget;
-        previousScrollTop.current = listboxNode.scrollTop;
-        if (listboxNode.scrollTop + listboxNode.clientHeight >= listboxNode.scrollHeight - 10) {
-            loadMoreItems();
-        }
-    };
+        getItens();
+    }, [search]);
 
     return (
         <Autocomplete
             open={open}
+            id={props.id}
+            disabled={props.readonly}
+            size='small'
+            value={
+                typeof value === 'string' && value.length === 0
+                    ? null
+                    : value === undefined
+                        ? null
+                        : value
+            }
             onOpen={() => setOpen(true)}
             onClose={() => setOpen(false)}
-            ListboxComponent={(props) => (
-                <ItensDropDown {...props} onScroll={handleScroll} ref={listboxRef} />
-            )}
-            getOptionLabel={(option) => option[props.keyLabel]}
-            options={options}
-            loading={loading}
+            isOptionEqualToValue={(option, value) => option?.id === value.id}
+            onChange={(_, newValue: any, reason) => {
+                const newValor = reason !== 'clear' ? newValue : undefined;
+                setValue(newValor);
+                if (props.onChange) {
+                    if (props.retornarObjetoCompleto) {
+                        props.onChange(
+                            props.id,
+                            opcoesOriginais.find((x) => x?.id === newValor?.id),
+                        );
+                        return;
+                    }
+                    props.onChange(props.id, newValor?.id);
+                }
+            }}
+            options={options.map((val) => {
+                return {
+                    id: val.id,
+                    label: getLabel(val),
+                };
+            })}
+            getOptionLabel={(opt) => `${opt?.label || ''}`}
             renderInput={(params) => (
-                <TextField
+                <CustomTextField
+                    name={''}
+                    value={undefined}
                     {...params}
+                    id={props.id}
                     label={props.label}
-                    InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                            <>
-                                {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                {params.InputProps.endAdornment}
-                            </>
-                        ),
+                    required={props.requerid}
+                    helperText={props.helperText}
+                    error={props.error}
+                    onChange={(value) => {
+                        setSearch(value.target.value);
                     }}
                 />
             )}
         />
     );
 }
-

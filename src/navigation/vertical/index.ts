@@ -134,8 +134,13 @@ const navigation = (): VerticalNavItemsType => {
       children: [
         {
           title: 'Contas a receber',
-          icon: 'solar:hand-money-outline',
+          icon: 'game-icons:receive-money',
           path: '/financeiro/contas-a-receber'
+        },
+        {
+          title: 'Contas a pagar',
+          icon: 'game-icons:pay-money',
+          path: '/financeiro/contas-a-pagar'
         }
       ]
     }

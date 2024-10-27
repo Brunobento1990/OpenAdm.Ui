@@ -10,7 +10,14 @@ export const statusFatura: StatusObj = {
     1: { title: 'Pago', color: 'success' }
 }
 
-export function ContasAReceberPaginacao() {
+interface propsFaturaPaginacao {
+    tipo: 0 | 1,
+    urlView: string;
+    urlEdit: string;
+    urlAdd: string;
+}
+
+export function FaturaPaginacao(props: propsFaturaPaginacao) {
 
     return (
         <>
@@ -52,10 +59,11 @@ export function ContasAReceberPaginacao() {
                     },
                 ]}
                 url="parcela/paginacao"
-                urlView="contas-a-receber/view"
-                urlEdit="contas-a-receber/edit"
+                urlView={props.urlView}
+                urlEdit={props.urlEdit}
+                urlAdd={props.urlAdd}
                 filtroComplementar={{
-                    tipo: 1
+                    tipo: props.tipo
                 }}
             />
         </>

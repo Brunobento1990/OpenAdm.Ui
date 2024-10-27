@@ -1,4 +1,4 @@
-import { Pagination, Typography } from '@mui/material';
+import { Pagination, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { useLocalStorage } from 'src/hooks/useLocalStorage';
 import { BoxApp } from '../box';
 import { DropDown } from '../drop-down';
@@ -58,6 +58,8 @@ interface propsFooterTable {
 
 export function FooterTable(props: propsFooterTable) {
     const { setItem } = useLocalStorage();
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
     return (
         <BoxApp
@@ -68,33 +70,35 @@ export function FooterTable(props: propsFooterTable) {
             gap='10px'
             height='20px'
         >
-            <BoxApp display='flex' alignItems='center' gap='10px'>
-                <Typography fontSize={'12px'}>Registros por página:</Typography>
-                <DropDown
-                    width='100px'
-                    id='quantidadePorPagina'
-                    key='id'
-                    keyLabel='label'
-                    label=''
-                    values={opcoesDeQuantidadePorPagina}
-                    value={opcoesDeQuantidadePorPagina.find(
-                        (x) => x.label === props.quantidadePorPagina.toString(),
-                    )}
-                    onChange={(_, newValue) => {
-                        const id =
-                            typeof newValue === 'string' ? parseInt(newValue) : newValue;
-                        const newV = opcoesDeQuantidadePorPagina.find(
-                            (x) => x.id === id,
-                        )?.label;
-                        setItem(
-                            'quantidade-por-pagina',
-                            newV?.toString() ?? '5',
-                        );
-                        props.setQuantidadePorPagina(parseInt(newV ?? '5'));
-                    }}
-                />
-                <Typography fontSize={'12px'}>{`Exibindo ${props.length} registros de ${props.totalDeRegistros}`}</Typography>
-            </BoxApp>
+            {matches &&
+                <BoxApp display='flex' alignItems='center' gap='10px'>
+                    <Typography fontSize={'12px'}>Registros por página:</Typography>
+                    <DropDown
+                        width='100px'
+                        id='quantidadePorPagina'
+                        key='id'
+                        keyLabel='label'
+                        label=''
+                        values={opcoesDeQuantidadePorPagina}
+                        value={opcoesDeQuantidadePorPagina.find(
+                            (x) => x.label === props.quantidadePorPagina.toString(),
+                        )}
+                        onChange={(_, newValue) => {
+                            const id =
+                                typeof newValue === 'string' ? parseInt(newValue) : newValue;
+                            const newV = opcoesDeQuantidadePorPagina.find(
+                                (x) => x.id === id,
+                            )?.label;
+                            setItem(
+                                'quantidade-por-pagina',
+                                newV?.toString() ?? '5',
+                            );
+                            props.setQuantidadePorPagina(parseInt(newV ?? '5'));
+                        }}
+                    />
+                    <Typography fontSize={'12px'}>{`Exibindo ${props.length} registros de ${props.totalDeRegistros}`}</Typography>
+                </BoxApp>
+            }
             <Pagination
                 count={props.quantidadePagina}
                 page={props.pagina}

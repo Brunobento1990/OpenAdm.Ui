@@ -24,7 +24,7 @@ export function ModificarStatusPedido() {
     const { navigate } = useNavigateApp();
     const { get, atualizarStatus } = useApiPedido();
     const { id } = useNavigateApp();
-    const { faturasDoPedido, pagar } = useContasAReceber();
+    const { parcelasDoPedido, pagar } = useContasAReceber();
     const [loadingDados, setLoadingDados] = useState(false)
     const [loading, setLoading] = useState(false)
     const [faturas, setFaturas] = useState<IFaturaContasAReceber[]>([])
@@ -41,7 +41,7 @@ export function ModificarStatusPedido() {
         if (responsePedido) {
             form.setValue(responsePedido)
             setStatusPedidoSelecionado(responsePedido.statusPedido)
-            const responseFaturas = await faturasDoPedido(responsePedido.id);
+            const responseFaturas = await parcelasDoPedido(responsePedido.id);
             if (responseFaturas) {
                 setFaturas(responseFaturas)
             }
@@ -121,11 +121,11 @@ export function ModificarStatusPedido() {
 
             {faturas.length > 0 &&
                 <BoxApp>
-                    <DividerApp chip="Baixar fatura" marginBotton="1rem" />
+                    <DividerApp chip="Baixar parcela" marginBotton="1rem" />
                     <DropDown
                         id="faturas"
                         keyLabel="numeroDaFatura"
-                        label="Fatura"
+                        label="Parcela"
                         values={faturas}
                         key={"id"}
                         value={fatura}
@@ -135,7 +135,7 @@ export function ModificarStatusPedido() {
                     />
                     {fatura &&
                         <BoxApp marginTop="1rem">
-                            <TextApp texto={`N° da fatura: #${fatura.numeroDaFatura}`} />
+                            <TextApp texto={`N° da parcela: #${fatura.numeroDaFatura}`} />
                             <TextApp texto={`Valor: ${formatMoney(fatura.valor)}`} />
                             <TextApp texto={`Data de cadastro: ${formatDate(fatura.dataDeCriacao)}`} />
                             <TextApp texto={`Data de vencimento: ${formatDate(fatura.dataDeVencimento)}`} />

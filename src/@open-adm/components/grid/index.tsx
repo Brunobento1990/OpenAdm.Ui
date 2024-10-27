@@ -7,7 +7,25 @@ interface propsGridCustom {
     xs?: number;
     sm?: number;
     container?: boolean;
+    item?: boolean;
     withItem?: boolean;
+    marginTop?: string;
+}
+
+export function GridApp(props: propsGridCustom) {
+    return (
+        <Grid sx={{ marginTop: props.marginTop }} container spacing={props.spacing}>
+            {props.children}
+        </Grid>
+    )
+}
+
+export function GridItemApp(props: propsGridCustom) {
+    return (
+        <Grid item xs={props.xs} sm={props.sm}>
+            {props.children}
+        </Grid>
+    )
 }
 
 export function GridCustom(props: propsGridCustom) {
@@ -29,7 +47,7 @@ export function GridCustom(props: propsGridCustom) {
     }
 
     return (
-        <Grid container={props.container} spacing={props.spacing}>
+        <Grid container={props.container} item={props.item} spacing={props.spacing}>
             {props.children}
         </Grid>
     )
