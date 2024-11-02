@@ -9,13 +9,13 @@ import { generatePdfFromBase64 } from 'src/@open-adm/utils/download-pdf'
 
 export function useConfig() {
     const { navigate } = useNavigateApp();
+    const api = useNewApi({
+        method: 'GET',
+        url: 'pedidos/download-pedido?pedidoId=',
+    });
 
     async function downloadPedido(id: string) {
-        const api = useNewApi({
-            method: 'GET',
-            url: 'pedidos/download-pedido?pedidoId='
-        });
-        const pdfBase64 = await api.fecth<any>({ urlParams: `${id}` });
+        const pdfBase64 = await api.fecth<any>({ urlParams: `${id}`, message: 'Download efetuado com sucesso!' });
         if (pdfBase64?.pdf) {
             const pdf = await generatePdfFromBase64(pdfBase64.pdf);
             const link = document.createElement('a');
@@ -24,6 +24,7 @@ export function useConfig() {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+            navigate('/pedidos')
         }
     }
 
@@ -75,7 +76,7 @@ export function useConfig() {
                 return (
                     <Tooltip title="Download do pedido" placement="top">
                         <IconButton
-                            onClick={() => downloadPedido(params.id)}
+                            onClick={() => downloadPedido(`${params.id}`)}
                         >
                             <IconifyIcon
                                 icon='material-symbols-light:download'
