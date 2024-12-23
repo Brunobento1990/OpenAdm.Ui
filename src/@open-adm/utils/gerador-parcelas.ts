@@ -41,9 +41,9 @@ export function geradorParcelas(
                 proximoMesVencimento,
                 proximoDiaVencimento,
             ),
-            numeroDaFatura: i + 1,
+            numeroDaParcela: i + 1,
             valor: valorParcela,
-        });
+        } as any);
     }
 
     proximoMesVencimento += 1;
@@ -61,9 +61,9 @@ export function geradorParcelas(
             proximoMesVencimento,
             proximoDiaVencimento,
         ),
-        numeroDaFatura: props.quantidadeDeParcelas,
+        numeroDaParcela: props.quantidadeDeParcelas,
         valor: valorUltimaParcela
-    });
+    } as any);
 
     return novasParcelas;
 }
