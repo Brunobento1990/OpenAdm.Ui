@@ -1,4 +1,3 @@
-import { ContasAReceberPaginacao } from "src/@open-adm/pages/financeiro/contas-a-receber"
 import { FaturaPaginacao } from "src/@open-adm/pages/financeiro/fatura"
 
 const ContasAReceber = () => {
