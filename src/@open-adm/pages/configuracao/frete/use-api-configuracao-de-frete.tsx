@@ -11,7 +11,6 @@ export function useApiConfiguracaoDeFrete() {
         method: 'GET',
         url: 'configuracao-de-frete/get',
         notAlert: true,
-        notLoading: true
     });
 
     async function create(body: IConfiguracaoDeFreteCreate): Promise<IConfiguracaoDeFrete | undefined> {

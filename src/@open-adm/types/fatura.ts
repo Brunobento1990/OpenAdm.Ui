@@ -1,5 +1,6 @@
 import { ICliente } from "./cliente";
 import { IPedido } from "./pedido";
+import { ITransacaoFinanceira } from "./transacao-financeira";
 
 export interface IFaturaCriar {
     usuarioId: string,
@@ -10,15 +11,34 @@ export interface IFaturaCriar {
     total: number;
 }
 
-export interface IParcela {
-    id?: string;
-    faturaId?: string;
-    dataDeVencimento: string,
-    numeroDaFatura: number,
-    meioDePagamento?: number,
-    valor: number,
+export interface IPagarParcela {
+    id: string,
     desconto?: number,
-    observacao?: string
+    meioDePagamento?: number,
+    observacao?: string,
+    valor: number,
+    dataDePagamento?: string
+}
+
+export interface IParcela {
+    id: string,
+    dataDeCriacao: string,
+    dataDeAtualizacao: string,
+    numero: number,
+    dataDeVencimento: string,
+    numeroDaParcela: number,
+    numeroDoPedido: number,
+    meioDePagamento: number,
+    valor: number,
+    valorPagoRecebido: number,
+    valorAPagarAReceber: number,
+    desconto: number,
+    observacao: string,
+    vencida: boolean,
+    faturaId: string,
+    status: number,
+    fatura: IFatura,
+    transacoes?: ITransacaoFinanceira[],
 }
 
 export interface IFatura {

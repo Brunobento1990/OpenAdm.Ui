@@ -8,23 +8,24 @@ import { BoxApp } from "src/@open-adm/components/box";
 import { TextApp } from "src/@open-adm/components/text";
 import { formatDate, formatDateComHoras } from "src/@open-adm/utils/convert-date";
 import { statusPedido } from "../config";
-import { statusFatura } from "src/@open-adm/pages/financeiro/contas-a-receber/index";
 import { StatusApp } from "src/@open-adm/components/chip";
 import { formatMoney } from "src/@open-adm/utils/format-money";
 import { DividerApp } from "src/@open-adm/components/divider";
 import { RadioApp } from "src/@open-adm/components/radio";
 import { IFaturaContasAReceber, meiosDePagamentos } from "src/@open-adm/types/contas-a-receber";
-import { useContasAReceber } from "../../financeiro/contas-a-receber/form/use-api-contas-a-receber";
 import { DropDown } from "src/@open-adm/components/drop-down";
 import { InputCustom } from "src/@open-adm/components/input";
 import { FormRow } from "src/@open-adm/components/form/row";
 import { FormItemRow } from "src/@open-adm/components/form/item-row";
+import { useApiFatura } from "src/@open-adm/api/use-api-fatura";
+import { statusFatura } from "../../financeiro/fatura";
+
 export function ModificarStatusPedido() {
     const urlVoltar = "/pedidos";
     const { navigate } = useNavigateApp();
     const { get, atualizarStatus } = useApiPedido();
     const { id } = useNavigateApp();
-    const { parcelasDoPedido, pagar } = useContasAReceber();
+    const { parcelasDoPedido, pagar } = useApiFatura();
     const [loadingDados, setLoadingDados] = useState(false)
     const [loading, setLoading] = useState(false)
     const [faturas, setFaturas] = useState<IFaturaContasAReceber[]>([])
@@ -41,10 +42,10 @@ export function ModificarStatusPedido() {
         if (responsePedido) {
             form.setValue(responsePedido)
             setStatusPedidoSelecionado(responsePedido.statusPedido)
-            const responseFaturas = await parcelasDoPedido(responsePedido.id);
-            if (responseFaturas) {
-                setFaturas(responseFaturas)
-            }
+            // const responseFaturas = await parcelasDoPedido(responsePedido.id);
+            // if (responseFaturas) {
+            //     setFaturas(responseFaturas)
+            // }
         }
         setLoadingDados(false)
     }
@@ -55,15 +56,15 @@ export function ModificarStatusPedido() {
             pedidoId: form.values.id,
             statusPedido: statusPedidoSelecionado
         })
-        if (response && fatura) {
-            const responsePagar = await pagar({
-                ...fatura
-            });
-            if (responsePagar) {
-                navigate(urlVoltar)
-                return;
-            }
-        }
+        // if (response && fatura) {
+        //     const responsePagar = await pagar({
+        //         ...fatura
+        //     });
+        //     if (responsePagar) {
+        //         navigate(urlVoltar)
+        //         return;
+        //     }
+        // }
 
         if (response) {
             navigate(urlVoltar)
@@ -119,7 +120,7 @@ export function ModificarStatusPedido() {
                     },
                 ]} />
 
-            {faturas.length > 0 &&
+            {/* {faturas.length > 0 &&
                 <BoxApp>
                     <DividerApp chip="Baixar parcela" marginBotton="1rem" />
                     <DropDown
@@ -187,7 +188,7 @@ export function ModificarStatusPedido() {
                         </BoxApp>
                     }
                 </BoxApp>
-            }
+            } */}
         </Form>
     )
 }

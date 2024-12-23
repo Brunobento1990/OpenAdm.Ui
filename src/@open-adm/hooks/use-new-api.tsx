@@ -11,7 +11,6 @@ interface propsUseApi {
     url: string;
     notHandleError?: boolean;
     notAlert?: boolean;
-    notLoading?: boolean;
 }
 
 interface propsFecth {
@@ -35,8 +34,6 @@ export function useNewApi(props: propsUseApi) {
     const { getItem } = useLocalStorage();
 
     const URL_API = process.env.NEXT_PUBLIC_URL_API;
-    //const URL_API = 'http://localhost:8000/api/v1/'
-    //const URL_API = 'http://localhost:8000/api/v1/'
 
     const api = axios.create({
         baseURL: URL_API,

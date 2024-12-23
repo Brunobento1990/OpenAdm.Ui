@@ -21,7 +21,6 @@ export function DropDownMultiple(props: propsDropDownMultiple) {
     const { fecth } = useNewApi({
         method: props.method ?? 'GET',
         url: props.url,
-        notLoading: true,
         notAlert: true
     })
 

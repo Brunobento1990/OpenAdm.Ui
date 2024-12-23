@@ -65,7 +65,7 @@ export function EditarFatura() {
         const novaParcela = {
             faturaId: form.values.id,
             dataDeVencimento: undefined,
-            numeroDaFatura: form.values.parcelas.length + 1,
+            numeroDaParcela: form.values.parcelas.length + 1,
             valor: 0
         }
         setParcelaAdicionando(novaParcela as any)
@@ -132,9 +132,9 @@ export function EditarFatura() {
                             cancelar={() => setParcelaEditando(undefined)}
                         />
                     ) :
-                        <GridApp spacing={3} key={parcela.numeroDaFatura} marginTop="1rem">
+                        <GridApp spacing={3} key={parcela.numeroDaParcela} marginTop="1rem">
                             <GridItemApp xs={12} sm={1}>
-                                <TextApp texto={`Parcela: ${parcela.numeroDaFatura}`} />
+                                <TextApp texto={`Parcela: ${parcela.numeroDaParcela}`} />
                             </GridItemApp>
                             <GridItemApp xs={12} sm={2}>
                                 <TextApp texto={`Vencimento: ${formatDate(parcela.dataDeVencimento) ?? ''}`} />
@@ -195,7 +195,7 @@ function EditarParcela(props: propsEditarParcela) {
         <GridApp spacing={3} marginTop="1rem">
             <GridItemApp xs={12} sm={1}>
                 <BoxApp display="flex" alignItems="center" justifyContent="center" height="100%">
-                    <TextApp texto={`Parcela: ${props.parcela.numeroDaFatura}`} />
+                    <TextApp texto={`Parcela: ${props.parcela.numeroDaParcela}`} />
                 </BoxApp>
             </GridItemApp>
             <GridItemApp xs={12} sm={2}>

@@ -46,7 +46,7 @@ export function RelatorioProducao() {
         }
         setLoading(false);
     }
-    console.log('values', form.values)
+
     return (
         <Form
             action="create"

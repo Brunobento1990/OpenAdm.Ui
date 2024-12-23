@@ -141,6 +141,11 @@ const navigation = (): VerticalNavItemsType => {
           title: 'Contas a pagar',
           icon: 'game-icons:pay-money',
           path: '/financeiro/contas-a-pagar'
+        },
+        {
+          title: 'Transações',
+          icon: 'grommet-icons:transaction',
+          path: '/financeiro/transacao-financeira'
         }
       ]
     }

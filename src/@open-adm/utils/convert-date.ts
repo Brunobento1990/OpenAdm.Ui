@@ -9,6 +9,17 @@ export function convertDate(date?: string): string | undefined {
     return `${newDateSplit[0]}-${newDateSplit[2]}-${newDateSplit[1]}`;
 }
 
+export function convertDateForJson(date?: string): string | undefined {
+    if (!date) {
+        return undefined;
+    }
+    const newDateSplit = date.split("/");
+    if (newDateSplit.length !== 3) {
+        return date;
+    }
+    return `${newDateSplit[2]}-${newDateSplit[1]}-${newDateSplit[0]}`;
+}
+
 export function formatDate(date?: string): string | undefined {
     if (!date) {
         return undefined;

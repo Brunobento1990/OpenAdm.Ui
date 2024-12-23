@@ -8,7 +8,7 @@ interface propsUseFormikAdapter {
 
 export function useFormikAdapter<T = any>(props: propsUseFormikAdapter) {
   const formik = useFormik({
-    initialValues: props.initialValues,
+    initialValues: props.initialValues ?? {},
     validationSchema: props.validationSchema,
     onSubmit: props.onSubmit,
   });

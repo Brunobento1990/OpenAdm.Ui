@@ -6,7 +6,7 @@ import { BoxApp } from '../box';
 import { FooterTable } from './footer';
 import { HeaderTable } from './header';
 import { Card, CircularProgress, Divider, IconButton, Tooltip, Typography } from '@mui/material';
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import { GridColDef } from '@mui/x-data-grid';
 import IconifyIcon from 'src/@core/components/icon';
 import { useApi } from 'src/@open-adm/hooks/use-api';
 import { useModal } from '../modal/modal';
@@ -30,6 +30,7 @@ interface tableProps {
     desabilitarColunaAcoes?: boolean;
     metodo?: TypeMethod;
     childrenHeader?: ReactNode;
+    minWidth?: number;
 }
 
 export function TableIndex(props: tableProps) {
@@ -53,7 +54,6 @@ export function TableIndex(props: tableProps) {
         method: props.metodo ?? 'POST',
         url: props.url,
         notAlert: true,
-        notLoading: true,
     });
 
     const body = {
@@ -101,16 +101,14 @@ export function TableIndex(props: tableProps) {
     function optionsColumns(): GridColDef<any>[] {
         return [
             {
-                flex: 0.175,
-                minWidth: 140,
+                width: 200,
                 field: 'dataDeCriacao',
                 headerName: 'Data de cadastro',
                 renderCell: (params: any) => formatDate(params?.dataDeCriacao),
                 sortable: true,
             },
             {
-                flex: 0.175,
-                minWidth: 140,
+                width: 200,
                 field: 'action',
                 headerName: 'Ações',
                 renderCell: (params: any) => {
@@ -164,8 +162,7 @@ export function TableIndex(props: tableProps) {
             {
                 field: 'numero',
                 headerName: 'Número',
-                flex: 0.100,
-                minWidth: 80,
+                width: 80,
                 renderCell: (params: any) => (
                     <Typography variant='body2' sx={{ color: 'success' }}>
                         #{params.numero}
@@ -222,14 +219,13 @@ export function TableIndex(props: tableProps) {
                         <CircularProgress size={20} />
                     </BoxApp>
                 ) : (
-                    <>
-                        <TablePaginacao
-                            columns={[...defaultColuns(), ...props.columns, ...optionsColumns()]}
-                            rows={rows}
-                            sorting={sorting}
-                            setSorting={setSorting}
-                        />
-                    </>
+                    <TablePaginacao
+                        columns={[...defaultColuns(), ...props.columns, ...optionsColumns()]}
+                        rows={rows}
+                        sorting={sorting}
+                        setSorting={setSorting}
+                        minWidth={props.minWidth}
+                    />
                 )}
             </BoxApp>
             <Divider sx={{
