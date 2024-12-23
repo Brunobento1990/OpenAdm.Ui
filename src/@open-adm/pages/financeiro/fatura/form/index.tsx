@@ -127,10 +127,10 @@ export function CreateFatura(props: propsCreateFatura) {
             </GridApp>
             <DividerApp chip="Parcelas" marginTop="1rem" />
             {form.values.parcelas?.map((parcela, index) => (
-                <GridApp spacing={3} key={parcela.numeroDaFatura} marginTop="1rem">
+                <GridApp spacing={3} key={parcela.numeroDaParcela} marginTop="1rem">
                     <GridItemApp xs={12} sm={1}>
                         <BoxApp display="flex" alignItems="center" justifyContent="center" height="100%">
-                            <Typography>Parcela: {parcela.numeroDaFatura}</Typography>
+                            <Typography>Parcela: {parcela.numeroDaParcela}</Typography>
                         </BoxApp>
                     </GridItemApp>
                     <GridItemApp xs={12} sm={2}>
