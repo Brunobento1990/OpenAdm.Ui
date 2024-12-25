@@ -56,23 +56,23 @@ export function HomePage() {
         <>
             <BoxApp padding="1rem">
                 <Grid container spacing={5} padding={2}>
-                    {home?.totalAReceber &&
+                    {home?.totalAReceber && home?.totalAReceber > 0 ?
                         <Grid item xs={12} sm={6}>
                             <FaturasTotalizador total={home.totalAReceber} />
-                        </Grid>
+                        </Grid> : <></>
                     }
-                    {home?.pedidosEmAberto &&
+                    {home?.pedidosEmAberto && home?.pedidosEmAberto > 0 ?
                         <Grid item xs={12} sm={6}>
                             <PedidosEmEbrtoGrafico total={home.pedidosEmAberto} />
-                        </Grid>
+                        </Grid> : <></>
                     }
                 </Grid>
             </BoxApp>
             <Grid container spacing={5} padding={2}>
-                {home?.faturas && home.faturas?.length &&
+                {home?.faturas && home.faturas?.length ?
                     <Grid item xs={12} sm={6}>
                         <Faturas faturas={home?.faturas ?? []} />
-                    </Grid>
+                    </Grid> : <></>
                 }
                 <Grid item xs={12} sm={6}>
                     <Movimentos movimentos={home?.movimentos ?? []} />

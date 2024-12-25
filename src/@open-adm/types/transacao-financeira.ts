@@ -11,7 +11,8 @@ export interface ITransacaoFinanceira {
     valor: number,
     tipoTransacaoFinanceira: TipoTransacaoFinanceira,
     meioDePagamento: number,
-    observacao: string
+    observacao: string,
+    ehEstorno?: boolean;
 }
 
 export type TipoTransacaoFinanceira = 0 | 1;

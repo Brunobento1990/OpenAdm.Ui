@@ -43,8 +43,8 @@ export function BaixarParcela() {
         setLoading(true)
         const response = await pagarParcela({
             id: form.values.id,
-            valor: cleanFormatMoney(form.values.valor) ?? 0,
-            dataDePagamento,
+            valor: cleanFormatMoney(form.values.valorAPagarAReceber) ?? 0,
+            dataDePagamento: dataDePagamento?.length && dataDePagamento.length > 0 ? dataDePagamento : undefined,
             desconto: cleanFormatMoney(form.values.desconto),
             meioDePagamento: form.values.meioDePagamento,
             observacao: form.values.observacao
@@ -88,10 +88,10 @@ export function BaixarParcela() {
             <FormItemRow sm={6} xs={12}>
                 <InputCustom
                     fullWidth
-                    id="valor"
+                    id="valorAPagarAReceber"
                     label="Valor"
-                    name="valor"
-                    value={form.values.valor}
+                    name="valorAPagarAReceber"
+                    value={form.values.valorAPagarAReceber}
                     mask={MaskType.MONEY}
                     onChange={form.onChange}
                     onBlur={form.onBlur}

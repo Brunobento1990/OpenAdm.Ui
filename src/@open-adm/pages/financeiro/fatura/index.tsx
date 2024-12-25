@@ -6,6 +6,9 @@ import { TableIndex } from "src/@open-adm/components/table-paginacao";
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { IconButton, Tooltip } from "@mui/material";
 import IconifyIcon from "src/@core/components/icon";
+import { useApiParcela } from "src/@open-adm/api/use-api-parcela";
+import { IParcela } from "src/@open-adm/types/fatura";
+import { useModal } from "src/@open-adm/components/modal/modal";
 
 export const statusFatura: StatusObj = {
     0: { title: 'Pendente', color: 'warning' },
@@ -22,6 +25,19 @@ interface propsFaturaPaginacao {
 
 export function FaturaPaginacao(props: propsFaturaPaginacao) {
     const { navigate } = useNavigateApp();
+    const { estornarParcela } = useApiParcela();
+    const { show, close } = useModal()
+
+    async function estornar(parcela: IParcela) {
+        show({
+            message: `Confirma o estorno da parcela: ${parcela.numeroDaParcela}?`,
+            confirmed: async () => {
+                await estornarParcela(parcela.id)
+                close()
+            }
+        })
+    }
+
     return (
         <TableIndex
             minWidth={2500}
@@ -93,7 +109,7 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
                     sortable: true,
                 },
                 {
-                    width: 150,
+                    width: 100,
                     field: 'baixa',
                     headerName: 'Baixar',
                     renderCell: (params: any) => {
@@ -101,6 +117,20 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
                             <IconButton onClick={() => navigate(`/financeiro/fatura/baixar/${params.id}`)}>
                                 <IconifyIcon
                                     icon='fe:app-menu'
+                                />
+                            </IconButton>
+                        )
+                    }
+                },
+                {
+                    width: 140,
+                    field: 'estornar',
+                    headerName: 'Estornar',
+                    renderCell: (params: IParcela) => {
+                        return (
+                            <IconButton onClick={async () => await estornar(params)}>
+                                <IconifyIcon
+                                    icon='mage:reload-reverse'
                                 />
                             </IconButton>
                         )

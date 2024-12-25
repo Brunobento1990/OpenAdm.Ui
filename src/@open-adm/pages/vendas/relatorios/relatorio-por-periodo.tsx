@@ -102,9 +102,9 @@ export function RelatorioPorPeriodo() {
                     <SelectCustom
                         id='usuarios'
                         getOptionLabel={option => option.nome || ''}
-                        onInputChange={(event, newInputValue) => formik.setValues({
+                        onInputChange={(_, newInputValue) => formik.setValues({
                             ...formik.values,
-                            usuarioId: usuarios.find((x) => x.nome === newInputValue).id
+                            usuarioId: usuarios.find((x) => x.nome === newInputValue)?.id
                         })}
                         options={usuarios}
                         renderInput={params =>

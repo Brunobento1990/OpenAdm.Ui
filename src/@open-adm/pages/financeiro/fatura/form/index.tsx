@@ -117,7 +117,7 @@ export function CreateFatura(props: propsCreateFatura) {
                         fullWidth
                         id="total"
                         onBlur={gerarParcelas}
-                        label={"Quantidade de parcelas"}
+                        label={"Total"}
                         onChange={form.onChange}
                         name={"total"}
                         value={form.values.total}

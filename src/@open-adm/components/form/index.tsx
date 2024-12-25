@@ -47,25 +47,26 @@ export function Form(props: propsForm) {
                 }
             }}>
                 {props.children}
+                <Box display='flex' justifyContent='space-between' sx={{ marginTop: 10 }}>
+                    {props.urlVoltar &&
+                        <Button
+                            onClick={() => navigate(props.urlVoltar ?? '/home')}
+                        >
+                            Voltar
+                        </Button>
+                    }
+                    {props.action !== 'view' &&
+                        <Button
+                            disabled={props.loading}
+                            variant="contained"
+                            type="submit"
+                            onClick={props.submit}
+                        >
+                            {props.loading ? <>Aguarde ... <LoadingApp size={20} /></> : props.titleButton ?? 'Salvar'}
+                        </Button>
+                    }
+                </Box>
             </form>
-            <Box display='flex' justifyContent='space-between' sx={{ marginTop: 10 }}>
-                {props.urlVoltar &&
-                    <Button
-                        onClick={() => navigate(props.urlVoltar ?? '/home')}
-                    >
-                        Voltar
-                    </Button>
-                }
-                {props.action !== 'view' &&
-                    <Button
-                        disabled={props.loading}
-                        variant="contained"
-                        onClick={props.submit}
-                    >
-                        {props.loading ? <>Aguarde ... <LoadingApp size={20} /></> : props.titleButton ?? 'Salvar'}
-                    </Button>
-                }
-            </Box>
         </Card>
     )
 }

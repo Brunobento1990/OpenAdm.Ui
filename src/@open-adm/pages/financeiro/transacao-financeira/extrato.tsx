@@ -5,14 +5,22 @@ import { initialValues, schema } from "./config";
 import { FormRow } from "src/@open-adm/components/form/row";
 import { FormItemRow } from "src/@open-adm/components/form/item-row";
 import { InputDate } from "src/@open-adm/components/input/input-date";
-import { convertDateForJson, formatDateComHoras } from "src/@open-adm/utils/convert-date";
+import { formatDateComHoras } from "src/@open-adm/utils/convert-date";
 import { useApiTransacao } from "src/@open-adm/api/use-api-transacao";
 import { useState } from "react";
 import { TablePaginacao } from "src/@open-adm/components/table-paginacao/table";
 import { formatMoney } from "src/@open-adm/utils/format-money";
 import { BoxApp } from "src/@open-adm/components/box";
-import { DropDownMultiple } from "src/@open-adm/components/drop-down-scroll/dorp-down-multiple";
-import { DropDownScroll } from "src/@open-adm/components/drop-down-scroll";
+import { StatusApp } from "src/@open-adm/components/chip";
+import { StatusObj } from "../../pedidos/config";
+import { statusFatura } from "../fatura";
+import IconifyIcon from "src/@core/components/icon";
+import { listaIcones } from "src/configs/listaIcones";
+
+export const tipoTransacaoFinanceira: StatusObj = {
+    0: { title: 'Entrada', color: 'success' },
+    1: { title: 'Saída', color: 'error' },
+}
 
 export function Extrato() {
     const [loading, setLoading] = useState(false)
@@ -32,8 +40,6 @@ export function Extrato() {
         }
         setLoading(false)
     }
-
-    console.log('values', form.values)
 
     return (
         <Form
@@ -90,6 +96,39 @@ export function Extrato() {
                     minWidth={2000}
                     columns={[
                         {
+                            width: 20,
+                            field: 'tipo_1',
+                            headerName: '',
+                            renderCell: (row: ITransacaoFinanceira) => {
+                                return (
+                                    <IconifyIcon icon={row.tipoTransacaoFinanceira === 0 ?
+                                        listaIcones.contasAReceber
+                                        : listaIcones.contasAPagar}
+                                        color={row.tipoTransacaoFinanceira === 0 ? 'green' : 'red'}
+                                    />
+                                )
+                            }
+                        },
+                        {
+                            width: 50,
+                            field: 'tipo',
+                            headerName: 'Tipo',
+                            renderCell: (row: ITransacaoFinanceira) => {
+                                const status = tipoTransacaoFinanceira[row.tipoTransacaoFinanceira]
+                                return (
+                                    <StatusApp cor={status.color} titulo={status.title} />
+                                )
+                            }
+                        },
+                        {
+                            width: 50,
+                            field: 'ehEstorno',
+                            headerName: 'Estorno',
+                            renderCell: (row: ITransacaoFinanceira) => {
+                                return row.ehEstorno ? 'Sim' : 'Não'
+                            }
+                        },
+                        {
                             width: 100,
                             field: 'usuario',
                             headerName: 'Cliente',
@@ -124,12 +163,6 @@ export function Extrato() {
                             field: 'desconto',
                             headerName: 'Desconto da parcela',
                             renderCell: (row: ITransacaoFinanceira) => formatMoney(row.parcela?.desconto) ?? ''
-                        },
-                        {
-                            width: 50,
-                            field: 'tipo',
-                            headerName: 'Tipo',
-                            renderCell: (row: ITransacaoFinanceira) => row.tipoTransacaoFinanceira === 0 ? 'Entrada' : 'Saída'
                         },
                         {
                             width: 100,
