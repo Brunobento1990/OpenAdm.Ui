@@ -1,6 +1,8 @@
 import { IBase } from "./base";
+import { ICliente } from "./cliente";
 import { IPeso } from "./peso";
 import { IProduto } from "./produto";
+import { ITabelaDePreco } from "./tabela-de-preco";
 import { ITamanho } from "./tamanho";
 
 export interface IPedido extends IBase {
@@ -9,6 +11,25 @@ export interface IPedido extends IBase {
     totalItens: number,
     usuario: string,
     itensPedido: IItemPedido[]
+}
+
+export interface IPedidoCreate {
+    usuarioId: string;
+    usuario: ICliente;
+    tabelaDePrecoId: string;
+    tabelaDePreco: ITabelaDePreco;
+    itens: IItemPedidoCreate[]
+}
+
+export interface IItemPedidoCreate {
+    produtoId: string;
+    produto: IProduto;
+    pesoId?: string;
+    peso?: IPeso;
+    tamanhoId?: string;
+    tamanho?: ITamanho;
+    valorUnitario: number;
+    quantidade?: number;
 }
 
 export interface IAtualizarStatusPedido {

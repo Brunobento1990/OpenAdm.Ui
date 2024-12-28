@@ -93,14 +93,14 @@ export function TablePaginacao(props: propsTable) {
                                     }s linear alternate`,
                             }}
                         >
-                            {props.columns.map((column, index) => (
+                            {props.columns.map((column, i) => (
                                 <TableCell
                                     align={column.align}
-                                    key={index}
+                                    key={i}
                                     width={column.width}
                                 >
                                     {column.renderCell && !column?.pesquisar ? (
-                                        column.renderCell(row)
+                                        column.renderCell(row, index)
                                     ) : (
                                         row[column.field]
                                     )}

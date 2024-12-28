@@ -16,5 +16,6 @@ export interface ICliente extends IBase {
   cnpj?: string;
   cpf?: string;
   avatar?: string;
-  quantidadeDePedido?: number
+  quantidadeDePedido?: number;
+  isAtacado?: boolean;
 }

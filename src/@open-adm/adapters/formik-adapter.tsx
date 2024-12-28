@@ -13,7 +13,7 @@ export function useFormikAdapter<T = any>(props: propsUseFormikAdapter) {
     onSubmit: props.onSubmit,
   });
 
-  function setValue(value: any) {
+  function setValue(value: Partial<T>) {
     formik.setValues({
       ...formik.values,
       ...value,

@@ -1,7 +1,12 @@
-import { useNewApi } from "src/@open-adm/hooks/use-new-api";
-import { IAtualizarStatusPedido, IPedido } from "src/@open-adm/types/pedido";
+import { useNewApi } from "../hooks/use-new-api";
+import { IAtualizarStatusPedido, IPedido, IPedidoCreate } from "../types/pedido";
 
 export function useApiPedido() {
+    const apiCreateAdm = useNewApi({
+        method: 'POST',
+        url: 'pedidos-adm/create'
+    })
+
     const apiGet = useNewApi({
         method: 'GET',
         url: 'pedidos/get?pedidoId=',
@@ -22,7 +27,12 @@ export function useApiPedido() {
         return await apiAtualizarStatus.fecth({ body })
     }
 
+    async function criarPedido(body: IPedidoCreate): Promise<any> {
+        return await apiCreateAdm.fecth({ body })
+    }
+
     return {
+        criarPedido,
         get,
         atualizarStatus
     }

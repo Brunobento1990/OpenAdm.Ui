@@ -55,6 +55,7 @@ export function Pedidos() {
             url="pedidos/paginacao"
             urlDelete="pedidos/delete"
             urlView="pedidos/view"
+            urlAdd="pedidos/create"
             childrenHeader={filtro()}
             filtroComplementar={{
                 statusPedido: status > 0 ? status - 1 : undefined

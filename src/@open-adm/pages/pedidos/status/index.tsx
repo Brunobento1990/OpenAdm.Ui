@@ -1,24 +1,20 @@
 import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter"
 import { IPedido } from "src/@open-adm/types/pedido"
-import { useApiPedido } from "../use-api-pedido"
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { useEffect, useState } from "react";
 import { Form } from "src/@open-adm/components/form";
 import { BoxApp } from "src/@open-adm/components/box";
 import { TextApp } from "src/@open-adm/components/text";
-import { formatDate, formatDateComHoras } from "src/@open-adm/utils/convert-date";
+import { formatDateComHoras } from "src/@open-adm/utils/convert-date";
 import { statusPedido } from "../config";
 import { StatusApp } from "src/@open-adm/components/chip";
 import { formatMoney } from "src/@open-adm/utils/format-money";
 import { DividerApp } from "src/@open-adm/components/divider";
 import { RadioApp } from "src/@open-adm/components/radio";
-import { IFaturaContasAReceber, meiosDePagamentos } from "src/@open-adm/types/contas-a-receber";
-import { DropDown } from "src/@open-adm/components/drop-down";
-import { InputCustom } from "src/@open-adm/components/input";
-import { FormRow } from "src/@open-adm/components/form/row";
-import { FormItemRow } from "src/@open-adm/components/form/item-row";
+import { IFaturaContasAReceber } from "src/@open-adm/types/contas-a-receber";
 import { useApiFatura } from "src/@open-adm/api/use-api-fatura";
 import { statusFatura } from "../../financeiro/fatura";
+import { useApiPedido } from "src/@open-adm/api/UseApiPedido";
 
 export function ModificarStatusPedido() {
     const urlVoltar = "/pedidos";

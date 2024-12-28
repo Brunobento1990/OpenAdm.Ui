@@ -39,10 +39,17 @@ export function DropDownScroll(props: propsDropDownScroll) {
                 search
             }
         });
-        if (newItems) {
+        if (Array.isArray(newItems)) {
             setOptions(newItems);
             if (props.retornarObjetoCompleto) {
                 setOpcoesOriginais(newItems);
+            }
+        }
+
+        if (Array.isArray(newItems?.values)) {
+            setOptions(newItems?.values);
+            if (props.retornarObjetoCompleto) {
+                setOpcoesOriginais(newItems?.values);
             }
         }
     }
@@ -95,6 +102,8 @@ export function DropDownScroll(props: propsDropDownScroll) {
         <Autocomplete
             open={open}
             id={props.id}
+            loadingText='Carregando...'
+            noOptionsText='Sem registros'
             disabled={props.readonly}
             size='small'
             value={
