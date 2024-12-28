@@ -94,7 +94,7 @@ export function EditarFatura() {
         const response = await excluirFatura(id);
         if (response?.result) {
             form.setValue({
-                parcelas: [form.values.parcelas.filter((x) => x.id !== id)]
+                parcelas: [form.values.parcelas.filter((x) => x.id !== id)] as any
             })
         }
         setExcluindoParcela(false);
