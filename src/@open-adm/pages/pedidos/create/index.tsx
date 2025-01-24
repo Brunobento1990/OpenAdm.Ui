@@ -8,15 +8,16 @@ import { DropDownScroll } from "src/@open-adm/components/drop-down-scroll"
 import { BoxApp } from "src/@open-adm/components/box"
 import { DividerApp } from "src/@open-adm/components/divider"
 import { useApiTabelaDePreco } from "src/@open-adm/api/UseApiTabelaDePreco"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { InputCustom, MaskType } from "src/@open-adm/components/input"
 import { Button } from "@mui/material"
 import { TablePaginacao } from "src/@open-adm/components/table-paginacao/table"
 import { useSnackbar } from "src/@open-adm/components/snack"
-import { cleanFormatMoney } from "src/@open-adm/utils/format-money"
+import { cleanFormatMoney, formatMoney } from "src/@open-adm/utils/format-money"
 import { removerItemDeArrayPorIndex } from "src/@open-adm/utils/RemoverItemArrayPorIndex"
 import { useApiPedido } from "src/@open-adm/api/UseApiPedido"
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app"
+import { TextApp } from "src/@open-adm/components/text"
 
 export function PedidoCreate() {
     const urlVoltar = '/pedidos'
@@ -31,6 +32,12 @@ export function PedidoCreate() {
         initialValues,
         validationSchema: schema
     })
+
+    const total = useMemo(() => form
+        .values
+        .itens
+        .reduce((valor, item) => valor + (item.valorUnitario * (item.quantidade ?? 0)), 0)
+        , [form.values.itens])
 
     const { coluns } = config({
         remove: (i) => {
@@ -112,6 +119,15 @@ export function PedidoCreate() {
             urlVoltar={urlVoltar}
             loading={loading}
         >
+            {total > 0 ?
+                <BoxApp>
+                    <TextApp fontWeight={600} fontSize="16px" texto={`Total: ${formatMoney(total)}`} />
+                </BoxApp>
+                :
+                <BoxApp>
+                    <TextApp texto="Adicione os itens no pedido" color="red" />
+                </BoxApp>
+            }
             <FormRow spacing={3}>
                 <FormItemRow sm={6} xs={12}>
                     <DropDownScroll
