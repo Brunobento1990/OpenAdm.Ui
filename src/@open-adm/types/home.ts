@@ -7,6 +7,8 @@ export interface IHome {
     faturas: any[],
     totalAReceber: number,
     pedidosEmAberto: number,
+    quantidadeDeAcessoEcommerce: number;
+    quantidadeDeUsuario: number;
 }
 
 export interface ITopUsuarios extends IBase {

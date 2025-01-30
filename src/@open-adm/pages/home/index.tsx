@@ -9,6 +9,15 @@ const TopClientesMaisGastos = dynamic(() => import('src/@open-adm/views/home/top
     ssr: false,
 });
 
+
+const TotalUsuario = dynamic(() => import('src/@open-adm/views/home/total-usuarios'), {
+    ssr: false,
+});
+
+const AcessoUsuarioEcommerce = dynamic(() => import('src/@open-adm/views/home/acesso-usuario-ecommerce'), {
+    ssr: false,
+});
+
 const TopClientesMaisPedidos = dynamic(() => import('src/@open-adm/views/home/top-clientes-mais-pedidos'), {
     ssr: false,
 });
@@ -56,6 +65,16 @@ export function HomePage() {
         <>
             <BoxApp padding="1rem">
                 <Grid container spacing={5} padding={2}>
+                    {home?.quantidadeDeUsuario && home.quantidadeDeUsuario > 0 ? (
+                        <Grid item xs={12} sm={6}>
+                            <TotalUsuario total={home.quantidadeDeUsuario} />
+                        </Grid>
+                    ) : (<></>)}
+                    {home?.quantidadeDeAcessoEcommerce && home.quantidadeDeAcessoEcommerce > 0 ? (
+                        <Grid item xs={12} sm={6}>
+                            <AcessoUsuarioEcommerce total={home.quantidadeDeAcessoEcommerce} />
+                        </Grid>
+                    ) : (<></>)}
                     {home?.totalAReceber && home?.totalAReceber > 0 ?
                         <Grid item xs={12} sm={6}>
                             <FaturasTotalizador total={home.totalAReceber} />
