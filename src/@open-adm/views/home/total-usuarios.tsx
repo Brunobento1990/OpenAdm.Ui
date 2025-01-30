@@ -11,7 +11,7 @@ const TotalUsuarios = (props: propsTotalUsuarios) => {
                 stats={`${props.total}`}
                 chartColor='error'
                 avatarColor='success'
-                title='Total de usuários'
+                title='Total de clientes'
                 avatarIcon='tabler:credit-card'
                 chartSeries={[{ data: [5, 12, 46, 10, 56, 31, 70] }]}
             />
