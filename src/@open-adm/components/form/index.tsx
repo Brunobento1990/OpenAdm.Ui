@@ -1,4 +1,4 @@
-import { Card, CardHeader, Box, Button, CircularProgress } from "@mui/material";
+import { Card, CardHeader, Box, Button } from "@mui/material";
 import { ReactNode } from "react";
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { LoadingApp } from "../loading";
@@ -60,7 +60,12 @@ export function Form(props: propsForm) {
                             disabled={props.loading}
                             variant="contained"
                             type="submit"
-                            onClick={props.submit}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (props.submit) {
+                                    props.submit();
+                                }
+                            }}
                         >
                             {props.loading ? <>Aguarde ... <LoadingApp size={20} /></> : props.titleButton ?? 'Salvar'}
                         </Button>

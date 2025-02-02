@@ -13,6 +13,12 @@ export function useApiPedido() {
         notAlert: true
     })
 
+    const apiGetGerarPix = useNewApi({
+        method: 'GET',
+        url: 'pedidos/get-gerar-pix?pedidoId=',
+        notAlert: true
+    })
+
     const apiAtualizarStatus = useNewApi({
         method: 'PUT',
         url: 'pedidos/update-status',
@@ -21,6 +27,10 @@ export function useApiPedido() {
 
     async function get(id: string): Promise<IPedido | undefined> {
         return await apiGet.fecth<IPedido>({ urlParams: id })
+    }
+
+    async function getGerarPix(id: string): Promise<IPedido | undefined> {
+        return await apiGetGerarPix.fecth<IPedido>({ urlParams: id })
     }
 
     async function atualizarStatus(body: IAtualizarStatusPedido): Promise<any> {
@@ -34,6 +44,7 @@ export function useApiPedido() {
     return {
         criarPedido,
         get,
-        atualizarStatus
+        atualizarStatus,
+        getGerarPix
     }
 }

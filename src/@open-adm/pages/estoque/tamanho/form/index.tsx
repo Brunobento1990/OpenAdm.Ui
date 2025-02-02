@@ -74,6 +74,7 @@ export function FormTamanho(props: IForm) {
                 <Box sx={{ width: !matches ? '100%' : '80%' }}>
                     <InputCustom
                         fullWidth
+                        autoFocus
                         label='Descrição'
                         name='descricao'
                         id='descricao'

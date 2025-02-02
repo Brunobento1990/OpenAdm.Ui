@@ -87,6 +87,7 @@ export function FormPeso(props: IForm) {
                         helperText={formik.helperText('descricao')}
                         error={formik.error('descricao')}
                         required
+                        autoFocus
                         maxLength={255}
                         readonly={props.action === 'view'}
                     />

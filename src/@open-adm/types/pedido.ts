@@ -10,6 +10,7 @@ export interface IPedido extends IBase {
     valorTotal: number,
     totalItens: number,
     usuario: string,
+    totalAReceber?: number;
     itensPedido: IItemPedido[]
 }
 

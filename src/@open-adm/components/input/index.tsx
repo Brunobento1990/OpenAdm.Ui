@@ -29,6 +29,7 @@ interface InputCustomProps {
     isPassword?: boolean;
     mask?: MaskType;
     readonly?: boolean;
+    autoFocus?: boolean;
 }
 
 export function InputCustom(props: InputCustomProps) {
@@ -58,6 +59,7 @@ export function InputCustom(props: InputCustomProps) {
         <CustomTextField
             placeholder={props.placeholder}
             type={type}
+            autoFocus={props.autoFocus}
             fullWidth={props.fullWidth}
             label={props.label}
             name={props.name}
