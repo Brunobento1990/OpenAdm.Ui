@@ -13,7 +13,7 @@ jobs:
       - name: Make envfile
         run: |
           cat > .env.production
-          echo "NEXT_PUBLIC_URL_API=${{ secrets.URL_API }}" >> .env.production
+          echo "NEXT_PUBLIC_URL_API=${{ secrets.URL_API_HML }}" >> .env.production
           echo "$(<.env.production)"
       - name: Build
         run: docker build . -t brunobentocaina/open-adm-ui:stating
