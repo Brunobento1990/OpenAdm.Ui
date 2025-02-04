@@ -1,7 +1,8 @@
-import { columns } from "./config";
 import { TableIndex } from "src/@open-adm/components/table-paginacao";
+import { useColumns } from "./config";
 
 export function ClientePaginacao() {
+    const { columns } = useColumns();
     return (
         <TableIndex
             columns={columns}
