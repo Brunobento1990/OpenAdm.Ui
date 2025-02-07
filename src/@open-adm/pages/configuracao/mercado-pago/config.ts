@@ -9,4 +9,5 @@ export const initialValues: Partial<IConfiguracaoPagamentoMercadoPago> = {
 export const schema = new YupAdapter()
     .string("publicKey")
     .string("accessToken")
+    .string("urlWebHook")
     .build();
