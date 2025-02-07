@@ -89,6 +89,22 @@ export function MercadoPago() {
                     />
                 </Grid>
             </Grid>
+            <Grid container spacing={6}>
+                <Grid item xs={12} sm={6}>
+                    <InputCustom
+                        fullWidth
+                        label='Url web hook'
+                        name='urlWebHook'
+                        id='urlWebHook'
+                        value={form.values.urlWebHook}
+                        onBlur={form.onBlur}
+                        onChange={form.onChange}
+                        required
+                        helperText={form.helperText("urlWebHook")}
+                        error={form.error("urlWebHook")}
+                    />
+                </Grid>
+            </Grid>
         </Form>
     )
 }
