@@ -26,6 +26,10 @@ const Movimentos = dynamic(() => import('src/@open-adm/views/home/movimentos'), 
     ssr: false,
 });
 
+const EstoquesHome = dynamic(() => import('src/@open-adm/views/home/estoques-home'), {
+    ssr: false,
+});
+
 const Faturas = dynamic(() => import('src/@open-adm/views/home/faturas'), {
     ssr: false,
 });
@@ -96,6 +100,11 @@ export function HomePage() {
                 <Grid item xs={12} sm={6}>
                     <Movimentos movimentos={home?.movimentos ?? []} />
                 </Grid>
+                {home?.posicaoDeEstoques && home.posicaoDeEstoques?.length ?
+                    <Grid item xs={12} sm={6}>
+                        <EstoquesHome estoques={home?.posicaoDeEstoques ?? []} />
+                    </Grid> : <></>
+                }
             </Grid>
             <Grid container spacing={5} padding={2}>
                 <Grid item xs={12} sm={6}>

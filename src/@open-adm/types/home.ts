@@ -9,6 +9,7 @@ export interface IHome {
     pedidosEmAberto: number,
     quantidadeDeAcessoEcommerce: number;
     quantidadeDeUsuario: number;
+    posicaoDeEstoques: any[]
 }
 
 export interface ITopUsuarios extends IBase {
