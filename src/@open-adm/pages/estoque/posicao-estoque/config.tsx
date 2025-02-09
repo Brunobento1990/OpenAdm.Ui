@@ -1,8 +1,9 @@
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import { GridColDef } from "@mui/x-data-grid";
 import { StatusObj } from "../../pedidos/config";
 import CustomChip from 'src/@open-adm/components/chip'
 import { IEstoqueEdit } from "src/@open-adm/types/estoque";
 import * as yup from 'yup';
+import { formatDateComHoras } from "src/@open-adm/utils/convert-date";
 
 export const quantidade: StatusObj = {
     0: { title: 'Em aberto', color: 'warning' },
@@ -53,9 +54,8 @@ export const columns: GridColDef[] = [
         minWidth: 140,
         field: 'dataDeAtualizacao',
         headerName: 'Ultima movimentação',
-        valueGetter: (params: any) => {
-            const newValue = params?.row?.dataDeAtualizacao?.slice(0, 10).split('-')
-            return `${newValue[2]}/${newValue[1]}/${newValue[0]}`
+        renderCell: (params: any) => {
+            return formatDateComHoras(params.dataDeAtualizacao);
         }
     }
 ]

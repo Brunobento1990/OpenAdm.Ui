@@ -11,7 +11,7 @@ const AcessoUsuarioEcommerce = (props: propsAcessoUsuarioEcommerce) => {
                 stats={`${props.total}`}
                 chartColor='primary'
                 avatarColor='success'
-                title='Total de acesso ecommerce'
+                title='Total de acesso ecommerce no mês'
                 avatarIcon='tabler:credit-card'
                 chartSeries={[{ data: [5, 12, 46, 10, 56, 31, 70] }]}
             />
