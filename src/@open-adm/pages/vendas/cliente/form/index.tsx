@@ -36,14 +36,16 @@ export function FormCliente() {
 
             setLoading(true);
 
-            await create({
+            const response = await create({
                 ...values,
                 cpf: clearMaskCpf(values.cpf),
                 cnpj: clearMaskCnpj(values.cnpj),
-                telefone: clearMaskPhone(values.telefone)
+                telefone: clearMaskPhone(values.telefone),
+                tipoPessoa: values.cnpj ? 1 : 2
             });
-
-            navigate(urlVoltar);
+            if (response) {
+                navigate(urlVoltar);
+            }
         } catch (error) {
 
         } finally {
