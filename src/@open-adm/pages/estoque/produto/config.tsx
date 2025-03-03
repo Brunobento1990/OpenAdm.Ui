@@ -1,38 +1,73 @@
-import { Box } from "@mui/material"
+import { Box, Checkbox, IconButton, Tooltip } from "@mui/material"
 import { GridColDef } from "@mui/x-data-grid"
+import IconifyIcon from "src/@core/components/icon";
 import { ICreateProdutoDto, IProduto } from "src/@open-adm/types/produto";
 import { IItensTabelaDePreco, ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
 import * as yup from 'yup';
 
-export const columns: GridColDef[] = [
-    {
-        flex: 0.200,
-        minWidth: 200,
-        field: 'foto',
-        headerName: 'Foto',
-        renderCell: (params: any) => (
-            <Box
-                component="img"
-                loading="lazy"
-                src={params.foto}
-                sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
-            />
-        )
-    },
-    {
-        flex: 0.200,
-        minWidth: 200,
-        field: 'descricao',
-        headerName: 'Descricao',
-        sortable: true,
-    },
-    {
-        flex: 0.200,
-        minWidth: 200,
-        field: 'referencia',
-        headerName: 'Referencia'
+interface propsColunsProduto {
+    inativarEcommerce: (id: string, inativo: boolean) => void;
+}
+
+export function colunsProduto(props: propsColunsProduto) {
+    const columns: GridColDef[] = [
+        {
+            flex: 0.200,
+            minWidth: 200,
+            field: 'foto',
+            headerName: 'Foto',
+            renderCell: (params: any) => (
+                <Box
+                    component="img"
+                    loading="lazy"
+                    src={params.foto}
+                    sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
+                />
+            )
+        },
+        {
+            flex: 0.200,
+            minWidth: 200,
+            field: 'descricao',
+            headerName: 'Descricao',
+            sortable: true,
+        },
+        {
+            flex: 0.200,
+            minWidth: 200,
+            field: 'referencia',
+            headerName: 'Referencia'
+        },
+        {
+            flex: 0.200,
+            minWidth: 200,
+            field: 'inativoEcommerce',
+            headerName: 'Inativo',
+            renderCell: (params: any) => <Checkbox disabled checked={params.inativoEcommerce} />
+        },
+        {
+            flex: 0.200,
+            minWidth: 200,
+            field: 'inativar',
+            headerName: 'Inativar',
+            renderCell: (params: any) => (
+                <Tooltip title="Visualizar" placement="top">
+                    <IconButton
+                        onClick={() => props.inativarEcommerce(params.id, params.inativoEcommerce ?? false)}
+                    >
+                        <IconifyIcon
+                            icon='tabler:refresh'
+                        />
+                    </IconButton>
+                </Tooltip>
+            )
+        },
+    ]
+
+    return {
+        columns
     }
-]
+}
 
 export const defaultValues: ICreateProdutoDto = {
     descricao: '',

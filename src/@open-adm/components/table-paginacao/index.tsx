@@ -45,7 +45,7 @@ export function TableIndex(props: tableProps) {
         parseInt(getItem<string>('quantidade-por-pagina') ?? '5'),
     );
     const [sorting, setSorting] = useState<ISortingTable>({
-        field: 'dataDeAtualizacao',
+        field: 'numero',
         sort: 'desc',
     });
     const [quantidadePagina, setQuantidadePagina] = useState<number>(0);
