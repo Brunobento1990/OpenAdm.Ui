@@ -69,9 +69,14 @@ export function HomePage() {
         <>
             <BoxApp padding="1rem">
                 <Grid container spacing={5} padding={2}>
-                    {home?.quantidadeDeUsuario && home.quantidadeDeUsuario > 0 ? (
+                    {home?.quantidadeDeUsuarioCnpj && home.quantidadeDeUsuarioCnpj > 0 ? (
                         <Grid item xs={12} sm={6}>
-                            <TotalUsuario total={home.quantidadeDeUsuario} />
+                            <TotalUsuario cor="success" titulo="Qtd clientes CNPJ" total={home.quantidadeDeUsuarioCnpj} />
+                        </Grid>
+                    ) : (<></>)}
+                    {home?.quantidadeDeUsuarioCpf && home.quantidadeDeUsuarioCpf > 0 ? (
+                        <Grid item xs={12} sm={6}>
+                            <TotalUsuario cor="error" titulo="Qtd clientes CPF" total={home.quantidadeDeUsuarioCpf} />
                         </Grid>
                     ) : (<></>)}
                     {home?.quantidadeDeAcessoEcommerce && home.quantidadeDeAcessoEcommerce > 0 ? (
