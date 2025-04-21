@@ -2,7 +2,8 @@ name: Docker Image CI
 
 on:
   push:
-    branches: ['main']
+    tags:
+      - '*.*.*'
 
 jobs:
   build:
@@ -16,8 +17,8 @@ jobs:
           echo "NEXT_PUBLIC_URL_API=${{ secrets.URL_API }}" >> .env.production
           echo "$(<.env.production)"
       - name: Build
-        run: docker build . -t brunobentocaina/open-adm-ui:latest
+        run: docker build . -t brunobentocaina/open-adm-ui:${GITHUB_REF#refs/*/}
       - name: Push
         run: |
           docker login -u brunobentocaina -p ${{ secrets.DOCKER_HUB_KEY }}
-          docker push brunobentocaina/open-adm-ui:latest
+          docker push brunobentocaina/open-adm-ui:${GITHUB_REF#refs/*/}

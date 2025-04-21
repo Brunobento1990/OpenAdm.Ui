@@ -8,7 +8,8 @@ export interface IHome {
     totalAReceber: number,
     pedidosEmAberto: number,
     quantidadeDeAcessoEcommerce: number;
-    quantidadeDeUsuario: number;
+    quantidadeDeUsuarioCpf: number;
+    quantidadeDeUsuarioCnpj: number;
     posicaoDeEstoques: any[]
 }
 
