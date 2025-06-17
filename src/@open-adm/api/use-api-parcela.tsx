@@ -5,7 +5,7 @@ export function useApiParcela() {
     const apiGet = useNewApi({
         method: 'GET',
         url: 'parcela/get-by-id',
-        notAlert: true,
+        naoRenderizarResposta: true,
     })
 
     const apiPagar = useNewApi({

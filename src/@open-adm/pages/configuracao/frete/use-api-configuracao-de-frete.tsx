@@ -10,7 +10,7 @@ export function useApiConfiguracaoDeFrete() {
     const apiGet = useNewApi({
         method: 'GET',
         url: 'configuracao-de-frete/get',
-        notAlert: true,
+        naoRenderizarResposta: true,
     });
 
     async function create(body: IConfiguracaoDeFreteCreate): Promise<IConfiguracaoDeFrete | undefined> {

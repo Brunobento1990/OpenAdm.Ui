@@ -5,7 +5,7 @@ export function useApiTransacao() {
     const apiPeriodo = useNewApi({
         method: 'POST',
         url: 'transacao-financeira/periodo',
-        notAlert: true
+        naoRenderizarResposta: true
     })
 
     async function extratoPeriodo(body: IExtratoTrasacao): Promise<ITransacaoFinanceira[] | undefined> {

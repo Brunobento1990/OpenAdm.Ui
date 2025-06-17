@@ -10,7 +10,7 @@ export function apiDropDown(props: propsApiDropDown) {
     const { fecth } = useNewApi({
         method: "GET",
         url: props.url,
-        notAlert: true,
+        naoRenderizarResposta: true,
     });
 
     async function fetchDropDown() {
