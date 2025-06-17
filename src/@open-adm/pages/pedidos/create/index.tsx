@@ -1,282 +1,442 @@
-import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter"
-import { Form } from "src/@open-adm/components/form"
-import { IItemPedidoCreate, IPedidoCreate } from "src/@open-adm/types/pedido"
-import { config, initialValues, schema } from "./config"
-import { FormRow } from "src/@open-adm/components/form/row"
-import { FormItemRow } from "src/@open-adm/components/form/item-row"
-import { DropDownScroll } from "src/@open-adm/components/drop-down-scroll"
-import { BoxApp } from "src/@open-adm/components/box"
-import { DividerApp } from "src/@open-adm/components/divider"
-import { useApiTabelaDePreco } from "src/@open-adm/api/UseApiTabelaDePreco"
-import { useEffect, useMemo, useState } from "react"
-import { InputCustom, MaskType } from "src/@open-adm/components/input"
-import { Button } from "@mui/material"
-import { TablePaginacao } from "src/@open-adm/components/table-paginacao/table"
-import { useSnackbar } from "src/@open-adm/components/snack"
-import { cleanFormatMoney, formatMoney } from "src/@open-adm/utils/format-money"
-import { removerItemDeArrayPorIndex } from "src/@open-adm/utils/RemoverItemArrayPorIndex"
-import { useApiPedido } from "src/@open-adm/api/UseApiPedido"
-import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app"
-import { TextApp } from "src/@open-adm/components/text"
+"use client";
 
-export function PedidoCreate() {
-    const urlVoltar = '/pedidos'
-    const [item, setItem] = useState<IItemPedidoCreate>()
-    const [loading, setLoading] = useState(false)
-    const { tabelaDePrecoEcommerce } = useApiTabelaDePreco()
-    const { criarPedido } = useApiPedido()
-    const { navigate } = useNavigateApp()
-    const { show } = useSnackbar()
-    const form = useFormikAdapter<IPedidoCreate>({
-        onSubmit: submit,
+import { useState } from "react";
+import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
+import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
+import { useApiPedido } from "src/@open-adm/api/UseApiPedido";
+import { useApiTabelaDePreco } from "src/@open-adm/api/UseApiTabelaDePreco";
+import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
+import { IItemPedido, IPedido } from "src/@open-adm/types/pedido";
+import { ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
+import { useApiCliente } from "../../vendas/cliente/form/use-api-cliente";
+import { BoxApp } from "src/@open-adm/components/box";
+import { ButtonApp } from "src/@open-adm/components/buttons";
+import { DividerApp } from "src/@open-adm/components/divider";
+import { DropDownAutoFetchApp } from "src/@open-adm/components/drop-down/drop-down-auto-fetch-app";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputApp } from "src/@open-adm/components/input/input-app";
+import { IPeso } from "src/@open-adm/types/peso";
+import { ITamanho } from "src/@open-adm/types/tamanho";
+import { removerItemDeArrayPorIndex } from "src/@open-adm/utils/RemoverItemArrayPorIndex";
+import { listaIcones } from "src/configs/listaIcones";
+import { rotasApi } from "src/configs/rotasApi";
+import { rotasApp } from "src/configs/rotasApp";
+import { formatMoney } from "src/@open-adm/utils/format-money";
+import { ICliente } from "src/@open-adm/types/cliente";
+import { LoadingAppTexto } from "src/@open-adm/components/loading/loading-app-texto";
+import { TableApp } from "src/@open-adm/components/table/table-app";
+import { IconButtonAppComTooltip } from "src/@open-adm/components/icon/icon-button-app-tool-tip";
+import { IconConsultaCep } from "src/@open-adm/components/icon/icon-consulta-cep";
+
+const initialValues: Partial<IPedido> = {
+    itensPedido: [],
+    usuarioId: "",
+};
+
+const validationSchema = new YupAdapter().string("usuarioId").build();
+
+export function PedidoCreateForm() {
+    const [itemPedido, setItemPedido] = useState<IItemPedido>();
+    const { listarItens } = useApiTabelaDePreco();
+    const { criar } = useApiPedido();
+    const { get } = useApiCliente();
+    const { navigate } = useNavigateApp();
+    const form = useFormikAdapter<IPedido>({
         initialValues,
-        validationSchema: schema
-    })
+        validationSchema,
+        onSubmit: submit,
+    });
 
-    const total = useMemo(() => form
-        .values
-        .itens
-        .reduce((valor, item) => valor + (item.valorUnitario * (item.quantidade ?? 0)), 0)
-        , [form.values.itens])
-
-    const { coluns } = config({
-        remove: (i) => {
-            console.log(i)
+    async function selecionarTabelaDePreco(tabelaDePreco?: ITabelaDePreco) {
+        if (!tabelaDePreco) {
             form.setValue({
-                itens: removerItemDeArrayPorIndex(i, form.values.itens)
-            })
+                tabelaDePreco: undefined,
+            });
+            return;
         }
-    })
-
-    async function init() {
-        const response = await tabelaDePrecoEcommerce()
-        if (response) {
+        const itens = await listarItens.fetch(tabelaDePreco.id);
+        if (itens) {
             form.setValue({
-                tabelaDePreco: response,
-                tabelaDePrecoId: response.id
-            })
+                tabelaDePreco: {
+                    ...tabelaDePreco,
+                    itensTabelaDePreco: itens,
+                },
+            });
         }
     }
 
-    function addItem() {
-        if (!item) {
+    async function selecionarCliente(cliente?: ICliente) {
+        if (!cliente) {
+            form.setValue({
+                usuario: undefined,
+                usuarioId: undefined,
+            });
             return;
         }
+        const response = await get.fetch(cliente.id);
+        if (response) {
+            form.setValue({
+                usuario: response,
+                usuarioId: response.id,
+                enderecoEntrega: response.enderecoUsuario,
+            });
+        }
+    }
 
-        if (!item?.quantidade) {
-            show('Informe a quantidade', 'error')
-            return;
-        }
-        const valor = cleanFormatMoney(item?.valorUnitario)
-        if (!valor) {
-            show('Informe o valor', 'error')
+    async function selecionarPeso(peso?: IPeso) {
+        const preco = form.values.tabelaDePreco?.itensTabelaDePreco?.find(
+            (x) =>
+                x.produtoId === itemPedido?.produtoId &&
+                x.pesoId === peso?.id &&
+                x.tamanhoId === itemPedido?.tamanhoId
+        );
+        const valorUnitario = itemPedido?.valorUnitario
+            ? itemPedido.valorUnitario
+            : form.values.usuario?.isAtacado
+                ? preco?.valorUnitarioAtacado
+                : preco?.valorUnitarioVarejo;
+
+        setItemPedido({
+            ...(itemPedido ?? {}),
+            peso,
+            pesoId: peso?.id,
+            valorUnitario,
+        } as any);
+    }
+
+    async function selecionarTamanho(tamanho?: ITamanho) {
+        const preco = form.values.tabelaDePreco?.itensTabelaDePreco?.find(
+            (x) =>
+                x.produtoId === itemPedido?.produtoId &&
+                x.pesoId === itemPedido?.id &&
+                x.tamanhoId === tamanho?.id
+        );
+        const valorUnitario = itemPedido?.valorUnitario
+            ? itemPedido.valorUnitario
+            : form.values.usuario?.isAtacado
+                ? preco?.valorUnitarioAtacado
+                : preco?.valorUnitarioVarejo;
+
+        setItemPedido({
+            ...(itemPedido ?? {}),
+            tamanho,
+            tamanhoId: tamanho?.id,
+            valorUnitario,
+        } as any);
+    }
+
+    function setEnderecoEntrega(key: string, value: any) {
+        form.setValue({
+            enderecoEntrega: {
+                ...(form.values.enderecoEntrega ?? {}),
+                [key]: value,
+            } as any,
+        });
+    }
+
+    function adicionarItem() {
+        if (!itemPedido) {
             return;
         }
 
         form.setValue({
-            itens: [...form.values.itens, item]
-        })
-
-        setItem(undefined)
-    }
-
-    function obterValorUnitario(produtoId?: string, pesoId?: string, tamanhoId?: string) {
-        const itemTabelaDePreco = form
-            .values
-            .tabelaDePreco?.
-            itensTabelaDePreco?.
-            find((x) =>
-                x.tamanhoId === tamanhoId &&
-                x.pesoId === pesoId &&
-                x.produtoId === produtoId);
-
-        return form.values.usuario?.isAtacado ? itemTabelaDePreco?.valorUnitarioAtacado : itemTabelaDePreco?.valorUnitarioVarejo;
+            itensPedido: [...form.values.itensPedido, itemPedido],
+        });
+        setItemPedido(undefined);
     }
 
     async function submit() {
-        if (!form.values.itens || form.values.itens.length === 0) {
-            show('Adicione os itens ao pedido', 'error')
-            return;
+        const response = await criar.fetch(form.values);
+        if (response) {
+            navigate(rotasApp.pedido.paginacao);
         }
-        setLoading(true)
-        const response = await criarPedido(form.values)
-        if (response?.result) {
-            navigate(urlVoltar);
-            return;
-        }
-        setLoading(false)
     }
 
-    useEffect(() => {
-        init();
-    }, [])
-
     return (
-        <Form
-            action="create"
-            title="Novo pedido"
+        <FormRoot.Form
+            urlVoltar={rotasApp.pedido.paginacao}
             submit={form.onSubmit}
-            urlVoltar={urlVoltar}
-            loading={loading}
+            titulo="Pedido"
         >
-            {total > 0 ?
-                <BoxApp>
-                    <TextApp fontWeight={600} fontSize="16px" texto={`Total: ${formatMoney(total)}`} />
-                </BoxApp>
-                :
-                <BoxApp>
-                    <TextApp texto="Adicione os itens no pedido" color="red" />
-                </BoxApp>
-            }
-            <FormRow spacing={3}>
-                <FormItemRow sm={6} xs={12}>
-                    <DropDownScroll
-                        width="100%"
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <DropDownAutoFetchApp
                         id="usuarioId"
+                        method="POST"
                         keyLabel="nome"
                         label="Cliente"
-                        url="/usuarios/paginacao"
-                        error={form.error('usuarioId')}
-                        helperText={form.helperText('usuarioId')}
-                        onChange={form.onChange}
+                        url={rotasApi.cliente.paginacaoDropdown}
+                        error={form.error("usuarioId")}
+                        helperText={form.helperText("usuarioId")}
+                        onChange={async (_, value) => await selecionarCliente(value)}
+                        value={form.values.usuario}
+                        autoFocus
+                        required
                     />
-                </FormItemRow>
-                <FormItemRow sm={6} xs={12}>
-                    <DropDownScroll
-                        width="100%"
-                        id="tabelaDePrecoId"
+                    {get.status === "loading" && (
+                        <LoadingAppTexto comBox texto="Carregando dados do cliente..." />
+                    )}
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <DropDownAutoFetchApp
+                        id="tabelaDePreco"
                         keyLabel="descricao"
+                        method="GET"
                         label="Tabela de preço"
-                        url="/tabelas-de-precos/paginacao"
-                        error={form.error('tabelaDePrecoId')}
+                        url={rotasApi.tabelaDePreco.listar}
                         value={form.values.tabelaDePreco}
-                        helperText={form.helperText('tabelaDePrecoId')}
-                        onChange={(_, value) => {
-                            form.setValue({
-                                tabelaDePreco: value,
-                                tabelaDePrecoId: value?.id
-                            })
-                        }}
-                        retornarObjetoCompleto
+                        required
+                        onChange={async (_, value) => await selecionarTabelaDePreco(value)}
                     />
-                </FormItemRow>
-            </FormRow>
-            <BoxApp marginTop="1rem">
-                <DividerApp color="primary" chip="Adicionar item" />
-                <FormRow spacing={3}>
-                    <FormItemRow sm={4} xs={12}>
-                        <DropDownScroll
-                            width="100%"
-                            id="produtoId"
-                            keyLabel="descricao"
-                            label="Produto"
-                            url="/produtos/paginacao"
-                            retornarObjetoCompleto
-                            onChange={(_, value) => {
-                                setItem({
-                                    ...item,
-                                    produto: value,
-                                    produtoId: value?.id,
-                                    valorUnitario: obterValorUnitario(value?.id, item?.pesoId, item?.tamanhoId)
-                                } as any)
-                            }}
-                            value={item?.produto}
+                    {listarItens.status === "loading" && (
+                        <LoadingAppTexto comBox texto="Carregando preços..." />
+                    )}
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <DividerApp width="100%" color="primary" chip="Adicione os itens" />
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={4}>
+                    <DropDownAutoFetchApp
+                        id="produtoId"
+                        keyLabel="descricao"
+                        label="Produto"
+                        url={rotasApi.produto.paginacaoDropDown}
+                        value={itemPedido?.produto}
+                        onChange={(_, value) => {
+                            setItemPedido({
+                                ...itemPedido,
+                                produto: value,
+                                produtoId: value?.id,
+                            } as any);
+                        }}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={4}>
+                    <DropDownAutoFetchApp
+                        id="pesoId"
+                        keyLabel="descricao"
+                        label="Peso"
+                        method="GET"
+                        url={rotasApi.peso.listar}
+                        value={itemPedido?.peso}
+                        onChange={(_, value) => {
+                            selecionarPeso(value);
+                        }}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={4}>
+                    <DropDownAutoFetchApp
+                        id="tamanhoId"
+                        method="GET"
+                        keyLabel="descricao"
+                        label="Tamanho"
+                        url={rotasApi.tamanho.listar}
+                        value={itemPedido?.tamanho}
+                        onChange={(_, value) => {
+                            selecionarTamanho(value);
+                        }}
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={4}>
+                    <InputApp
+                        label="Quantidade"
+                        type="number"
+                        value={itemPedido?.quantidade}
+                        id="quantidade"
+                        onChange={(_, value) =>
+                            setItemPedido({
+                                ...itemPedido,
+                                quantidade:
+                                    typeof value === "string" ? parseFloat(value) : value,
+                            } as any)
+                        }
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={4}>
+                    <InputApp
+                        label="Vlr unitário"
+                        type="number"
+                        value={itemPedido?.valorUnitario}
+                        id="valorUnitario"
+                        onChange={(_, value) =>
+                            setItemPedido({
+                                ...itemPedido,
+                                valorUnitario:
+                                    typeof value === "string" ? parseFloat(value) : value,
+                            } as any)
+                        }
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={4}>
+                    <BoxApp
+                        display="flex"
+                        alignItems="center"
+                        height="100%"
+                        justifyContent="start"
+                        marginTop="10px"
+                    >
+                        <ButtonApp
+                            onClick={adicionarItem}
+                            variant="contained"
+                            title="Adicionar item"
                         />
-                    </FormItemRow>
-                    <FormItemRow sm={4} xs={12}>
-                        <DropDownScroll
-                            width="100%"
-                            id="pesoId"
-                            keyLabel="descricao"
-                            label="Peso"
-                            url="/pesos/paginacao"
-                            retornarObjetoCompleto
-                            onChange={(_, value) => {
-                                setItem({
-                                    ...item,
-                                    peso: value,
-                                    pesoId: value?.id,
-                                    valorUnitario: obterValorUnitario(item?.produtoId, value?.id, item?.tamanhoId)
-                                } as any)
-                            }}
-                            value={item?.peso}
-                        />
-                    </FormItemRow>
-                    <FormItemRow sm={4} xs={12}>
-                        <DropDownScroll
-                            width="100%"
-                            id="tamanhoId"
-                            keyLabel="descricao"
-                            label="Tamanho"
-                            url="/tamanhos/paginacao"
-                            retornarObjetoCompleto
-                            onChange={(_, value) => {
-                                setItem({
-                                    ...item,
-                                    tamanho: value,
-                                    tamanhoId: value?.id,
-                                    valorUnitario: obterValorUnitario(item?.produtoId, item?.pesoId, value?.id)
-                                } as any)
-                            }}
-                            value={item?.tamanho}
-                        />
-                    </FormItemRow>
-                </FormRow>
-                <FormRow spacing={3}>
-                    <FormItemRow sm={4} xs={12}>
-                        <InputCustom
-                            fullWidth
-                            id="quantidade"
-                            label="Quantidade"
-                            name="quantidade"
-                            onChange={(_, value) => {
-                                setItem({
-                                    ...item,
-                                    quantidade: typeof value === 'string' ? parseFloat(value) : value,
-                                } as any)
-                            }}
-                            value={item?.quantidade ?? ''}
-                            type='number'
-                        />
-                    </FormItemRow>
-                    <FormItemRow sm={4} xs={12}>
-                        <InputCustom
-                            fullWidth
-                            id="preco"
-                            label="Preço"
-                            name="preco"
-                            onChange={(_, value) => {
-                                setItem({
-                                    ...item,
-                                    valorUnitario: value,
-                                } as any)
-                            }}
-                            value={item?.valorUnitario}
-                            mask={MaskType.MONEY}
-                        />
-                    </FormItemRow>
-                    <FormItemRow sm={4} xs={12}>
-                        <BoxApp
-                            display="flex"
-                            alignItems="center"
-                            height="100%"
-                            justifyContent="center"
-                        >
-                            <Button variant="contained" onClick={addItem} sx={{ marginTop: '1rem' }}>
-                                Adicionar item
-                            </Button>
-                        </BoxApp>
-                    </FormItemRow>
-                </FormRow>
-            </BoxApp>
-            <BoxApp marginTop="1rem">
-                <DividerApp color="primary" chip="Itens" />
-            </BoxApp>
-            <TablePaginacao
-                marginTop="1rem"
-                columns={coluns}
-                rows={form.values.itens}
+                    </BoxApp>
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <TableApp
+                columns={[
+                    {
+                        field: "foto",
+                        headerName: "Foto",
+                        renderCell: (item: IItemPedido) => {
+                            return (
+                                <img
+                                    src={item.produto?.foto}
+                                    alt={item.produto?.descricao}
+                                    style={{ maxWidth: "50px" }}
+                                />
+                            );
+                        },
+                    },
+                    {
+                        field: "produto",
+                        headerName: "Produto",
+                        renderCell: (item: IItemPedido) => item.produto?.descricao,
+                    },
+                    {
+                        field: "pesoTamanho",
+                        headerName: "Peso/Tamanho",
+                        renderCell: (item: IItemPedido) =>
+                            item.tamanho ? item.tamanho.descricao : item.peso?.descricao,
+                    },
+                    {
+                        field: "valorUnitario",
+                        headerName: "Vlr un",
+                        renderCell: (item: IItemPedido) =>
+                            formatMoney(item?.valorUnitario),
+                    },
+                    {
+                        field: "qtd",
+                        headerName: "Qtd",
+                        renderCell: (item: IItemPedido) => item.quantidade,
+                    },
+                    {
+                        field: "total",
+                        headerName: "Total",
+                        renderCell: (item: IItemPedido) =>
+                            formatMoney((item?.valorUnitario ?? 0) * (item.quantidade ?? 0)),
+                    },
+                    {
+                        field: "excluir",
+                        headerName: "Excluir",
+                        renderCell: (_: IItemPedido, i: number) => (
+                            <IconButtonAppComTooltip
+                                icon={listaIcones.lixeira}
+                                titulo=""
+                                onClick={() =>
+                                    form.setValue({
+                                        itensPedido: removerItemDeArrayPorIndex(
+                                            i,
+                                            form.values.itensPedido
+                                        ),
+                                    })
+                                }
+                                cor="red"
+                            />
+                        ),
+                    },
+                ]}
+                rows={form.values.itensPedido}
             />
-        </Form>
-    )
+            <DividerApp
+                chip="Endereço de entraga"
+                marginTop="1rem"
+                width="100%"
+                color="primary"
+            />
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow sm={3} xs={12}>
+                    <BoxApp display="flex" alignItems="center">
+                        <InputApp
+                            label="CEP"
+                            id="cep"
+                            onChange={setEnderecoEntrega}
+                            value={form.values.enderecoEntrega?.cep}
+                            maxLength={8}
+                        />
+                        <BoxApp marginTop="17px">
+                            <IconConsultaCep
+                                setEndereco={(endereco) =>
+                                    form.setValue({
+                                        enderecoEntrega: endereco,
+                                    })
+                                }
+                                cep={form.values.enderecoEntrega?.cep}
+                            />
+                        </BoxApp>
+                    </BoxApp>
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow sm={6} xs={12}>
+                    <InputApp
+                        label="Rua"
+                        id="logradouro"
+                        onChange={setEnderecoEntrega}
+                        value={form.values.enderecoEntrega?.logradouro}
+                        maxLength={255}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow sm={3} xs={12}>
+                    <InputApp
+                        label="N°"
+                        id="numero"
+                        onChange={setEnderecoEntrega}
+                        value={form.values.enderecoEntrega?.numero}
+                        maxLength={10}
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow sm={6} xs={12}>
+                    <InputApp
+                        label="Cidade"
+                        id="localidade"
+                        onChange={setEnderecoEntrega}
+                        value={form.values.enderecoEntrega?.localidade}
+                        maxLength={255}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow sm={3} xs={12}>
+                    <InputApp
+                        label="Bairro"
+                        id="bairro"
+                        onChange={setEnderecoEntrega}
+                        value={form.values.enderecoEntrega?.bairro}
+                        maxLength={255}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow sm={3} xs={12}>
+                    <InputApp
+                        label="UF"
+                        id="uf"
+                        onChange={setEnderecoEntrega}
+                        value={form.values.enderecoEntrega?.uf}
+                        maxLength={2}
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow sm={12} xs={12}>
+                    <InputApp
+                        label="Complemento"
+                        id="complemento"
+                        onChange={setEnderecoEntrega}
+                        value={form.values.enderecoEntrega?.complemento}
+                        maxLength={255}
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+        </FormRoot.Form>
+    );
 }

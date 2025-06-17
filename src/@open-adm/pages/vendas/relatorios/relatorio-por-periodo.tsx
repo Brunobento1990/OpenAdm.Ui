@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import CustomTextField from "src/@core/components/mui/text-field";
 import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
-import { Form } from "src/@open-adm/components/form";
+import { FormApp } from "src/@open-adm/components/form";
 import SelectCustom from "src/@open-adm/components/select";
 import { useSnackbar } from "src/@open-adm/components/snack";
 import { useApi } from "src/@open-adm/hooks/use-api";
@@ -61,11 +61,10 @@ export function RelatorioPorPeriodo() {
     }, [])
 
     return (
-        <Form
-            action="create"
+        <FormApp
             submit={formik.submitForm}
-            title="Relatório por período"
-            titleButton="Download"
+            titulo="Relatório por período"
+            tituloBotaoSalvar="Download"
         >
             <Grid container spacing={5}>
                 <Grid item xs={12} sm={4}>
@@ -116,6 +115,6 @@ export function RelatorioPorPeriodo() {
                     />
                 </Grid>
             </Grid>
-        </Form>
+        </FormApp>
     )
 }

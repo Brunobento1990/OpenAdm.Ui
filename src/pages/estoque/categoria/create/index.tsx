@@ -1,8 +1,8 @@
-import { FormCategoria } from "src/@open-adm/pages/estoque/categorias/form"
+import { CategoriaForm } from "src/@open-adm/pages/estoque/categorias/form"
 
 const Categoria = () => {
     return (
-        <FormCategoria action="create" />
+        <CategoriaForm action="create" />
     )
 }
 

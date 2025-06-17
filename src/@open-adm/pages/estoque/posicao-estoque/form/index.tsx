@@ -1,67 +1,79 @@
-import { useEffect } from "react"
-import { useApi } from "src/@open-adm/hooks/use-api";
-import { useRouter as useRouterQuery } from 'next/router'
-import { useRouter } from "next/router";
-import { useFormik } from "formik";
-import { defaultValues, schema } from "../config";
-import { IEstoqueEdit } from "src/@open-adm/types/estoque";
-import { Form } from "src/@open-adm/components/form";
-import { Typography } from "@mui/material";
-import CustomTextField from "src/@core/components/mui/text-field";
-import { Box } from "@mui/system";
+"use client";
 
-export function FormEstoque() {
+import { useEffect } from "react";
+import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
+import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
+import { useApiEstoque } from "src/@open-adm/api/use-api-estoque";
+import { BoxApp } from "src/@open-adm/components/box";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputApp } from "src/@open-adm/components/input/input-app";
+import { TextApp } from "src/@open-adm/components/text";
+import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
+import { IPosicaoEstoqueUpdate } from "src/@open-adm/types/movimento-produto";
+import { rotasApp } from "src/configs/rotasApp";
 
-    const { get, put } = useApi();
-    const router = useRouter();
-    const { query } = useRouterQuery();
+export function PosicaoEstoqueForm() {
+    const { update, obter } = useApiEstoque();
+    const { navigate, id } = useNavigateApp();
 
-    const formik = useFormik({
-        initialValues: defaultValues,
-        validationSchema: schema,
-        onSubmit: (values) => onSubmit(values),
+    const form = useFormikAdapter<IPosicaoEstoqueUpdate>({
+        initialValues: {
+            quantidade: 0,
+            produtoId: "",
+        },
+        validationSchema: new YupAdapter()
+            .string("produtoId")
+            .number("quantidade")
+            .build(),
+        onSubmit: submit,
     });
 
-    async function onSubmit(estoque: IEstoqueEdit) {
-        await put('estoques/update', estoque);
-        router.replace('/estoque/posicao-estoque')
+    async function submit() {
+        const response = await update.fetch(form.values);
+        if (response) {
+            navigate(rotasApp.posicaoEstoque.paginacao);
+        }
     }
 
     async function init() {
-        const estoqueResponse = await get<any>(`estoques/get-estoque?id=${query.id}`);
-
-        if (estoqueResponse) {
-            formik.setValues(estoqueResponse);
+        const response = await obter.fetch(id as string);
+        if (response) {
+            form.setValue(response);
         }
     }
 
     useEffect(() => {
         init();
-    }, [])
+    }, []);
 
     return (
-        <Form
-            action="edit"
-            submit={formik.submitForm}
-            title="Atualizar estoque"
-            urlVoltar="/estoque/posicao-estoque"
+        <FormRoot.Form
+            titulo="Atualizar estoque"
+            submit={form.onSubmit}
+            urlVoltar={rotasApp.posicaoEstoque.paginacao}
+            loading={update.status === "loading" || obter.status === "loading"}
         >
-            <Box display='flex' gap={10} alignItems='center' padding={5}>
-                <Typography>
-                    Produto : {formik.values.produto}
-                </Typography>
-                <CustomTextField
-                    label='Quantidade'
-                    name='quantidade'
-                    id='quantidade'
-                    value={formik.values.quantidade}
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    type="number"
-                    helperText={formik.touched.quantidade && formik.errors.quantidade}
-                    error={!!(formik.touched.quantidade && formik.errors.quantidade)}
-                />
-            </Box>
-        </Form>
-    )
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <BoxApp display="flex" alignItems="center" gap="1rem">
+                        <TextApp texto={"Produto:"} fontWeight={600} />
+                        <TextApp texto={form.values.produto} />
+                    </BoxApp>
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={3}>
+                    <InputApp
+                        label="Quantidade"
+                        type="number"
+                        id="quantidade"
+                        error={form.error("quantidade")}
+                        helperText={form.helperText("quantidade")}
+                        value={form.values.quantidade}
+                        onChange={form.onChange}
+                        onBlur={form.onBlur}
+                        required
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+        </FormRoot.Form>
+    );
 }

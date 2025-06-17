@@ -1,17 +1,21 @@
-import { IBase } from "./base";
+import { IBase, IEnderecoBase } from "./base";
 import { ICliente } from "./cliente";
 import { IPeso } from "./peso";
 import { IProduto } from "./produto";
 import { ITabelaDePreco } from "./tabela-de-preco";
 import { ITamanho } from "./tamanho";
+import { IUsuario } from "./usuario";
 
 export interface IPedido extends IBase {
     statusPedido: number,
     valorTotal: number,
     totalItens: number,
-    usuario: string,
+    usuario: IUsuario,
+    usuarioId: string,
+    tabelaDePreco?: ITabelaDePreco;
     totalAReceber?: number;
-    itensPedido: IItemPedido[]
+    itensPedido: IItemPedido[];
+    enderecoEntrega?: IEnderecoBase;
 }
 
 export interface IPedidoCreate {

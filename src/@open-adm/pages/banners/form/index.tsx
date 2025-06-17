@@ -1,127 +1,117 @@
-import { Box, Button, Card, CardHeader, Checkbox, FormGroup, Typography, FormControlLabel } from "@mui/material";
-import { useRouter } from "next/router";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useSnackbar } from "src/@open-adm/components/snack";
-import { UploadImage } from "src/@open-adm/components/upload-image";
-import { useApi } from "src/@open-adm/hooks/use-api";
-import { IForm } from "src/@open-adm/types/form";
-import { useRouter as useRouterQuery } from 'next/router'
+"use client";
+
+import { useEffect } from "react";
+import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
+import { useApiBanner } from "src/@open-adm/api/use-api-banner";
+import { CheckBoxApp } from "src/@open-adm/components/check-box";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputFile } from "src/@open-adm/components/input/input-file";
+import { useArquivo } from "src/@open-adm/hooks/use-arquivo";
+import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { IBanner } from "src/@open-adm/types/banner";
+import { IFormTypes } from "src/@open-adm/types/form";
+import { rotasApp } from "src/configs/rotasApp";
 
-export function FormBanner(props: IForm) {
-
-    const [foto, setFoto] = useState<string>('')
-    const [banner, setBanner] = useState<IBanner>()
-    const router = useRouter();
-    const snack = useSnackbar();
-    const { query } = useRouterQuery();
-    const { post, get, put } = useApi();
-    const title = props.action === 'create' ? 'Adicionar novo banner' : props.action === 'update' ? 'Editar banner' : 'Visualizar banner'
+export function BannerForm(props: IFormTypes) {
+    const { create, obter, update } = useApiBanner();
+    const { recortarBase64, resolveUploadImagem } = useArquivo();
+    const { navigate, id } = useNavigateApp();
+    const form = useFormikAdapter<IBanner>({
+        initialValues: {
+            foto: "",
+            ativo: true,
+        },
+        onSubmit: submit,
+    });
 
     async function submit() {
-        try {
-            const index = foto.indexOf(',') + 1;
-            const base64 = foto.slice(index);
-
-            if (!base64) {
-                snack.show('Selecione uma foto para o banner!', "info");
-                return;
-            }
-
-            if (props.action === 'create') {
-                await post('banners/create', {
-                    foto: base64
-                } as IBanner)
-            }
-
-            if (props.action === 'update') {
-                await put('banners/update', {
-                    id: banner?.id ?? '',
-                    ativo: banner?.ativo ?? false,
-                    foto: base64
-                } as IBanner)
-            }
-            router.replace('/banners')
-        } catch (error) {
-
+        const body = {
+            ...form.values,
+            novaFoto: form.values.novaFoto
+                ? recortarBase64(form.values.novaFoto).base64
+                : undefined,
+        };
+        const response =
+            props.action === "create"
+                ? await create.fetch(body)
+                : await update.fetch(body);
+        if (response) {
+            navigate(rotasApp.banner.pagincao);
         }
     }
 
     async function init() {
-        try {
-            if (props.action !== 'create') {
-                const response = await get<IBanner>(`banners/get-banner?id=${query.id}`);
-                if (response && !banner) {
-                    setBanner(response);
-                    setFoto(response?.foto);
-                }
-            }
-        } catch (error) {
-
+        if (props.action === "create") {
+            return;
+        }
+        const response = await obter.fetch(id as string);
+        if (response) {
+            form.setValue(response);
         }
     }
 
+    const loading =
+        create.status === "loading" ||
+        update.status === "loading" ||
+        obter.status === "loading";
+
     useEffect(() => {
         init();
-    }, [])
+    }, []);
 
     return (
-        <Card sx={{ padding: 5 }} >
-            <CardHeader
-                title={title}
-            />
-
-            <Box width='100%' display='flex' alignItems='center' justifyContent='center' flexDirection='column' gap={10}>
-                {props.action !== 'view' &&
-                    <Box display='flex' alignItems='center'>
-                        <UploadImage
-                            upload={(ft) => setFoto(ft)}
-                        />
-                        <Typography>
-                            Selecione uma imagem!
-                        </Typography>
-                    </Box>
-                }
-                <Box
-                    component="img"
-                    src={foto}
-                    sx={{ width: '200px', height: '200px', borderRadius: '5px' }}
+        <FormRoot.Form
+            titulo="Banners"
+            loading={loading}
+            readonly={props.action === "view"}
+            submit={form.onSubmit}
+            urlVoltar={rotasApp.banner.pagincao}
+        >
+            <FormRoot.FormRow>
+                <FormRoot.FormItemRow>
+                    <CheckBoxApp
+                        label="Ativo"
+                        value={form.values.ativo}
+                        onChange={form.onChange}
+                        id="ativo"
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow>
+                    <InputFile
+                        accept={["image/*"]}
+                        handleFileChange={async (arquivos) => {
+                            if (arquivos && arquivos.length > 0) {
+                                const novaFoto = await resolveUploadImagem(arquivos[0]);
+                                form.setValue({
+                                    novaFoto,
+                                });
+                            }
+                        }}
+                        label="Selecione o banner"
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            {form.values.novaFoto ? (
+                <img
+                    src={form.values.novaFoto}
+                    alt="banner"
+                    style={{
+                        maxWidth: "300px",
+                    }}
                 />
-                {props.action !== 'create' &&
-                    <FormGroup>
-                        <FormControlLabel
-                            required
-                            disabled={props.action === 'view'}
-                            control={
-                                <Checkbox
-                                    checked={banner?.ativo ?? false}
-                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setBanner({
-                                        ...banner,
-                                        ativo: e.target.checked
-                                    } as IBanner)}
-                                />}
-                            label="Ativo"
+            ) : (
+                <>
+                    {form.values.foto && (
+                        <img
+                            src={form.values.foto}
+                            alt="banner"
+                            style={{
+                                maxWidth: "300px",
+                            }}
                         />
-                    </FormGroup>
-                }
-            </Box>
-
-
-            <Box display='flex' justifyContent='space-between' sx={{ marginTop: 10 }}>
-                <Button
-                    onClick={() => router.replace("/banners")}
-                >
-                    Voltar
-                </Button>
-                {props.action !== 'view' &&
-                    <Button
-                        variant="contained"
-                        onClick={submit}
-                    >
-                        Salvar
-                    </Button>
-                }
-            </Box>
-        </Card>
-    )
+                    )}
+                </>
+            )}
+        </FormRoot.Form>
+    );
 }

@@ -6,6 +6,7 @@ import { ITamanho } from "./tamanho";
 export interface IProduto extends IBase {
     descricao: string;
     foto: string;
+    novaFoto?: string;
     referencia?: string;
     especificacaoTecnica?: string;
     categoriaId: string;

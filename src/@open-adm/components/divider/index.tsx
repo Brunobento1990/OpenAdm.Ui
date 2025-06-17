@@ -5,12 +5,13 @@ interface propsDividerApp {
     marginTop?: string;
     marginBotton?: string;
     color?: "primary" | "secondary" | "error" | "info" | "success" | "warning";
+    width?: string;
 }
 
 export function DividerApp(props: propsDividerApp) {
     if (props.chip) {
         return (
-            <Divider sx={{ marginTop: props.marginTop ?? '10px', marginBottom: props.marginBotton }}>
+            <Divider sx={{ marginTop: props.marginTop ?? '10px', marginBottom: props.marginBotton, width: props.width }}>
                 <Chip color={props.color} label={props.chip} size="small" />
             </Divider>
         )

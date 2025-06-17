@@ -1,8 +1,8 @@
-import { AtualizarSenhaUsuarioAdm } from "src/@open-adm/pages/vendas/cliente/atualizar-senha/AtualizarSenhaUsuarioAdm"
+import { AtualizarSenhaClienteForm } from "src/@open-adm/pages/vendas/cliente/atualizar-senha/AtualizarSenhaUsuarioAdm"
 
 const AtualizarSenhaUsuarioAdmViewPage = () => {
   return (
-    <AtualizarSenhaUsuarioAdm />
+    <AtualizarSenhaClienteForm />
   )
 }
 

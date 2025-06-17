@@ -47,7 +47,7 @@ export function HomePage() {
     const { fecth } = useNewApi({
         method: 'GET',
         url: 'home/adm',
-        notAlert: true
+        naoRenderizarResposta: true
     });
     const [home, setHome] = useState<IHome>();
 

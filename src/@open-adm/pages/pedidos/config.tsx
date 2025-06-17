@@ -5,7 +5,7 @@ import { ThemeColor } from 'src/@core/layouts/types'
 import { StatusApp } from 'src/@open-adm/components/chip'
 import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
 import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
-import { IPedido } from 'src/@open-adm/types/pedido'
+//import { IPedido } from 'src/@open-adm/types/pedido'
 import { generatePdfFromBase64 } from 'src/@open-adm/utils/download-pdf'
 
 export function useConfig() {
@@ -87,24 +87,24 @@ export function useConfig() {
                 )
             }
         },
-        {
-            field: 'pix',
-            headerName: 'PIX',
-            align: 'center',
-            renderCell: (params: any) => {
-                return (
-                    <Tooltip title="PIX" placement="top">
-                        <IconButton
-                            onClick={() => navigate(`pedidos/gerar-pix/${params.id}`)}
-                        >
-                            <IconifyIcon
-                                icon='ic:sharp-pix'
-                            />
-                        </IconButton>
-                    </Tooltip>
-                )
-            }
-        }
+        // {
+        //     field: 'pix',
+        //     headerName: 'PIX',
+        //     align: 'center',
+        //     renderCell: (params: any) => {
+        //         return (
+        //             <Tooltip title="PIX" placement="top">
+        //                 <IconButton
+        //                     onClick={() => navigate(`pedidos/gerar-pix/${params.id}`)}
+        //                 >
+        //                     <IconifyIcon
+        //                         icon='ic:sharp-pix'
+        //                     />
+        //                 </IconButton>
+        //             </Tooltip>
+        //         )
+        //     }
+        // }
     ]
 
     return {

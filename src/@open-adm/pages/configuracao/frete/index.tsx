@@ -2,11 +2,11 @@ import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter"
 import { initialValues, schema } from "./config"
 import { useApiConfiguracaoDeFrete } from "./use-api-configuracao-de-frete";
 import { useEffect } from "react";
-import { Form } from "src/@open-adm/components/form";
 import { Checkbox, FormControlLabel, Grid } from "@mui/material";
 import { InputCustom } from "src/@open-adm/components/input";
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { IConfiguracaoDeFrete } from "src/@open-adm/types/configuracao-de-frete";
+import { FormApp } from "src/@open-adm/components/form";
 
 export function ConfiguracaoDeFrete() {
     const { navigate } = useNavigateApp();
@@ -38,9 +38,8 @@ export function ConfiguracaoDeFrete() {
     }, []);
 
     return (
-        <Form
-            action="update"
-            title="Configurações de frete"
+        <FormApp
+            titulo="Configurações de frete"
             submit={form.onSubmit}
         >
             <Grid container spacing={6}>
@@ -166,6 +165,6 @@ export function ConfiguracaoDeFrete() {
                     />
                 </Grid>
             </Grid>
-        </Form>
+        </FormApp>
     );
 }

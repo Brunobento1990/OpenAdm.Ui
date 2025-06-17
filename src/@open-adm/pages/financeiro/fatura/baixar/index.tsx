@@ -4,7 +4,7 @@ import { useApiParcela } from "src/@open-adm/api/use-api-parcela";
 import { BoxApp } from "src/@open-adm/components/box";
 import { StatusApp } from "src/@open-adm/components/chip";
 import { DropDown } from "src/@open-adm/components/drop-down";
-import { Form } from "src/@open-adm/components/form";
+import { FormApp } from "src/@open-adm/components/form";
 import { FormItemRow } from "src/@open-adm/components/form/item-row";
 import { FormRow } from "src/@open-adm/components/form/row";
 import { InputCustom, MaskType } from "src/@open-adm/components/input";
@@ -65,88 +65,89 @@ export function BaixarParcela() {
         init()
     }, [])
 
-    return <Form
-        action=""
-        title="Baixar parcela"
-        carregandoDados={loading}
-        submit={form.onSubmit}
-        urlVoltar={urlVoltar}
-    >
-        <BoxApp display="flex" flexDirection="column" gap=".5rem">
-            <TextApp texto={`Fatura: #${form.values.fatura?.numero ?? ''}`} />
-            <TextApp texto={`Cliente: ${form.values.fatura?.usuario?.nome ?? ''}`} />
-            {form.values.fatura?.pedido &&
-                <TextApp texto={`Pedido: #${form.values.fatura.pedido.numero ?? ''}`} />
-            }
-            <TextApp texto={`Vencimento: ${formatDate(form.values.dataDeVencimento)}`} />
-            <TextApp texto={`Parcela: ${form.values.numeroDaParcela}`} />
-            <StatusApp width="100px" cor={status.color} titulo={status.title} />
-            <TextApp texto={`Valor pago/Recebido: ${formatMoney(form.values.valorPagoRecebido)}`} />
-            <TextApp texto={`Valor a pagar/a receber: ${formatMoney(form.values.valorAPagarAReceber)}`} />
-        </BoxApp>
-        <FormRow spacing={3}>
-            <FormItemRow sm={6} xs={12}>
-                <InputCustom
-                    fullWidth
-                    id="valorAPagarAReceber"
-                    label="Valor"
-                    name="valorAPagarAReceber"
-                    value={form.values.valorAPagarAReceber}
-                    mask={MaskType.MONEY}
-                    onChange={form.onChange}
-                    onBlur={form.onBlur}
-                    required
-                />
-            </FormItemRow>
-            <FormItemRow sm={6} xs={12}>
-                <InputCustom
-                    fullWidth
-                    id="desconto"
-                    label="Desconto"
-                    name="desconto"
-                    value={form.values.desconto}
-                    mask={MaskType.MONEY}
-                    onChange={form.onChange}
-                    onBlur={form.onBlur}
-                />
-            </FormItemRow>
-            <FormItemRow sm={6} xs={12}>
-                <DropDown
-                    id="meioDePagamento"
-                    keyLabel="descricao"
-                    label="Meio de pagamento"
-                    values={meiosDePagamentos}
-                    key={"meioDePagamento"}
-                    value={meiosDePagamentos.find((x) => x.id === form.values.meioDePagamento)}
-                    onChange={form.onChange}
-                    onBlur={form.onBlur}
-                />
-            </FormItemRow>
-            <FormItemRow sm={6} xs={12}>
-                <InputCustom
-                    fullWidth
-                    id="dataDePagamento"
-                    label="Data de pagamento"
-                    name="dataDePagamento"
-                    value={dataDePagamento}
-                    type="date"
-                    onChange={(_, value) => setDataDePagemento(value)}
-                />
-            </FormItemRow>
-        </FormRow>
-        <FormRow spacing={3}>
-            <FormItemRow sm={12} xs={12}>
-                <InputCustom
-                    fullWidth
-                    id="observacao"
-                    label="observacao"
-                    name="observacao"
-                    value={form.values.observacao}
-                    maxLength={500}
-                    onChange={form.onChange}
-                    onBlur={form.onBlur}
-                />
-            </FormItemRow>
-        </FormRow>
-    </Form>
+    return (
+        <FormApp
+            titulo="Baixar parcela"
+            loading={loading}
+            submit={form.onSubmit}
+            urlVoltar={urlVoltar}
+        >
+            <BoxApp display="flex" flexDirection="column" gap=".5rem">
+                <TextApp texto={`Fatura: #${form.values.fatura?.numero ?? ''}`} />
+                <TextApp texto={`Cliente: ${form.values.fatura?.usuario?.nome ?? ''}`} />
+                {form.values.fatura?.pedido &&
+                    <TextApp texto={`Pedido: #${form.values.fatura.pedido.numero ?? ''}`} />
+                }
+                <TextApp texto={`Vencimento: ${formatDate(form.values.dataDeVencimento)}`} />
+                <TextApp texto={`Parcela: ${form.values.numeroDaParcela}`} />
+                <StatusApp width="100px" cor={status.color} titulo={status.title} />
+                <TextApp texto={`Valor pago/Recebido: ${formatMoney(form.values.valorPagoRecebido)}`} />
+                <TextApp texto={`Valor a pagar/a receber: ${formatMoney(form.values.valorAPagarAReceber)}`} />
+            </BoxApp>
+            <FormRow spacing={3}>
+                <FormItemRow sm={6} xs={12}>
+                    <InputCustom
+                        fullWidth
+                        id="valorAPagarAReceber"
+                        label="Valor"
+                        name="valorAPagarAReceber"
+                        value={form.values.valorAPagarAReceber}
+                        mask={MaskType.MONEY}
+                        onChange={form.onChange}
+                        onBlur={form.onBlur}
+                        required
+                    />
+                </FormItemRow>
+                <FormItemRow sm={6} xs={12}>
+                    <InputCustom
+                        fullWidth
+                        id="desconto"
+                        label="Desconto"
+                        name="desconto"
+                        value={form.values.desconto}
+                        mask={MaskType.MONEY}
+                        onChange={form.onChange}
+                        onBlur={form.onBlur}
+                    />
+                </FormItemRow>
+                <FormItemRow sm={6} xs={12}>
+                    <DropDown
+                        id="meioDePagamento"
+                        keyLabel="descricao"
+                        label="Meio de pagamento"
+                        values={meiosDePagamentos}
+                        key={"meioDePagamento"}
+                        value={meiosDePagamentos.find((x) => x.id === form.values.meioDePagamento)}
+                        onChange={form.onChange}
+                        onBlur={form.onBlur}
+                    />
+                </FormItemRow>
+                <FormItemRow sm={6} xs={12}>
+                    <InputCustom
+                        fullWidth
+                        id="dataDePagamento"
+                        label="Data de pagamento"
+                        name="dataDePagamento"
+                        value={dataDePagamento}
+                        type="date"
+                        onChange={(_, value) => setDataDePagemento(value)}
+                    />
+                </FormItemRow>
+            </FormRow>
+            <FormRow spacing={3}>
+                <FormItemRow sm={12} xs={12}>
+                    <InputCustom
+                        fullWidth
+                        id="observacao"
+                        label="observacao"
+                        name="observacao"
+                        value={form.values.observacao}
+                        maxLength={500}
+                        onChange={form.onChange}
+                        onBlur={form.onBlur}
+                    />
+                </FormItemRow>
+            </FormRow>
+        </FormApp>
+    )
 }

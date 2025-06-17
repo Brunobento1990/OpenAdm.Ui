@@ -1,10 +1,10 @@
-import { Divider, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
 import { DividerApp } from "src/@open-adm/components/divider";
 import { DropDownMultiple } from "src/@open-adm/components/drop-down-scroll/dorp-down-multiple";
-import { Form } from "src/@open-adm/components/form";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
 import { InputDate } from "src/@open-adm/components/input/input-date";
 import { useNewApi } from "src/@open-adm/hooks/use-new-api";
 import { generatePdfFromBase64 } from "src/@open-adm/utils/download-pdf";
@@ -22,7 +22,7 @@ export function RelatorioEstoque() {
     const api = useNewApi({
         method: 'POST',
         url: 'movimentacao-de-produto/relatorio',
-        notAlert: true
+        naoRenderizarResposta: true
     });
     const formik = useFormik({
         initialValues: defaultValues,
@@ -54,12 +54,11 @@ export function RelatorioEstoque() {
     }
 
     return (
-        <Form
-            action="create"
+        <FormRoot.Form
             submit={formik.submitForm}
-            title="Relatório de estoque"
-            titleButton="Download"
+            tituloBotaoSalvar="Download"
             loading={loading}
+            titulo="Relatório de estoque"
         >
             <Grid container spacing={5}>
                 <Grid item xs={12} sm={4}>
@@ -132,6 +131,6 @@ export function RelatorioEstoque() {
                     />
                 </Grid>
             </Grid>
-        </Form>
+        </FormRoot.Form>
     )
 }

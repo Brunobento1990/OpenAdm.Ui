@@ -2,7 +2,7 @@ import { TabelaDePrecoForm } from "src/@open-adm/pages/vendas/tabela-de-preco/fo
 
 const TabelaDePreco = () => {
     return (
-        <TabelaDePrecoForm action="update" />
+        <TabelaDePrecoForm action="edit" />
     )
 }
 

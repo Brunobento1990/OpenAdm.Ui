@@ -1,8 +1,8 @@
-import { FormLojasParceiras } from 'src/@open-adm/pages/lojas-parceiras/form'
+import { LojasParceirasForm } from 'src/@open-adm/pages/lojas-parceiras/form'
 
 const LojasParceiras = () => {
   return (
-      <FormLojasParceiras action='update' />
+    <LojasParceirasForm action='edit' />
   )
 }
 

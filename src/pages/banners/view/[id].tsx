@@ -1,8 +1,8 @@
-import { FormBanner } from "src/@open-adm/pages/banners/form"
+import { BannerForm } from "src/@open-adm/pages/banners/form"
 
 const BannerView = () => {
     return (
-        <FormBanner action="view" />
+        <BannerForm action="view" />
     )
 }
 

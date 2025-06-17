@@ -107,6 +107,11 @@ const navigation = (): VerticalNavItemsType => {
       'icon': 'iwwa:settings',
       children: [
         {
+          title: 'Minha empresa',
+          icon: 'mdi:company',
+          path: '/configuracao/minha-empresa'
+        },
+        {
           title: 'E-mail',
           icon: 'iconamoon:email-thin',
           path: '/configuracao/email'

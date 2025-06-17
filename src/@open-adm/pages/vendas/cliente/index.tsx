@@ -8,6 +8,7 @@ export function ClientePaginacao() {
             columns={columns}
             url="usuarios/paginacao"
             urlAdd="cliente/create"
+            minWidth={1200}
             urlView="cliente/view"
         />
     )

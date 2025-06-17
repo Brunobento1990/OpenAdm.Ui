@@ -1,50 +1,69 @@
+import { rotasApi } from "src/configs/rotasApi";
 import { useNewApi } from "../hooks/use-new-api";
-import { IAtualizarStatusPedido, IPedido, IPedidoCreate } from "../types/pedido";
+import { IPedido } from "../types/pedido";
+
 
 export function useApiPedido() {
-    const apiCreateAdm = useNewApi({
-        method: 'POST',
-        url: 'pedidos-adm/create'
-    })
-
-    const apiGet = useNewApi({
-        method: 'GET',
-        url: 'pedidos/get?pedidoId=',
-        notAlert: true
-    })
-
-    const apiGetGerarPix = useNewApi({
-        method: 'GET',
-        url: 'pedidos/get-gerar-pix?pedidoId=',
-        notAlert: true
-    })
-
-    const apiAtualizarStatus = useNewApi({
-        method: 'PUT',
-        url: 'pedidos/update-status',
-        notAlert: true
+    const apiDownLoadPdf = useNewApi({
+        method: "GET",
+        url: rotasApi.pedido.downloadPedido,
     });
 
-    async function get(id: string): Promise<IPedido | undefined> {
-        return await apiGet.fecth<IPedido>({ urlParams: id })
+    const apiObter = useNewApi({
+        method: "GET",
+        url: rotasApi.pedido.obter,
+    });
+
+    const apiCriar = useNewApi({
+        method: "POST",
+        url: rotasApi.pedido.criar,
+    });
+
+    const apiAtualizarStatus = useNewApi({
+        method: "PUT",
+        url: rotasApi.pedido.atualizaStatus,
+    });
+
+    async function downloadPedido(id: string): Promise<any> {
+        return await apiDownLoadPdf.fecth({
+            urlParams: `?pedidoId=${id}`,
+        });
     }
 
-    async function getGerarPix(id: string): Promise<IPedido | undefined> {
-        return await apiGetGerarPix.fecth<IPedido>({ urlParams: id })
+    async function obter(id: string): Promise<IPedido | undefined> {
+        return await apiObter.fecth({ urlParams: `?pedidoId=${id}` });
     }
 
-    async function atualizarStatus(body: IAtualizarStatusPedido): Promise<any> {
-        return await apiAtualizarStatus.fecth({ body })
+    async function criar(body: Partial<IPedido>): Promise<IPedido | undefined> {
+        return await apiCriar.fecth({
+            body,
+            message: "Pedido criado com sucesso",
+        });
     }
 
-    async function criarPedido(body: IPedidoCreate): Promise<any> {
-        return await apiCreateAdm.fecth({ body })
+    async function atualizarStatus(body: any): Promise<any> {
+        return await apiAtualizarStatus.fecth({
+            body,
+            message: "Status atualizado com sucesso",
+        });
     }
 
     return {
-        criarPedido,
-        get,
-        atualizarStatus,
-        getGerarPix
-    }
+        downloadPedido: {
+            fetch: downloadPedido,
+            status: apiDownLoadPdf.statusRequisicao,
+        },
+        obter: {
+            fetch: obter,
+            status: apiObter.statusRequisicao,
+        },
+        atualizarStatus: {
+            fetch: atualizarStatus,
+            status: apiAtualizarStatus.statusRequisicao,
+        },
+        criar: {
+            fetch: criar,
+            status: apiCriar.statusRequisicao,
+        },
+    };
 }

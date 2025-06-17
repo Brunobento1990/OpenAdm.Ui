@@ -1,103 +1,96 @@
-import { useApi } from "src/@open-adm/hooks/use-api"
-import { defaultValues, schema } from "./config";
-import { IConfiguracaoDePedido } from "src/@open-adm/types/configuracao-pedido";
-import { Form } from "src/@open-adm/components/form";
-import { Grid } from "@mui/material";
-import FileUploaderSingle from "src/@open-adm/components/upload";
+"use client";
+
 import { useEffect } from "react";
-import { useRouter } from "next/router";
-import { InputCustom, MaskType } from "src/@open-adm/components/input";
-import { cleanFormatMoney } from "src/@open-adm/utils/format-money";
 import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
+import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
+import { useApiConfiguracaoPedido } from "src/@open-adm/api/use-api-configuracao-pedido";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputApp, MaskType } from "src/@open-adm/components/input/input-app";
+import { IConfiguracaoDePedido } from "src/@open-adm/types/configuracao-pedido";
+import { cleanFormatMoney, formatMoney } from "src/@open-adm/utils/format-money";
 
-export function ConfiguracaoPedido() {
+export function ConfiguracaoPedidoForm() {
+    const { obter, update } = useApiConfiguracaoPedido();
 
-    const { get, put } = useApi();
-    const router = useRouter();
-
-    const formik = useFormikAdapter({
-        initialValues: defaultValues,
-        validationSchema: schema,
-        onSubmit: (values) => onSubmit(values),
+    const form = useFormikAdapter<IConfiguracaoDePedido>({
+        initialValues: { emailDeEnvio: "" },
+        validationSchema: new YupAdapter().string("emailDeEnvio").build(),
+        onSubmit: submit,
     });
 
-    async function onSubmit(values: IConfiguracaoDePedido) {
-        await put('configuracoes-de-pedido/update', {
-            ...values,
-            pedidoMinimoAtacado: cleanFormatMoney(values.pedidoMinimoAtacado),
-            pedidoMinimoVarejo: cleanFormatMoney(values.pedidoMinimoVarejo),
-        });
-        router.replace('/home');
+    async function submit() {
+        await update.fetch(form.values);
     }
 
     async function init() {
-        const response = await get<IConfiguracaoDePedido>('configuracoes-de-pedido/get-configuracoes')
+        const response = await obter.fetch();
         if (response) {
-            formik.setValue(response);
+            form.setValue(response);
         }
     }
 
     useEffect(() => {
         init();
-    }, [])
+    }, []);
+
+    const loading = obter.status === "loading" || update.status === "loading";
 
     return (
-        <Form
-            action="update"
-            submit={formik.onSubmit}
-            title="Configurações de pedido"
+        <FormRoot.Form
+            titulo="Configuração de pedido"
+            submit={form.onSubmit}
+            loading={loading}
         >
-            <Grid container spacing={6}>
-                <Grid item xs={12} sm={6}>
-                    <InputCustom
-                        fullWidth
-                        label='Pedido mínimo atacado'
-                        name='pedidoMinimoAtacado'
-                        id='pedidoMinimoAtacado'
-                        value={formik.values.pedidoMinimoAtacado}
-                        onBlur={formik.onBlur}
-                        onChange={formik.onChange}
-                        mask={MaskType.MONEY}
-                        type="text"
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <InputCustom
-                        fullWidth
-                        label='Pedido mínimo varejo'
-                        name='pedidoMinimoVarejo'
-                        id='pedidoMinimoVarejo'
-                        value={formik.values.pedidoMinimoVarejo}
-                        onBlur={formik.onBlur}
-                        onChange={formik.onChange}
-                        mask={MaskType.MONEY}
-                    />
-                </Grid>
-            </Grid>
-            <Grid container spacing={6}>
-                <Grid item xs={12} sm={6}>
-                    <InputCustom
-                        fullWidth
-                        label='E-mail para receber o pedido'
-                        name='emailDeEnvio'
-                        id='emailDeEnvio'
-                        value={formik.values.emailDeEnvio}
-                        onBlur={formik.onBlur}
-                        onChange={formik.onChange}
-                        helperText={formik.helperText("emailDeEnvio")}
-                        error={formik.error("emailDeEnvio")}
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
+                        label="E-mail de envio"
+                        name="emailDeEnvio"
+                        id="emailDeEnvio"
+                        value={form.values.emailDeEnvio}
+                        onBlur={form.onBlur}
+                        onChange={form.onChange}
+                        helperText={form.helperText("emailDeEnvio")}
+                        error={form.error("emailDeEnvio")}
+                        maxLength={255}
+                        type="email"
                         required
+                        autoFocus
                     />
-                </Grid>
-            </Grid>
-            <FileUploaderSingle
-                title="Selecione uma logo para o pdf de pedido"
-                maringTop={5}
-                setFoto={(ft: any) => formik.setValue({
-                    logo: ft
-                })}
-                defaultValue={formik.values.logo}
-            />
-        </Form>
-    )
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
+                        label="Pedido minimo no atacado"
+                        name="pedidoMinimoAtacado"
+                        id="pedidoMinimoAtacado"
+                        value={form.values.pedidoMinimoAtacado}
+                        onBlur={form.onBlur}
+                        onChange={(_, value) =>
+                            form.setValue({
+                                pedidoMinimoAtacado: cleanFormatMoney(value),
+                            })
+                        }
+                        mask={MaskType.MONEY}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
+                        label="Pedido minimo no varejo"
+                        name="pedidoMinimoVarejo"
+                        id="pedidoMinimoVarejo"
+                        value={form.values.pedidoMinimoVarejo}
+                        onBlur={form.onBlur}
+                        onChange={(_, value) =>
+                            form.setValue({
+                                pedidoMinimoVarejo: formatMoney(value),
+                            })
+                        }
+                        mask={MaskType.MONEY}
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+        </FormRoot.Form>
+    );
 }

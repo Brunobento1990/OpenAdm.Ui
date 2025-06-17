@@ -53,7 +53,7 @@ export function TableIndex(props: tableProps) {
     const { fecth } = useNewApi({
         method: props.metodo ?? 'POST',
         url: props.url,
-        notAlert: true,
+        naoRenderizarResposta: true
     });
 
     const body = {
@@ -103,7 +103,7 @@ export function TableIndex(props: tableProps) {
             {
                 width: 200,
                 field: 'dataDeCriacao',
-                headerName: 'Data de cadastro',
+                headerName: 'Cadastro',
                 renderCell: (params: any) => formatDate(params?.dataDeCriacao),
                 sortable: true,
             },
@@ -161,7 +161,7 @@ export function TableIndex(props: tableProps) {
         columns.push(
             {
                 field: 'numero',
-                headerName: 'Número',
+                headerName: 'N°',
                 width: 80,
                 renderCell: (params: any) => (
                     <Typography variant='body2' sx={{ color: 'success' }}>

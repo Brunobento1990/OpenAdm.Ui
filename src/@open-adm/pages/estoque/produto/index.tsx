@@ -51,6 +51,7 @@ export function Produtos() {
                 urlDelete="produtos/delete"
                 urlEdit="produto/edit"
                 urlView="produto/view"
+                minWidth={1600}
             />
         </>
     )

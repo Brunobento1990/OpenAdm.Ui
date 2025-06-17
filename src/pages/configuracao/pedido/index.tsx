@@ -1,8 +1,8 @@
-import { ConfiguracaoPedido } from "src/@open-adm/pages/configuracao/pedido"
+import { ConfiguracaoPedidoForm } from "src/@open-adm/pages/configuracao/pedido"
 
 const ConfiguracaoDePedidoPage = () => {
     return (
-        <ConfiguracaoPedido />
+        <ConfiguracaoPedidoForm />
     )
 }
 

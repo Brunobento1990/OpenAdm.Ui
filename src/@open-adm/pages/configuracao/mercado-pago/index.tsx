@@ -1,10 +1,10 @@
 import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
-import { Form } from "src/@open-adm/components/form";
 import { initialValues, schema } from "./config";
 import { apiMercadoPago } from "./api-mercado-pago";
 import { Checkbox, FormControlLabel, Grid } from "@mui/material";
 import { InputCustom } from "src/@open-adm/components/input";
 import { useEffect } from "react";
+import { FormApp } from "src/@open-adm/components/form";
 
 export function MercadoPago() {
 
@@ -28,9 +28,8 @@ export function MercadoPago() {
     }, [])
 
     return (
-        <Form
-            action="update"
-            title="Configurações do mercado pago"
+        <FormApp
+            titulo="Configurações do mercado pago"
             submit={form.onSubmit}
         >
             <Grid container spacing={6}>
@@ -105,6 +104,6 @@ export function MercadoPago() {
                     />
                 </Grid>
             </Grid>
-        </Form>
+        </FormApp>
     )
 }

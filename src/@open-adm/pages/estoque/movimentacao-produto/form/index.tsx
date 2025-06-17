@@ -1,145 +1,110 @@
-import { useFormik } from "formik";
-import { defaultValues, schema } from "../config";
-import { IMovimentacaoDeProduto } from "src/@open-adm/types/estoque";
-import { Form } from "src/@open-adm/components/form";
-import { useEffect, useState } from "react";
-import { IProduto } from "src/@open-adm/types/produto";
-import { useApi } from "src/@open-adm/hooks/use-api";
-import { FormControl, FormControlLabel, FormLabel, Grid, Radio, RadioGroup } from "@mui/material";
-import SelectCustom from "src/@open-adm/components/select";
-import CustomTextField from "src/@core/components/mui/text-field";
-import { useRouter } from "next/router";
-import { IPeso } from "src/@open-adm/types/peso";
-import { ITamanho } from "src/@open-adm/types/tamanho";
+"use client";
 
-export function MovimentacaoDeProdutoForm() {
+import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
+import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
+import { useApiEstoque } from "src/@open-adm/api/use-api-estoque";
+import { DropDownApp } from "src/@open-adm/components/drop-down/drop-down-app";
+import { DropDownAutoFetchApp } from "src/@open-adm/components/drop-down/drop-down-auto-fetch-app";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputApp } from "src/@open-adm/components/input/input-app";
+import { tiposMovimentacaoOpcoes } from "src/@open-adm/enuns/tipo-movimentacao-estoque-opcoes";
+import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
+import { IMovimentoProduto } from "src/@open-adm/types/movimento-produto";
+import { rotasApp } from "src/configs/rotasApp";
 
-    const [produtos, setProdutos] = useState<IProduto[]>([]);
-    const [pesos, setPesos] = useState<IPeso[]>([]);
-    const [tamanhos, setTamanhos] = useState<ITamanho[]>([]);
-    const { get, put } = useApi();
-    const router = useRouter();
-
-    const formik = useFormik({
-        initialValues: defaultValues,
-        validationSchema: schema,
-        onSubmit: (values) => onSubmit(values),
+export function MovimentoProdutoForm() {
+    const { movimentar } = useApiEstoque();
+    const { navigate } = useNavigateApp();
+    const form = useFormikAdapter<IMovimentoProduto>({
+        initialValues: {
+            quantidade: 0,
+            produtoId: "",
+            tipoMovimentacaoDeProduto: 0,
+        },
+        validationSchema: new YupAdapter()
+            .string("produtoId")
+            .number("quantidade")
+            .number("tipoMovimentacaoDeProduto")
+            .build(),
+        onSubmit: submit,
     });
 
-    async function onSubmit(values: IMovimentacaoDeProduto) {
-        await put('estoques/movimentar-estoque', values);
-        router.replace('/estoque/movimentacao-produto')
-    }
-
-    async function init() {
-        const [responseProdutos, responsePesos, responseTamanhos] = await
-            Promise.all([get<IProduto[]>('produtos/all-list'), get<IPeso[]>('pesos/list'), get<ITamanho[]>('tamanhos/list')]);
-        if (responseProdutos) {
-            setProdutos(responseProdutos)
-        }
-
-        if (responsePesos) {
-            setPesos(responsePesos)
-        }
-
-        if (responseTamanhos) {
-            setTamanhos(responseTamanhos)
+    async function submit() {
+        const response = await movimentar.fetch({
+            ...form.values,
+            tipoMovimentacaoDeProduto: form.values.tipoMovimentacaoDeProduto - 1,
+        });
+        if (response) {
+            navigate(rotasApp.movimentoProduto.paginacao);
         }
     }
-
-    useEffect(() => {
-        init();
-    }, [])
-
-    if (produtos.length === 0)
-        return (<></>)
 
     return (
-        <Form
-            action="create"
-            submit={formik.submitForm}
-            title="Movimentar produto"
-            urlVoltar="/estoque/movimentacao-produto"
+        <FormRoot.Form
+            titulo="Movimentar estoque"
+            submit={form.onSubmit}
+            urlVoltar={rotasApp.movimentoProduto.paginacao}
+            loading={movimentar.status === "loading"}
         >
-            <Grid container spacing={6}>
-                <Grid item xs={12} sm={6}>
-                    <SelectCustom
-                        id='produtos'
-                        getOptionLabel={option => option.descricao || ''}
-                        onInputChange={(event, newInputValue) => formik.setValues({
-                            ...formik.values,
-                            produtoId: produtos.find((x) => x.descricao === newInputValue)?.id ?? ''
-                        })}
-                        options={produtos}
-                        renderInput={params =>
-                            <CustomTextField
-                                {...params}
-                                label='Selecione um produto'
-                                required
-                                helperText={formik.touched.produtoId && formik.errors.produtoId}
-                                error={!!(formik.touched.produtoId && formik.errors.produtoId)}
-                            />
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <DropDownAutoFetchApp
+                        keyLabel="descricao"
+                        method="GET"
+                        id="produtoId"
+                        label="Produto"
+                        url="produtos/all-list"
+                        value={form.values.produto}
+                        autoFocus
+                        error={form.error("produtoId")}
+                        helperText={form.helperText("produtoId")}
+                        required
+                        onChange={(_, produto) =>
+                            form.setValue({ produto, produtoId: produto?.id })
                         }
                     />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <CustomTextField
-                        fullWidth
-                        label='Quantidade'
-                        name='quantidade'
-                        id='quantidade'
-                        value={formik.values.quantidade}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={3}>
+                    <DropDownApp
+                        id="tipoMovimentacaoDeProduto"
+                        keyLabel="descricao"
+                        label="Tipo de movimentação"
+                        values={tiposMovimentacaoOpcoes}
+                        error={form.error("tipoMovimentacaoDeProduto")}
+                        helperText={form.helperText("tipoMovimentacaoDeProduto")}
+                        onChange={form.onChange}
+                        required
+                        onBlur={form.onBlur}
+                        value={tiposMovimentacaoOpcoes.find(
+                            (x) => x.id === form.values.tipoMovimentacaoDeProduto
+                        )}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={3}>
+                    <InputApp
+                        label="Quantidade"
                         type="number"
-                        helperText={formik.touched.quantidade && formik.errors.quantidade}
-                        error={!!(formik.touched.quantidade && formik.errors.quantidade)}
+                        id="quantidade"
+                        error={form.error("quantidade")}
+                        helperText={form.helperText("quantidade")}
+                        value={form.values.quantidade}
+                        onChange={form.onChange}
+                        onBlur={form.onBlur}
+                        required
                     />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <SelectCustom
-                        id='pesos'
-                        getOptionLabel={option => option.descricao || ''}
-                        onInputChange={(event, newInputValue) => formik.setValues({
-                            ...formik.values,
-                            pesoId: pesos.find((x) => x.descricao === newInputValue)?.id ?? ''
-                        })}
-                        options={pesos}
-                        renderInput={params =>
-                            <CustomTextField
-                                {...params}
-                                label='Selecione um peso'
-                            />
-                        }
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={12}>
+                    <InputApp
+                        id="observacao"
+                        label="Observação"
+                        onChange={form.onChange}
+                        value={form.values.observacao}
+                        maxLength={255}
                     />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <SelectCustom
-                        id='tamanhos'
-                        getOptionLabel={option => option.descricao || ''}
-                        onInputChange={(event, newInputValue) => formik.setValues({
-                            ...formik.values,
-                            tamanhoId: tamanhos.find((x) => x.descricao === newInputValue)?.id ?? ''
-                        })}
-                        options={tamanhos}
-                        renderInput={params =>
-                            <CustomTextField
-                                {...params}
-                                label='Selecione um tamanho'
-                            />
-                        }
-                    />
-                </Grid>
-                <Grid item xs={12} sx={{ padding: 5 }}>
-                    <FormControl>
-                        <FormLabel component='legend'>Tipo de movimentação</FormLabel>
-                        <RadioGroup aria-label='status' name='status' row value={formik.values.tipoMovimentacaoDeProduto} onChange={(e) => formik.setValues({ ...formik.values, tipoMovimentacaoDeProduto: parseInt(e.target.value) })}>
-                            <FormControlLabel value='0' control={<Radio />} label='Entrada' />
-                            <FormControlLabel value='1' control={<Radio />} label='Saída' />
-                        </RadioGroup>
-                    </FormControl>
-                </Grid>
-            </Grid>
-        </Form>
-    )
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+        </FormRoot.Form>
+    );
 }

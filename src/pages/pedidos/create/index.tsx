@@ -1,8 +1,8 @@
-import { PedidoCreate } from "src/@open-adm/pages/pedidos/create"
+import { PedidoCreateForm } from "src/@open-adm/pages/pedidos/create"
 
 const PedidoCreatePage = () => {
     return (
-        <PedidoCreate />
+        <PedidoCreateForm />
     )
 }
 
