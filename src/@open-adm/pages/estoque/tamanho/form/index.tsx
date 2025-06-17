@@ -1,107 +1,93 @@
-import { Box } from "@mui/material";
+"use client";
+
 import { useEffect } from "react";
-import CustomTextField from "src/@core/components/mui/text-field";
-import { Form } from "src/@open-adm/components/form";
-import { useApi } from "src/@open-adm/hooks/use-api";
-import { IForm } from "src/@open-adm/types/form";
-import { useRouter } from "next/router";
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useFormik } from 'formik';
-import { defaultValues, schema } from "../config";
-import { useRouter as useRouterQuery } from 'next/router'
-import { ITamanho } from "src/@open-adm/types/tamanho";
 import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
-import { InputCustom } from "src/@open-adm/components/input";
+import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
+import { useApiTamanho } from "src/@open-adm/api/use-api-tamanho";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputApp } from "src/@open-adm/components/input/input-app";
+import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
+import { IFormTypes } from "src/@open-adm/types/form";
+import { ITamanho } from "src/@open-adm/types/tamanho";
+import { rotasApp } from "src/configs/rotasApp";
 
-export function FormTamanho(props: IForm) {
-
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const { post, get, put } = useApi();
-    const router = useRouter();
-    const { query } = useRouterQuery();
-    const title = props.action === 'create' ? 'Adicionar novo tamanho' : props.action === 'update' ? 'Editar tamanho' : 'Visualizar tamanho'
-
-    const formik = useFormikAdapter<ITamanho>({
-        initialValues: defaultValues,
-        validationSchema: schema,
-        onSubmit: onSubmit,
+export function TamanhoForm(props: IFormTypes) {
+    const { create, obter, update } = useApiTamanho();
+    const { navigate, id } = useNavigateApp();
+    const form = useFormikAdapter<ITamanho>({
+        initialValues: {
+            descricao: "",
+        },
+        validationSchema: new YupAdapter().string("descricao").build(),
+        onSubmit: submit,
     });
 
-    async function init() {
-        try {
-            if (props.action !== 'create') {
-                const response = await get<ITamanho>(`tamanhos/get-tamanho?id=${query.id}`);
-                if (response) {
-                    formik.setValue(response);
-                }
-            }
-        } catch (error) {
-
+    async function submit() {
+        const response =
+            props.action === "create"
+                ? await create.fetch(form.values)
+                : await update.fetch(form.values);
+        if (response) {
+            navigate(rotasApp.tamanho.pagincao);
         }
     }
+
+    async function init() {
+        if (props.action === "create") {
+            return;
+        }
+        const response = await obter.fetch(id as string);
+        if (response) {
+            form.setValue(response);
+        }
+    }
+
+    const loading =
+        create.status === "loading" ||
+        update.status === "loading" ||
+        obter.status === "loading";
+
+    const readonly = props.action === "view";
 
     useEffect(() => {
         init();
-    }, [])
-
-    async function onSubmit() {
-
-        try {
-
-            if (props.action === "update") {
-                await put('tamanhos/update', formik.values)
-            }
-
-            if (props.action === 'create') {
-                await post('tamanhos/create', formik.values)
-            }
-            router.replace('/estoque/tamanho')
-        } catch (error) {
-
-        }
-    }
+    }, []);
 
     return (
-        <Form
-            title={title}
-            action={props.action}
-            submit={formik.onSubmit}
-            urlVoltar="/estoque/tamanho"
+        <FormRoot.Form
+            titulo="Tamanho"
+            loading={loading}
+            readonly={readonly}
+            submit={form.onSubmit}
+            urlVoltar={rotasApp.tamanho.pagincao}
         >
-            <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' gap={10}>
-                <Box sx={{ width: !matches ? '100%' : '80%' }}>
-                    <InputCustom
-                        fullWidth
-                        autoFocus
-                        label='Descrição'
-                        name='descricao'
-                        id='descricao'
-                        value={formik.values.descricao}
-                        onBlur={formik.onBlur}
-                        onChange={formik.onChange}
-                        helperText={formik.helperText('descricao')}
-                        error={formik.error('descricao')}
-                        required
-                        readonly={props.action === 'view'}
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow sm={6} xs={12}>
+                    <InputApp
+                        label="Descrição"
                         maxLength={255}
+                        id="descricao"
+                        value={form.values.descricao}
+                        autoFocus
+                        onChange={form.onChange}
+                        onBlur={form.onBlur}
+                        required
+                        error={form.error("descricao")}
+                        helperText={form.helperText("descricao")}
+                        readonly={readonly}
                     />
-                </Box>
-                <Box sx={{ width: !matches ? '100%' : '80%' }}>
-                    <InputCustom
-                        fullWidth
-                        label='Peso real (gramas)'
-                        name='pesoReal'
-                        id='pesoReal'
-                        value={formik.values.pesoReal}
-                        onBlur={formik.onBlur}
-                        onChange={formik.onChange}
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow sm={6} xs={12}>
+                    <InputApp
+                        label="Peso real"
+                        value={form.values.pesoReal}
+                        onChange={form.onChange}
+                        id="pesoReal"
                         type="number"
-                        readonly={props.action === 'view'}
+                        readonly={readonly}
                     />
-                </Box>
-            </Box>
-        </Form>
-    )
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+        </FormRoot.Form>
+    );
 }

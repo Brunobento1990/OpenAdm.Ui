@@ -1,4 +1,4 @@
-import { IBase } from "./base";
+import { IBase, IEnderecoBase } from "./base";
 import { ICliente } from "./cliente";
 import { IPeso } from "./peso";
 import { IProduto } from "./produto";
@@ -9,9 +9,12 @@ export interface IPedido extends IBase {
     statusPedido: number,
     valorTotal: number,
     totalItens: number,
-    usuario: string,
+    usuario: ICliente,
+    usuarioId: string,
+    tabelaDePreco?: ITabelaDePreco;
     totalAReceber?: number;
-    itensPedido: IItemPedido[]
+    itensPedido: IItemPedido[];
+    enderecoEntrega?: IEnderecoBase;
 }
 
 export interface IPedidoCreate {

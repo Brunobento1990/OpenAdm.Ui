@@ -6,10 +6,10 @@ import { useApiFatura } from "src/@open-adm/api/use-api-fatura";
 import { BoxApp } from "src/@open-adm/components/box";
 import { DividerApp } from "src/@open-adm/components/divider";
 import { DropDown } from "src/@open-adm/components/drop-down";
-import { Form } from "src/@open-adm/components/form";
+import { FormApp } from "src/@open-adm/components/form";
 import { GridApp, GridItemApp } from "src/@open-adm/components/grid";
 import { InputCustom, MaskType } from "src/@open-adm/components/input";
-import { LoadingApp, LoadingAppMensagem } from "src/@open-adm/components/loading";
+import { LoadingAppTexto } from "src/@open-adm/components/loading/loading-app-texto";
 import { TextApp } from "src/@open-adm/components/text";
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app"
 import { useNewApi } from "src/@open-adm/hooks/use-new-api";
@@ -105,81 +105,82 @@ export function EditarFatura() {
         init()
     }, [])
 
-    return <Form
-        action="view"
-        title="Editar fatura"
-        loading={loading}
-        submit={form.onSubmit}
-    >
-        <BoxApp>
-            <TextApp texto={`Fatura: #${form.values.numero}`} />
-            <TextApp texto={`Cliente: ${form.values.usuario?.nome ?? ''}`} />
-            <TextApp texto={`Status: ${statusFatura[form.values.status]?.title ?? ''}`} />
-            {form.values.pedido &&
-                <TextApp texto={`Pedido: #${form.values.pedido.numero ?? ''}`} />
-            }
-            <TextApp texto={`Total: ${formatMoney(form.values.total) ?? ''}`} />
-            <Button onClick={adicionarParcelaLocal} variant="contained" sx={{ marginTop: '1rem' }} >Nova parcela</Button>
-            <DividerApp chip="Parcelas" />
-            {form.values.parcelas?.map((parcela) => (
-                <>
-                    {parcela.id === parcelaEditando?.id && parcelaEditando ? (
-                        <EditarParcela
-                            loading={loadingEditParcela}
-                            editar={editarParcelaLocal}
-                            setParcela={setParcelaEditando}
-                            parcela={parcelaEditando}
-                            cancelar={() => setParcelaEditando(undefined)}
-                        />
-                    ) :
-                        <GridApp spacing={3} key={parcela.numeroDaParcela} marginTop="1rem">
-                            <GridItemApp xs={12} sm={1}>
-                                <TextApp texto={`Parcela: ${parcela.numeroDaParcela}`} />
-                            </GridItemApp>
-                            <GridItemApp xs={12} sm={2}>
-                                <TextApp texto={`Vencimento: ${formatDate(parcela.dataDeVencimento) ?? ''}`} />
-                            </GridItemApp>
-                            <GridItemApp xs={12} sm={3}>
-                                <TextApp texto={`Meio de pagamento: ${meiosDePagamentos.find((x) => x.id === parcela.meioDePagamento)?.descricao ?? ''}`} />
-                            </GridItemApp>
-                            <GridItemApp xs={12} sm={3}>
-                                <TextApp texto={`Valor: ${formatMoney(parcela.valor)}`} />
-                            </GridItemApp>
-                            {excluindoParcela ? (
-                                <LoadingAppMensagem />
-                            ) : (
-                                <GridItemApp xs={12} sm={3}>
-                                    <Tooltip title="Editar fatura" placement="top">
-                                        <IconButton onClick={() => setParcelaEditando(parcela)}>
-                                            <IconifyIcon
-                                                icon='ep:edit'
-                                            />
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="Excluir fatura" placement="top">
-                                        <IconButton onClick={async () => await excluir(parcela.id ?? '')}>
-                                            <IconifyIcon
-                                                icon='ph:trash'
-                                            />
-                                        </IconButton>
-                                    </Tooltip>
+    return (
+        <FormApp
+            titulo="Editar fatura"
+            loading={loading}
+            submit={form.onSubmit}
+        >
+            <BoxApp>
+                <TextApp texto={`Fatura: #${form.values.numero}`} />
+                <TextApp texto={`Cliente: ${form.values.usuario?.nome ?? ''}`} />
+                <TextApp texto={`Status: ${statusFatura[form.values.status]?.title ?? ''}`} />
+                {form.values.pedido &&
+                    <TextApp texto={`Pedido: #${form.values.pedido.numero ?? ''}`} />
+                }
+                <TextApp texto={`Total: ${formatMoney(form.values.total) ?? ''}`} />
+                <Button onClick={adicionarParcelaLocal} variant="contained" sx={{ marginTop: '1rem' }} >Nova parcela</Button>
+                <DividerApp chip="Parcelas" />
+                {form.values.parcelas?.map((parcela) => (
+                    <>
+                        {parcela.id === parcelaEditando?.id && parcelaEditando ? (
+                            <EditarParcela
+                                loading={loadingEditParcela}
+                                editar={editarParcelaLocal}
+                                setParcela={setParcelaEditando}
+                                parcela={parcelaEditando}
+                                cancelar={() => setParcelaEditando(undefined)}
+                            />
+                        ) :
+                            <GridApp spacing={3} key={parcela.numeroDaParcela} marginTop="1rem">
+                                <GridItemApp xs={12} sm={1}>
+                                    <TextApp texto={`Parcela: ${parcela.numeroDaParcela}`} />
                                 </GridItemApp>
-                            )}
-                        </GridApp>
-                    }
-                </>
-            ))}
-            {parcelaAdicionando &&
-                <EditarParcela
-                    loading={loadingEditParcela}
-                    editar={adiconarNovaParcela}
-                    setParcela={setParcelaAdicionando}
-                    parcela={parcelaAdicionando}
-                    cancelar={() => setParcelaAdicionando(undefined)}
-                />
-            }
-        </BoxApp>
-    </Form>
+                                <GridItemApp xs={12} sm={2}>
+                                    <TextApp texto={`Vencimento: ${formatDate(parcela.dataDeVencimento) ?? ''}`} />
+                                </GridItemApp>
+                                <GridItemApp xs={12} sm={3}>
+                                    <TextApp texto={`Meio de pagamento: ${meiosDePagamentos.find((x) => x.id === parcela.meioDePagamento)?.descricao ?? ''}`} />
+                                </GridItemApp>
+                                <GridItemApp xs={12} sm={3}>
+                                    <TextApp texto={`Valor: ${formatMoney(parcela.valor)}`} />
+                                </GridItemApp>
+                                {excluindoParcela ? (
+                                    <LoadingAppTexto />
+                                ) : (
+                                    <GridItemApp xs={12} sm={3}>
+                                        <Tooltip title="Editar fatura" placement="top">
+                                            <IconButton onClick={() => setParcelaEditando(parcela)}>
+                                                <IconifyIcon
+                                                    icon='ep:edit'
+                                                />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title="Excluir fatura" placement="top">
+                                            <IconButton onClick={async () => await excluir(parcela.id ?? '')}>
+                                                <IconifyIcon
+                                                    icon='ph:trash'
+                                                />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </GridItemApp>
+                                )}
+                            </GridApp>
+                        }
+                    </>
+                ))}
+                {parcelaAdicionando &&
+                    <EditarParcela
+                        loading={loadingEditParcela}
+                        editar={adiconarNovaParcela}
+                        setParcela={setParcelaAdicionando}
+                        parcela={parcelaAdicionando}
+                        cancelar={() => setParcelaAdicionando(undefined)}
+                    />
+                }
+            </BoxApp>
+        </FormApp>
+    )
 }
 
 interface propsEditarParcela {
@@ -256,7 +257,7 @@ function EditarParcela(props: propsEditarParcela) {
             </GridItemApp>
             <GridItemApp xs={12} sm={2}>
                 {props.loading ? (
-                    <LoadingAppMensagem />
+                    <LoadingAppTexto />
                 ) : (
                     <BoxApp display="flex" alignItems="center" height="100%">
                         <Tooltip title="Salvar" placement="top">

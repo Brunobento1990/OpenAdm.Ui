@@ -1,5 +1,4 @@
 import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
-import { Form } from "src/@open-adm/components/form";
 import { IExtratoTrasacao, ITransacaoFinanceira } from "src/@open-adm/types/transacao-financeira";
 import { initialValues, schema } from "./config";
 import { FormRow } from "src/@open-adm/components/form/row";
@@ -16,6 +15,7 @@ import { StatusObj } from "../../pedidos/config";
 import { statusFatura } from "../fatura";
 import IconifyIcon from "src/@core/components/icon";
 import { listaIcones } from "src/configs/listaIcones";
+import { FormApp } from "src/@open-adm/components/form";
 
 export const tipoTransacaoFinanceira: StatusObj = {
     0: { title: 'Entrada', color: 'success' },
@@ -42,12 +42,11 @@ export function Extrato() {
     }
 
     return (
-        <Form
+        <FormApp
             loading={loading}
             submit={form.onSubmit}
-            action=""
-            title="Extrato por período"
-            titleButton="Carregar"
+            titulo="Extrato por período"
+            tituloBotaoSalvar="Carregar"
         >
             <FormRow spacing={3}>
                 <FormItemRow sm={3} xs={12}>
@@ -174,6 +173,6 @@ export function Extrato() {
                     rows={transacoes}
                 />
             </BoxApp>
-        </Form>
+        </FormApp>
     )
 }

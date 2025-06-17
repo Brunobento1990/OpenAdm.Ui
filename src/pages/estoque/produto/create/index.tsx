@@ -1,8 +1,8 @@
-import { CreateProduto } from "src/@open-adm/pages/estoque/produto/form/create-produto"
+import { ProdutoForm } from "src/@open-adm/pages/estoque/produto/form"
 
 const Produto = () => {
     return (
-        <CreateProduto />
+        <ProdutoForm action="create" />
     )
 }
 

@@ -6,7 +6,8 @@ import { BoxApp } from "src/@open-adm/components/box";
 import { DividerApp } from "src/@open-adm/components/divider";
 import { DropDown } from "src/@open-adm/components/drop-down";
 import { DropDownScroll } from "src/@open-adm/components/drop-down-scroll";
-import { Form } from "src/@open-adm/components/form";
+import { DropDownAutoFetchApp } from "src/@open-adm/components/drop-down/drop-down-auto-fetch-app";
+import { FormApp } from "src/@open-adm/components/form";
 import { GridApp, GridItemApp } from "src/@open-adm/components/grid";
 import { InputCustom, MaskType } from "src/@open-adm/components/input";
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
@@ -80,21 +81,19 @@ export function CreateFatura(props: propsCreateFatura) {
     }
 
     return (
-        <Form
-            action="create"
-            title={titulo}
+        <FormApp
+            titulo={titulo}
             urlVoltar={props.urlVoltar}
             submit={form.onSubmit}
             loading={loading}
         >
             <GridApp spacing={3}>
                 <GridItemApp xs={12} sm={6}>
-                    <DropDownScroll
+                    <DropDownAutoFetchApp
                         id="usuarioId"
                         keyLabel={"nome"}
                         label={props.tipo === 0 ? "Fornecedor" : "Cliente"}
                         url="usuarios/paginacao-drop-down"
-                        segundaKeyLabel="cnpj"
                         onChange={form.onChange}
                         error={form.error("usuarioId")}
                         helperText={form.helperText("usuarioId")}
@@ -179,6 +178,6 @@ export function CreateFatura(props: propsCreateFatura) {
                     </GridItemApp>
                 </GridApp>
             ))}
-        </Form>
+        </FormApp>
     )
 }

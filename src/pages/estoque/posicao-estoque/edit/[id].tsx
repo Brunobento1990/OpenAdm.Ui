@@ -1,8 +1,8 @@
-import { FormEstoque } from "src/@open-adm/pages/estoque/posicao-estoque/form"
+import { PosicaoEstoqueForm } from "src/@open-adm/pages/estoque/posicao-estoque/form"
 
 const EstoqueEdit = () => {
     return (
-        <FormEstoque />
+        <PosicaoEstoqueForm />
     )
 }
 

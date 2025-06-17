@@ -29,7 +29,7 @@ export function DropDownScroll(props: propsDropDownScroll) {
     const { fecth } = useNewApi({
         method: 'POST',
         url: props.url,
-        notAlert: true,
+        naoRenderizarResposta: true,
     })
 
     async function getItens() {

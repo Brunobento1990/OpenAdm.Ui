@@ -1,12 +1,9 @@
-import { Box, Divider, Grid, Typography } from "@mui/material";
-import { useFormik } from "formik";
+import { Box, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
-import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
 import { DividerApp } from "src/@open-adm/components/divider";
 import { DropDownMultiple } from "src/@open-adm/components/drop-down-scroll/dorp-down-multiple";
-import { Form } from "src/@open-adm/components/form";
-import { InputDate } from "src/@open-adm/components/input/input-date";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
 import { useNewApi } from "src/@open-adm/hooks/use-new-api";
 import { IRelatorioProducao } from "src/@open-adm/types/relatorio-producao";
 import { generatePdfFromBase64 } from "src/@open-adm/utils/download-pdf";
@@ -17,7 +14,7 @@ export function RelatorioProducao() {
     const api = useNewApi({
         method: 'POST',
         url: 'itens-pedidos/producao/pdf',
-        notAlert: true
+        naoRenderizarResposta: true
     });
     const form = useFormikAdapter<IRelatorioProducao>({
         onSubmit: submit,
@@ -48,11 +45,10 @@ export function RelatorioProducao() {
     }
 
     return (
-        <Form
-            action="create"
+        <FormRoot.Form
             submit={submit}
-            title="Relatório de produção"
-            titleButton="Download"
+            titulo="Relatório de produção"
+            tituloBotaoSalvar="Download"
             loading={loading}
         >
             <Grid container spacing={5}>
@@ -132,6 +128,6 @@ export function RelatorioProducao() {
                     <Typography>Valor total: {formatMoney(form.values.pedidosIds.reduce((a, b) => a + b.valorTotal, 0))}</Typography>
                 </Box>
             }
-        </Form>
+        </FormRoot.Form>
     )
 }

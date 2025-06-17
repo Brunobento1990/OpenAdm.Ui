@@ -1,125 +1,137 @@
-import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import CustomTextField from "src/@core/components/mui/text-field";
-import { Form } from "src/@open-adm/components/form";
-import { UploadImage } from "src/@open-adm/components/upload-image";
-import { useApi } from "src/@open-adm/hooks/use-api";
-import { IForm } from "src/@open-adm/types/form";
-import { useRouter } from "next/router";
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useFormik } from 'formik';
-import { defaultValues, schema } from "../config";
-import { useRouter as useRouterQuery } from 'next/router'
+"use client";
+
+import { useEffect } from "react";
+import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
+import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
+import { useApiCategoria } from "src/@open-adm/api/use-api-categoria";
+import { CheckBoxApp } from "src/@open-adm/components/check-box";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputApp } from "src/@open-adm/components/input/input-app";
+import { InputFile } from "src/@open-adm/components/input/input-file";
+import { useArquivo } from "src/@open-adm/hooks/use-arquivo";
+import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { ICategoria } from "src/@open-adm/types/categoria";
+import { IFormTypes } from "src/@open-adm/types/form";
+import { rotasApp } from "src/configs/rotasApp";
 
-export function FormCategoria(props: IForm) {
-
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const [foto, setFoto] = useState<string>('');
-    const { post, get, put } = useApi();
-    const router = useRouter();
-    const { query } = useRouterQuery();
-    const title = props.action === 'create' ? 'Adicionar nova categoria' : props.action === 'update' ? 'Editar categoria' : 'Visualizar categoria'
-
-    const formik = useFormik({
-        initialValues: defaultValues,
-        validationSchema: schema,
-        onSubmit: (values) => onSubmit(values),
+export function CategoriaForm(props: IFormTypes) {
+    const { create, obter, update } = useApiCategoria();
+    const { navigate, id } = useNavigateApp();
+    const { recortarBase64, resolveUploadImagem } = useArquivo();
+    const form = useFormikAdapter<ICategoria>({
+        initialValues: {
+            descricao: "",
+        },
+        validationSchema: new YupAdapter().string("descricao").build(),
+        onSubmit: submit,
     });
 
-    async function init() {
-        try {
-            if (props.action !== 'create') {
-                const response = await get<ICategoria>(`categorias/get-categoria?id=${query.id}`);
-                if (response) {
-                    formik.setValues(response);
-                    if (response?.foto) {
-                        setFoto(response?.foto);
-                    }
-                }
-            }
-        } catch (error) {
-
+    async function submit() {
+        const body = {
+            ...form.values,
+            novaFoto: form.values.novaFoto
+                ? recortarBase64(form.values.novaFoto).base64
+                : undefined,
+        };
+        const response =
+            props.action === "create"
+                ? await create.fetch(body)
+                : await update.fetch(body);
+        if (response) {
+            navigate(rotasApp.categoria.pagincao);
         }
     }
+
+    async function init() {
+        if (props.action === "create") {
+            return;
+        }
+        const response = await obter.fetch(id as string);
+        if (response) {
+            form.setValue(response);
+        }
+    }
+
+    const loading =
+        create.status === "loading" ||
+        update.status === "loading" ||
+        obter.status === "loading";
+
+    const readonly = props.action === "view";
 
     useEffect(() => {
         init();
-    }, [])
-
-    async function onSubmit(values: any) {
-
-        try {
-
-            let newFoto = '';
-            if (foto) {
-                const index = foto.indexOf(',') + 1;
-                newFoto = foto.slice(index);
-            }
-
-            if (props.action === "update") {
-                await put('categorias/update', {
-                    foto: newFoto,
-                    descricao: values.descricao,
-                    id: query.id
-                } as ICategoria)
-            }
-
-            if (props.action === 'create') {
-                await post('categorias/create', {
-                    foto: newFoto,
-                    descricao: values.descricao
-                } as ICategoria)
-            }
-            router.replace('/estoque/categoria')
-        } catch (error) {
-
-        }
-    }
+    }, []);
 
     return (
-        <Form
-            title={title}
-            action={props.action}
-            submit={formik.submitForm}
-            urlVoltar="/estoque/categoria"
+        <FormRoot.Form
+            titulo="Categoria"
+            loading={loading}
+            readonly={readonly}
+            submit={form.onSubmit}
+            urlVoltar={rotasApp.categoria.pagincao}
         >
-            <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column' gap={10}>
-                <Box sx={{ width: !matches ? '100%' : '80%' }}>
-                    <CustomTextField
-                        fullWidth
-                        label='Descrição *'
-                        name='descricao'
-                        id='descricao'
-                        value={formik.values.descricao}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        helperText={formik.touched.descricao && formik.errors.descricao}
-                        error={!!(formik.touched.descricao && formik.errors.descricao)}
-                        InputProps={{
-
-                            readOnly: props.action === 'view'
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow sm={6} xs={12}>
+                    <InputApp
+                        label="Descrição"
+                        maxLength={255}
+                        id="descricao"
+                        value={form.values.descricao}
+                        autoFocus
+                        onChange={form.onChange}
+                        onBlur={form.onBlur}
+                        required
+                        error={form.error("descricao")}
+                        helperText={form.helperText("descricao")}
+                        readonly={readonly}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow marginTop="17px" sm={6} xs={12}>
+                    <CheckBoxApp
+                        label="Inativo Ecommerce"
+                        value={form.values.inativoEcommerce}
+                        onChange={form.onChange}
+                        id="inativoEcommerce"
+                        readonly={readonly}
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow sm={6} xs={12}>
+                    <InputFile
+                        accept={["image/*"]}
+                        handleFileChange={async (arquivos) => {
+                            if (arquivos && arquivos.length > 0) {
+                                const novaFoto = await resolveUploadImagem(arquivos[0]);
+                                form.setValue({ novaFoto });
+                            }
                         }}
+                        label="Selecione uma foto"
                     />
-                </Box>
-                <Box width='100%' display='flex' alignItems='center' justifyContent='center' gap={10} flexDirection={!matches ? 'column' : undefined}>
-                    <Box display='flex' alignItems='center' justifyContent='center' flexDirection='column'>
-                        <UploadImage
-                            upload={(ft) => setFoto(ft)}
-                        />
-                        <Typography>
-                            Selecione uma imagem!
-                        </Typography>
-                    </Box>
-                    <Box
-                        component="img"
-                        src={foto}
-                        sx={{ width: '200px', height: '200px', borderRadius: '5px' }}
-                    />
-                </Box>
-            </Box>
-        </Form>
-    )
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow sm={6} xs={12}>
+                    {form.values.novaFoto ? (
+                        <>
+                            <img
+                                src={form.values.novaFoto}
+                                style={{ maxWidth: "300px" }}
+                                alt="categoria"
+                            />
+                        </>
+                    ) : (
+                        <>
+                            {form.values.foto && (
+                                <img
+                                    src={form.values.foto}
+                                    style={{ maxWidth: "300px" }}
+                                    alt="categoria"
+                                />
+                            )}
+                        </>
+                    )}
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+        </FormRoot.Form>
+    );
 }

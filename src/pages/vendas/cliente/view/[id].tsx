@@ -1,8 +1,8 @@
-import { ClienteView } from 'src/@open-adm/pages/vendas/cliente/view'
+import { ClienteForm } from "src/@open-adm/pages/vendas/cliente/form"
 
 const ClienteViewPage = () => {
   return (
-      <ClienteView />
+    <ClienteForm action="view" />
   )
 }
 

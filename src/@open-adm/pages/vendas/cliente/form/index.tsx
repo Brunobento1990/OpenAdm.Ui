@@ -1,161 +1,157 @@
+"use client";
+
 import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
-import { Form } from "src/@open-adm/components/form";
-import { initialValues, schema } from "./config";
-import { GridCustom } from "src/@open-adm/components/grid";
-import { InputCustom, MaskType } from "src/@open-adm/components/input";
-import { useSnackbar } from "src/@open-adm/components/snack";
-import { useApiCliente } from "./use-api-cliente";
-import { clearMaskCnpj, clearMaskCpf, clearMaskPhone } from "src/@open-adm/utils/mask";
+import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
+import { useApiCliente } from "src/@open-adm/api/use-api-cliente";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputApp, MaskType } from "src/@open-adm/components/input/input-app";
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
-import { useState } from "react";
+import { ICliente } from "src/@open-adm/types/cliente";
+import { IFormTypes } from "src/@open-adm/types/form";
+import { rotasApp } from "src/configs/rotasApp";
 
-export function FormCliente() {
-    const urlVoltar = "/vendas/cliente";
-    const { navigate } = useNavigateApp();
-    const { show } = useSnackbar();
-    const { create } = useApiCliente();
-    const [loading, setLoading] = useState(false);
-    const form = useFormikAdapter({
-        initialValues,
+export function ClienteForm(props: IFormTypes) {
+    const { navigate, id } = useNavigateApp();
+    const { create, get } = useApiCliente();
+    const form = useFormikAdapter<ICliente>({
+        initialValues: {
+            email: "",
+            nome: "",
+            senha: "",
+            reSenha: "",
+            telefone: "",
+        },
+        validationSchema: new YupAdapter()
+            .email("email")
+            .string("nome")
+            .string("senha")
+            .string("reSenha")
+            .string("telefone")
+            .build(),
         onSubmit: submit,
-        validationSchema: schema
-    })
+    });
 
-    async function submit(values: any) {
-        try {
-            if ((!values.cpf && !values.cnpj) ||
-                values.cpf && values.cnpj) {
-                show('Informe o CNPJ ou o CPF!');
-                return;
-            }
+    const readonly = props.action === "view";
+    const loading = get.status === "loading" || create.status === "loading";
 
-            if (values.senha !== values.reSenha) {
-                show('As senha não conferem!');
-                return;
-            }
-
-            setLoading(true);
-
-            const response = await create({
-                ...values,
-                cpf: clearMaskCpf(values.cpf),
-                cnpj: clearMaskCnpj(values.cnpj),
-                telefone: clearMaskPhone(values.telefone),
-                tipoPessoa: values.cnpj ? 1 : 2
-            });
-            if (response) {
-                navigate(urlVoltar);
-            }
-        } catch (error) {
-
-        } finally {
-            setLoading(false);
+    async function submit() {
+        const response = await create.fecth(form.values);
+        if (response) {
+            navigate(rotasApp.cliente.paginacao);
         }
     }
 
     return (
-        <Form urlVoltar={urlVoltar} loading={loading} action="create" title="Cadastrar novo cliente" submit={form.onSubmit} width="100%">
-            <GridCustom withItem spacing={3} xs={12} sm={6}>
-                {[
-                    <InputCustom
-                        fullWidth
-                        label="CPF"
-                        name="cpf"
+        <FormRoot.Form
+            submit={form.onSubmit}
+            readonly={readonly}
+            titulo="Cliente"
+            loading={loading}
+            urlVoltar={rotasApp.cliente.paginacao}
+        >
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
                         id="cpf"
                         value={form.values.cpf}
-                        onChange={form.onChange}
+                        label="CPF"
                         mask={MaskType.CPF}
-                        onBlur={form.onBlur}
-                    />,
-                    <InputCustom
-                        fullWidth
-                        label="CNPJ"
-                        name="cnpj"
+                        onChange={form.onChange}
+                        autoFocus
+                        readonly={readonly}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
                         id="cnpj"
                         value={form.values.cnpj}
-                        onChange={form.onChange}
-                        onBlur={form.onBlur}
+                        label="CNPJ"
                         mask={MaskType.CNPJ}
+                        onChange={form.onChange}
+                        readonly={readonly}
                     />
-                ]}
-            </GridCustom>
-            <GridCustom withItem spacing={3} xs={12} sm={6}>
-                {[
-                    <InputCustom
-                        fullWidth
-                        label="Nome"
-                        name="nome"
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
                         id="nome"
                         value={form.values.nome}
+                        label="Nome"
                         onChange={form.onChange}
+                        readonly={readonly}
                         onBlur={form.onBlur}
                         required
-                        helperText={form.helperText("nome")}
+                        maxLength={255}
                         error={form.error("nome")}
-                    />,
-                    <InputCustom
-                        fullWidth
-                        label="E-mail"
-                        name="email"
+                        helperText={form.helperText("nome")}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
                         id="email"
                         value={form.values.email}
+                        label="Email"
                         onChange={form.onChange}
+                        readonly={readonly}
                         onBlur={form.onBlur}
                         required
                         type="email"
-                        helperText={form.helperText("email")}
+                        maxLength={255}
                         error={form.error("email")}
+                        helperText={form.helperText("email")}
                     />
-                ]}
-            </GridCustom>
-            <GridCustom withItem spacing={3} xs={12} sm={6}>
-                {[
-                    <InputCustom
-                        fullWidth
-                        label="Senha"
-                        name="senha"
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
                         id="senha"
                         value={form.values.senha}
+                        label="Senha"
                         onChange={form.onChange}
+                        readonly={readonly}
                         onBlur={form.onBlur}
                         required
-                        type="password"
+                        maxLength={255}
                         isPassword
-                        helperText={form.helperText("senha")}
                         error={form.error("senha")}
-                    />,
-                    <InputCustom
-                        fullWidth
-                        label="Confirme a senha"
-                        name="reSenha"
+                        helperText={form.helperText("senha")}
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
                         id="reSenha"
                         value={form.values.reSenha}
+                        label="Confirme a senha"
                         onChange={form.onChange}
+                        readonly={readonly}
                         onBlur={form.onBlur}
                         required
-                        type="password"
                         isPassword
-                        helperText={form.helperText("reSenha")}
+                        maxLength={255}
                         error={form.error("reSenha")}
+                        helperText={form.helperText("reSenha")}
                     />
-                ]}
-            </GridCustom>
-            <GridCustom withItem spacing={3} xs={12} sm={6}>
-                <InputCustom
-                    fullWidth
-                    label="Telefone"
-                    name="telefone"
-                    id="telefone"
-                    value={form.values.telefone}
-                    onChange={form.onChange}
-                    onBlur={form.onBlur}
-                    required
-                    mask={MaskType.TELEFONE}
-                    maxLength={15}
-                    helperText={form.helperText("telefone")}
-                    error={form.error("telefone")}
-                />
-            </GridCustom>
-        </Form>
-    )
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
+                        id="telefone"
+                        value={form.values.telefone}
+                        label="Telefone"
+                        onChange={form.onChange}
+                        readonly={readonly}
+                        onBlur={form.onBlur}
+                        required
+                        mask={MaskType.TELEFONE}
+                        maxLength={255}
+                        error={form.error("telefone")}
+                        helperText={form.helperText("telefone")}
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+        </FormRoot.Form>
+    );
 }

@@ -4,6 +4,7 @@ import authConfig from 'src/configs/auth'
 import { AuthValuesType, LoginParams, ErrCallbackType, UserDataType } from './types'
 import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
 import { useLocalStorage } from 'src/hooks/useLocalStorage'
+import { ILoginResponse } from 'src/@open-adm/types/login-response'
 
 const defaultProvider: AuthValuesType = {
   user: null,
@@ -30,7 +31,7 @@ const AuthProvider = ({ children }: Props) => {
   const { fecth } = useNewApi({
     method: 'POST',
     url: 'login/funcionario',
-    notAlert: true
+    naoRenderizarResposta: true
   });
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const AuthProvider = ({ children }: Props) => {
   const handleLogin = async (params: LoginParams, errorCallback?: ErrCallbackType) => {
 
     try {
-      const response: any = await fecth({
+      const response = await fecth<ILoginResponse>({
         body: {
           email: params.email,
           senha: params.password
@@ -65,10 +66,9 @@ const AuthProvider = ({ children }: Props) => {
       if (response?.token) {
         setItem(authConfig.storageTokenKeyName, response.token)
         const returnUrl = router.query.returnUrl;
-        const user = { ...response.userData, role: 'admin' };
+        const user = { ...response.usuario, role: 'admin' };
         setUser(user)
         setItem(authConfig.keyUserdata, user, true);
-        setItem(authConfig.xApy, response.xApi)
 
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 

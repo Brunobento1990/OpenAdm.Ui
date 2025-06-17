@@ -1,76 +1,75 @@
-import { useState } from "react";
+"use client";
+
 import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
 import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
-import { Form } from "src/@open-adm/components/form";
-import { GridApp, GridItemApp } from "src/@open-adm/components/grid";
-import { InputCustom } from "src/@open-adm/components/input";
+import { useApiCliente } from "src/@open-adm/api/use-api-cliente";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputApp } from "src/@open-adm/components/input/input-app";
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
-import { useNewApi } from "src/@open-adm/hooks/use-new-api";
 import { IAtualizarSenhaUsuarioAdm } from "src/@open-adm/types/atualizar-senha-usuario-adm";
+import { rotasApp } from "src/configs/rotasApp";
 
-export function AtualizarSenhaUsuarioAdm() {
-    const [loading, setLoading] = useState(false)
-    const { id, navigate } = useNavigateApp();
-    const { fecth } = useNewApi({
-        method: 'POST',
-        url: '/usuario/atualizar-senha-adm'
-    })
+export function AtualizarSenhaClienteForm() {
+    const { navigate, id } = useNavigateApp();
+    const { atualizarSenha } = useApiCliente();
     const form = useFormikAdapter<IAtualizarSenhaUsuarioAdm>({
         initialValues: {
             usuarioId: id,
-            senha: '',
-            confirmarSenha: ''
+            senha: "",
+            confirmarSenha: "",
         },
+        validationSchema: new YupAdapter()
+            .string("senha")
+            .string("confirmarSenha")
+            .build(),
         onSubmit: submit,
-        validationSchema: new YupAdapter().string('senha').string('confirmarSenha').build()
-    })
+    });
 
     async function submit() {
-        setLoading(true);
-        const response = await fecth({ body: form.values, message: 'Senha atualizada com sucesso' });
+        const response = await atualizarSenha.fetch(form.values);
         if (response) {
-            navigate('/vendas/cliente');
-            return;
+            navigate(rotasApp.cliente.paginacao);
         }
-        setLoading(false);
     }
 
     return (
-        <Form
-            loading={loading}
-            action="create"
-            title="Atualizar senha do cliente"
+        <FormRoot.Form
             submit={form.onSubmit}
+            titulo="Atualizar senha cliente"
+            loading={atualizarSenha.status === "loading"}
+            urlVoltar={rotasApp.cliente.paginacao}
         >
-            <GridApp container spacing={3}>
-                <GridItemApp item sm={6} xs={12}>
-                    <InputCustom
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
                         id="senha"
                         label="Senha"
-                        name="senha"
-                        value={form.values.senha}
                         autoFocus
-                        fullWidth
+                        value={form.values.senha}
                         onChange={form.onChange}
                         onBlur={form.onBlur}
-                        error={form.error('senha')}
-                        helperText={form.helperText('senha')}
+                        error={form.error("senha")}
+                        helperText={form.helperText("senha")}
+                        maxLength={20}
+                        isPassword
+                        required
                     />
-                </GridItemApp>
-                <GridItemApp item sm={6} xs={12}>
-                    <InputCustom
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
                         id="confirmarSenha"
-                        label="Confirmar Senha"
-                        name="confirmarSenha"
+                        label="Confirmar senha"
                         value={form.values.confirmarSenha}
-                        fullWidth
                         onChange={form.onChange}
                         onBlur={form.onBlur}
-                        error={form.error('confirmarSenha')}
-                        helperText={form.helperText('confirmarSenha')}
+                        error={form.error("confirmarSenha")}
+                        helperText={form.helperText("confirmarSenha")}
+                        maxLength={20}
+                        isPassword
+                        required
                     />
-                </GridItemApp>
-            </GridApp>
-        </Form >
-    )
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+        </FormRoot.Form>
+    );
 }

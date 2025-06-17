@@ -1,8 +1,8 @@
-import { FormProduto } from "src/@open-adm/pages/estoque/produto/form"
+import { ProdutoForm } from "src/@open-adm/pages/estoque/produto/form"
 
 const Produto = () => {
     return (
-        <FormProduto action="update" />
+        <ProdutoForm action="edit" />
     )
 }
 

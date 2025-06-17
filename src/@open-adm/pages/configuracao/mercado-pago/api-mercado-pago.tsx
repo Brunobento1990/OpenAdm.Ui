@@ -11,7 +11,7 @@ export function apiMercadoPago() {
     const get = useNewApi({
         method: "GET",
         url: "configuracao-de-pagamento/get",
-        notAlert: true,
+        naoRenderizarResposta: true,
     })
 
     async function cretarOrUpdate(config: Partial<IConfiguracaoPagamentoMercadoPago>)

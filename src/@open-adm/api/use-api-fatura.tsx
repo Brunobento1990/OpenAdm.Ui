@@ -21,25 +21,25 @@ export function useApiFatura() {
     const apiGetFatura = useNewApi({
         method: 'GET',
         url: 'fatura/get?id=',
-        notAlert: true
+        naoRenderizarResposta: true
     })
 
     const apiParcelasPorPedido = useNewApi({
         method: 'GET',
         url: 'parcela/pedido?pedidoId=',
-        notAlert: true
+        naoRenderizarResposta: true
     });
 
     const apiGet = useNewApi({
         method: 'GET',
         url: 'parcela/get-by-id?id=',
-        notAlert: true
+        naoRenderizarResposta: true
     });
 
     const apiPagarFatura = useNewApi({
         method: 'PUT',
         url: 'parcela/pagar',
-        notAlert: true
+        naoRenderizarResposta: true
     });
 
     const apiEdit = useNewApi({

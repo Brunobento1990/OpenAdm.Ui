@@ -1,113 +1,118 @@
-import { useFormik } from "formik";
+"use client";
+
 import { useEffect } from "react";
-import { Form } from "src/@open-adm/components/form";
-import { useApi } from "src/@open-adm/hooks/use-api";
+import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
+import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
+import { useApiConfiguracaoEmail } from "src/@open-adm/api/use-api-configuracao-email";
+import { FormRoot } from "src/@open-adm/components/form/form-root";
+import { InputApp } from "src/@open-adm/components/input/input-app";
 import { IConfiguracaoDeEmail } from "src/@open-adm/types/configuracao-email";
-import { defaultValues, schema } from "./config";
-import { Grid } from "@mui/material";
-import CustomTextField from "src/@core/components/mui/text-field";
-import { useRouter } from "next/router";
 
-export function ConfiguracaoEmail() {
-
-    const { get, post } = useApi();
-    const router = useRouter();
-
-    const formik = useFormik({
-        initialValues: defaultValues,
-        validationSchema: schema,
-        onSubmit: (values) => onSubmit(values),
+export function EmailConfiguracaoForm() {
+    const { create, obter } = useApiConfiguracaoEmail();
+    const form = useFormikAdapter<IConfiguracaoDeEmail>({
+        initialValues: {
+            email: "",
+            servidor: "",
+            senha: "",
+            porta: 0,
+        },
+        validationSchema: new YupAdapter()
+            .string("email")
+            .string("servidor")
+            .string("senha")
+            .number("porta")
+            .build(),
+        onSubmit: submit,
     });
 
-    async function onSubmit(values: IConfiguracaoDeEmail) {
-        try {
-            await post('configuracoes-de-email/create', values)
-            router.replace('/home')
-        } catch (error) {
-            
-        }
+    async function submit() {
+        await create.fetch(form.values);
     }
 
     async function init() {
-        try {
-            const response = await get<IConfiguracaoDeEmail>('configuracoes-de-email/get-configuracao')
-            if (response)
-                formik.setValues(response);
-        } catch (error) {
-
+        const response = await obter.fetch();
+        if (response) {
+            form.setValue(response);
         }
     }
 
     useEffect(() => {
         init();
-    }, [])
+    }, []);
+
+    const loading = create.status === "loading" || obter.status === "loading";
 
     return (
-        <Form
-            action='update'
-            submit={formik.submitForm}
-            title="Configuração de e-mail"
-            urlVoltar="/home"
+        <FormRoot.Form
+            loading={loading}
+            submit={form.onSubmit}
+            titulo="Configuração de e-mail"
         >
-            <Grid container spacing={6}>
-                <Grid item xs={12} sm={6}>
-                    <CustomTextField
-                        fullWidth
-                        label='E-mail'
-                        name='email'
-                        id='email'
-                        value={formik.values.email}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        helperText={formik.touched.email && formik.errors.email}
-                        error={!!(formik.touched.email && formik.errors.email)}
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
+                        label="E-mail"
+                        name="email"
+                        id="email"
+                        value={form.values.email}
+                        onBlur={form.onBlur}
+                        onChange={form.onChange}
+                        helperText={form.helperText("email")}
+                        error={form.error("email")}
+                        maxLength={255}
+                        type="email"
+                        required
+                        autoFocus
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
+                        label="Senha"
+                        name="senha"
+                        id="senha"
+                        value={form.values.senha}
+                        onBlur={form.onBlur}
+                        onChange={form.onChange}
+                        helperText={form.helperText("senha")}
+                        error={form.error("senha")}
+                        maxLength={255}
+                        required
+                        isPassword
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow spacing={3}>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
+                        label="Servidor"
+                        name="servidor"
+                        id="servidor"
+                        value={form.values.servidor}
+                        onBlur={form.onBlur}
+                        onChange={form.onChange}
+                        helperText={form.helperText("servidor")}
+                        error={form.error("servidor")}
+                        maxLength={255}
                         required
                     />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <CustomTextField
-                        fullWidth
-                        label='Senha'
-                        name='senha'
-                        id='senha'
-                        value={formik.values.senha}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        helperText={formik.touched.senha && formik.errors.senha}
-                        error={!!(formik.touched.senha && formik.errors.senha)}
-                        required
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <CustomTextField
-                        fullWidth
-                        label='Servidor'
-                        name='servidor'
-                        id='servidor'
-                        value={formik.values.servidor}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        helperText={formik.touched.servidor && formik.errors.servidor}
-                        error={!!(formik.touched.servidor && formik.errors.servidor)}
-                        required
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <CustomTextField
-                        fullWidth
-                        label='Porta'
-                        name='porta'
-                        id='porta'
-                        value={formik.values.porta}
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        helperText={formik.touched.porta && formik.errors.porta}
-                        error={!!(formik.touched.porta && formik.errors.porta)}
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
+                        label="Porta"
+                        name="porta"
+                        id="porta"
+                        value={form.values.porta}
+                        onBlur={form.onBlur}
+                        onChange={form.onChange}
+                        helperText={form.helperText("porta")}
+                        error={form.error("porta")}
+                        maxLength={255}
                         required
                         type="number"
                     />
-                </Grid>
-            </Grid>
-        </Form>
-    )
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+        </FormRoot.Form>
+    );
 }

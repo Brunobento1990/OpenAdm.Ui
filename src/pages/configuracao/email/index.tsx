@@ -1,8 +1,8 @@
-import { ConfiguracaoEmail } from "src/@open-adm/pages/configuracao/email"
+import { EmailConfiguracaoForm } from "src/@open-adm/pages/configuracao/email"
 
 const ConfiguracaoEmailPage = () => {
     return (
-        <ConfiguracaoEmail />
+        <EmailConfiguracaoForm />
     )
 }
 
