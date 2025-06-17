@@ -4,13 +4,12 @@ import { IPeso } from "./peso";
 import { IProduto } from "./produto";
 import { ITabelaDePreco } from "./tabela-de-preco";
 import { ITamanho } from "./tamanho";
-import { IUsuario } from "./usuario";
 
 export interface IPedido extends IBase {
     statusPedido: number,
     valorTotal: number,
     totalItens: number,
-    usuario: IUsuario,
+    usuario: ICliente,
     usuarioId: string,
     tabelaDePreco?: ITabelaDePreco;
     totalAReceber?: number;
