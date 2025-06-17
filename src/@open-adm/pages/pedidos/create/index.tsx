@@ -8,7 +8,6 @@ import { useApiTabelaDePreco } from "src/@open-adm/api/UseApiTabelaDePreco";
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { IItemPedido, IPedido } from "src/@open-adm/types/pedido";
 import { ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
-import { useApiCliente } from "../../vendas/cliente/form/use-api-cliente";
 import { BoxApp } from "src/@open-adm/components/box";
 import { ButtonApp } from "src/@open-adm/components/buttons";
 import { DividerApp } from "src/@open-adm/components/divider";
@@ -27,6 +26,7 @@ import { LoadingAppTexto } from "src/@open-adm/components/loading/loading-app-te
 import { TableApp } from "src/@open-adm/components/table/table-app";
 import { IconButtonAppComTooltip } from "src/@open-adm/components/icon/icon-button-app-tool-tip";
 import { IconConsultaCep } from "src/@open-adm/components/icon/icon-consulta-cep";
+import { useApiCliente } from "src/@open-adm/api/use-api-cliente";
 
 const initialValues: Partial<IPedido> = {
     itensPedido: [],
