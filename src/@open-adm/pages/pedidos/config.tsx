@@ -120,9 +120,9 @@ export interface StatusObj {
 }
 
 export const statusPedido: StatusObj = {
-    0: { title: 'Em aberto', color: 'warning' },//
-    1: { title: 'Faturado', color: 'primary' },//success
+    0: { title: 'Em aberto', color: 'warning' },
+    1: { title: 'Faturado', color: 'primary' },
     2: { title: 'Em entrega', color: 'info' },
-    3: { title: 'Entregue', color: 'success' },//warning
-    4: { title: 'Cancelado', color: 'error' },//warning
+    3: { title: 'Entregue', color: 'success' },
+    4: { title: 'Cancelado', color: 'error' },
 }

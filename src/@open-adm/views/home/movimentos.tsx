@@ -3,15 +3,20 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
 import dynamic from "next/dynamic";
+import { IMovimentoProdutoHome } from "src/@open-adm/types/home";
+import { CardCustom } from "src/@open-adm/components/cards";
+import { TextApp } from "src/@open-adm/components/text";
+import { palavraNoPlural } from "src/@open-adm/utils/palavra-no-plural";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface PropsMovimentoProdutoHomePage {
-    movimentos: any[];
+    movimentos: IMovimentoProdutoHome[];
 }
 
 const MovimentoProdutoHomePage = (props: PropsMovimentoProdutoHomePage) => {
     // chart color
     const theme = useTheme();
+    const countMovimento = props.movimentos.length;
     const primary = theme.palette.primary.main;
     const secondary = theme.palette.secondary.main;
 
@@ -90,7 +95,8 @@ const MovimentoProdutoHomePage = (props: PropsMovimentoProdutoHomePage) => {
         },
     };
     return (
-        <>
+        <CardCustom>
+            <TextApp padding="1rem" fontSize="1.2rem" fontWeight={600} texto={`Movimentação de ${palavraNoPlural('produto', 'produtos', countMovimento)} ${palavraNoPlural('no', 'nos', countMovimento)} ${palavraNoPlural('ultimo', 'ultimos', countMovimento)} ${props.movimentos.length} ${palavraNoPlural('mês', 'mese', countMovimento)}`} />
             <Chart
                 options={{
                     ...optionscolumnchart,
@@ -114,7 +120,7 @@ const MovimentoProdutoHomePage = (props: PropsMovimentoProdutoHomePage) => {
                 height={370}
                 width={"100%"}
             />
-        </>
+        </CardCustom>
     );
 };
 
