@@ -1,9 +1,8 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
-import { ITopUsuarios } from 'src/@open-adm/types/home';
 
 interface propsTopClientesMaisPedidos {
-    topUsuarios: ITopUsuarios[];
+    topUsuarios: any[];
 }
 
 const TopClientesMaisPedidos = (props: propsTopClientesMaisPedidos) => {
