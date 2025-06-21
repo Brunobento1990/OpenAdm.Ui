@@ -41,7 +41,7 @@ export function useApiParceiro() {
     }
 
     async function excluirTelefone(telefoneId: string): Promise<any> {
-        return await apiDeleteRedeSocial.fecth({
+        return await apiDeleteTelefone.fecth({
             urlParams: `?telefoneId=${telefoneId}`,
         });
     }
