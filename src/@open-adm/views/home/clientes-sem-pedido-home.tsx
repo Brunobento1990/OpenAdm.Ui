@@ -7,32 +7,35 @@ import { maskCNPJ, maskCPF, maskPhone } from 'src/@open-adm/utils/mask';
 
 interface propsTopClientesMaisPedidos {
     cliente: ICliente[];
+    titulo: string
 }
 
 const EstoquesHome = (props: propsTopClientesMaisPedidos) => {
     return (
         <CardCustom>
-            <TextApp texto='Clientes sem pedido' fontSize='1.2rem' fontWeight={600} padding='1rem' />
-            <TableApp columns={[
-                {
-                    field: 'numero',
-                    headerName: 'N°',
-                },
-                {
-                    field: 'nome',
-                    headerName: 'Nome',
-                },
-                {
-                    field: 'cpfCnpj',
-                    headerName: 'CPF/CNPJ',
-                    renderCell: (row: ICliente) => row.cpf ? maskCPF(row.cpf) : maskCNPJ(row.cnpj)
-                },
-                {
-                    field: 'telefone',
-                    headerName: 'Telefone',
-                    renderCell: (row: ICliente) => maskPhone(row.telefone)
-                },
-            ]}
+            <TextApp texto={props.titulo} fontSize='1.2rem' fontWeight={600} padding='1rem' />
+            <TableApp
+                maxHeigth={'500px'}
+                columns={[
+                    {
+                        field: 'numero',
+                        headerName: 'N°',
+                    },
+                    {
+                        field: 'nome',
+                        headerName: 'Nome',
+                    },
+                    {
+                        field: 'cpfCnpj',
+                        headerName: 'CPF/CNPJ',
+                        renderCell: (row: ICliente) => row.cpf ? maskCPF(row.cpf) : maskCNPJ(row.cnpj)
+                    },
+                    {
+                        field: 'telefone',
+                        headerName: 'Telefone',
+                        renderCell: (row: ICliente) => maskPhone(row.telefone)
+                    },
+                ]}
                 rows={props.cliente ?? []}
                 stickyHeader
             />

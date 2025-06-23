@@ -11,6 +11,7 @@ export function Produtos() {
         method: 'PUT',
         url: 'produtos/inativar-ativar?id='
     })
+    const [refresh, setRefresh] = useState(false);
     const [inativar, setInativar] = useState<Inativar>();
     function abrirModal(id: string, inativo: boolean) {
         setInativar({
@@ -38,6 +39,7 @@ export function Produtos() {
 
     function fecharModal() {
         setInativar(undefined)
+        setRefresh(state => !state)
     }
     return (
         <>
@@ -52,6 +54,7 @@ export function Produtos() {
                 urlEdit="produto/edit"
                 urlView="produto/view"
                 minWidth={1600}
+                refreshPai={refresh}
             />
         </>
     )

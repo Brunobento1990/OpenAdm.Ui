@@ -86,8 +86,9 @@ export function HomePage() {
                     </Grid>
                 </GridApp>
             </BoxApp >
-            <BoxApp padding="1rem">
-                <ClientesSemPedidoHome cliente={home?.usuarioSemPedido ?? []} />
+            <BoxApp padding="1rem" display="flex" flexDirection="column" gap="1rem">
+                <ClientesSemPedidoHome titulo="Clientes sem pedido CNPJ" cliente={home?.usuarioSemPedidoCnpj ?? []} />
+                <ClientesSemPedidoHome titulo="Clientes sem pedido CPF" cliente={home?.usuarioSemPedidoCpf ?? []} />
             </BoxApp>
             <BoxApp padding="1rem">
                 <Grid container spacing={5}>
