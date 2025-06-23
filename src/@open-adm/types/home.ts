@@ -12,7 +12,8 @@ export interface IHome {
     quantidadeDeUsuarioCnpj: number;
     quantidadeDeUsuarioCpf: number;
     variacaoMensalPedido: IVariacaoMensalPedido;
-    usuarioSemPedido: ICliente[]
+    usuarioSemPedidoCpf: ICliente[]
+    usuarioSemPedidoCnpj: ICliente[]
 }
 
 export interface IStatusPedidoHome {

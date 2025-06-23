@@ -51,7 +51,7 @@ export function colunsProduto(props: propsColunsProduto) {
             field: 'inativar',
             headerName: 'Inativar',
             renderCell: (params: any) => (
-                <Tooltip title="Visualizar" placement="top">
+                <Tooltip title="Inativar" placement="top">
                     <IconButton
                         onClick={() => props.inativarEcommerce(params.id, params.inativoEcommerce ?? false)}
                     >
