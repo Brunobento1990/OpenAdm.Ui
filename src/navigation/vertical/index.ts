@@ -91,6 +91,16 @@ const navigation = (): VerticalNavItemsType => {
           path: '/vendas/tabeladepreco'
         },
         {
+          title: 'Preço por peso',
+          icon: 'material-symbols-light:price-change-outline-rounded',
+          path: '/vendas/preco-por-peso'
+        },
+        {
+          title: 'Preço por tamanho',
+          icon: 'solar:tag-price-outline',
+          path: '/vendas/preco-por-tamanho'
+        },
+        {
           title: 'Relatório por período',
           icon: "tabler:report-search",
           path: '/vendas/relatorio-por-periodo'

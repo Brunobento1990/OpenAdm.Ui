@@ -103,6 +103,7 @@ export function DropDownAutoFetchApp(props: propsDropDown) {
                     required={props.required}
                     helperText={props.helperText}
                     error={props.error}
+                    onChange={(e) => setSearch(e.target.value ?? '')}
                 />
             )}
         />
