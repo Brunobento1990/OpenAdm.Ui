@@ -112,11 +112,6 @@ const navigation = (): VerticalNavItemsType => {
           path: '/configuracao/minha-empresa'
         },
         {
-          title: 'E-mail',
-          icon: 'iconamoon:email-thin',
-          path: '/configuracao/email'
-        },
-        {
           title: 'Pedidos',
           path: '/configuracao/pedido',
           icon: 'material-symbols:order-approve-outline',

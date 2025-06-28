@@ -19,7 +19,11 @@ export function ConfiguracaoPedidoForm() {
     });
 
     async function submit() {
-        await update.fetch(form.values);
+        await update.fetch({
+            ...form.values,
+            pedidoMinimoAtacado: cleanFormatMoney(form.values.pedidoMinimoAtacado),
+            pedidoMinimoVarejo: cleanFormatMoney(form.values.pedidoMinimoVarejo)
+        });
     }
 
     async function init() {
@@ -67,11 +71,7 @@ export function ConfiguracaoPedidoForm() {
                         id="pedidoMinimoAtacado"
                         value={form.values.pedidoMinimoAtacado}
                         onBlur={form.onBlur}
-                        onChange={(_, value) =>
-                            form.setValue({
-                                pedidoMinimoAtacado: cleanFormatMoney(value),
-                            })
-                        }
+                        onChange={form.onChange}
                         mask={MaskType.MONEY}
                     />
                 </FormRoot.FormItemRow>
@@ -82,11 +82,7 @@ export function ConfiguracaoPedidoForm() {
                         id="pedidoMinimoVarejo"
                         value={form.values.pedidoMinimoVarejo}
                         onBlur={form.onBlur}
-                        onChange={(_, value) =>
-                            form.setValue({
-                                pedidoMinimoVarejo: formatMoney(value),
-                            })
-                        }
+                        onChange={form.onChange}
                         mask={MaskType.MONEY}
                     />
                 </FormRoot.FormItemRow>
