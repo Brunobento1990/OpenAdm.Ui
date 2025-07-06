@@ -94,38 +94,50 @@ export function UltimosPedidos(props: PropsUltimosPedidos) {
                 open={!!ultimoPedidoSelecionado}
                 desabilitarFooter
             >
-                <BoxApp display="flex" gap="0.5rem">
-                    <TextApp width={width} texto={'Cliente:'} fontWeight={600} />
-                    <TextApp texto={ultimoPedidoSelecionado?.nome} />
-                </BoxApp>
-                <BoxApp display="flex" gap="0.5rem">
-                    <TextApp width={width} texto={'CPF/CNPJ:'} fontWeight={600} />
-                    <TextApp texto={ultimoPedidoSelecionado?.cpfCnpj ? maskCNPJ(ultimoPedidoSelecionado.cpfCnpj) : maskCPF(ultimoPedidoSelecionado?.cpfCnpj)} />
-                </BoxApp>
-                <BoxApp display="flex" gap="0.5rem">
-                    <TextApp width={width} texto={'Telefone:'} fontWeight={600} />
-                    <TextApp texto={maskPhone(ultimoPedidoSelecionado?.telefone)} />
-                </BoxApp>
-                {statusPedidoSelecionado && (
+                <BoxApp display="flex" alignItems="start" flexDirection="column" gap="0.5rem">
                     <BoxApp display="flex" gap="0.5rem">
-                        <TextApp width={width} texto="Status:" fontWeight={600} />
-                        <StatusApp
-                            cor={statusPedidoSelecionado.color}
-                            titulo={statusPedidoSelecionado.title}
-                        />
+                        <TextApp width={width} texto={'Cliente:'} fontWeight={600} />
+                        <TextApp texto={ultimoPedidoSelecionado?.nome} />
                     </BoxApp>
-                )}
-                <BoxApp display="flex" gap="0.5rem">
-                    <TextApp width={width} texto={'Data ultimo pedido:'} fontWeight={600} />
-                    <TextApp texto={formatDateComHoras(ultimoPedidoSelecionado?.dataDoUltimoPedido)} />
-                </BoxApp>
-                <BoxApp display="flex" gap="0.5rem">
-                    <TextApp width={width} texto={'Total ultimo pedido:'} fontWeight={600} />
-                    <TextApp texto={formatMoney(ultimoPedidoSelecionado?.total)} />
-                </BoxApp>
-                <BoxApp display="flex" gap="0.5rem">
-                    <TextApp width={width} texto={'Número ultimo pedido:'} fontWeight={600} />
-                    <TextApp texto={`${ultimoPedidoSelecionado?.numeroDoPedido}`} />
+                    <BoxApp display="flex" gap="0.5rem">
+                        <TextApp width={width} texto={'CPF/CNPJ:'} fontWeight={600} />
+                        <TextApp texto={ultimoPedidoSelecionado?.cpfCnpj ? maskCNPJ(ultimoPedidoSelecionado.cpfCnpj) : maskCPF(ultimoPedidoSelecionado?.cpfCnpj)} />
+                    </BoxApp>
+                    <BoxApp display="flex" gap="0.5rem">
+                        <TextApp width={width} texto={'Telefone:'} fontWeight={600} />
+                        <TextApp texto={maskPhone(ultimoPedidoSelecionado?.telefone)} />
+                    </BoxApp>
+                    <BoxApp display="flex" gap="0.5rem" alignItems="center">
+                        <TextApp texto="Abrir conversa:" fontWeight={600} width={width} />
+                        <Link href={`https://api.whatsapp.com/send?phone=55${ultimoPedidoSelecionado?.telefone}`} target="_blank">
+                            <IconButtonAppComTooltip
+                                icon={listaIcones.whatsApp}
+                                titulo={''}
+                                onClick={() => navigate()}
+                            />
+                        </Link>
+                    </BoxApp>
+                    <BoxApp display="flex" gap="0.5rem">
+                        <TextApp width={width} texto={'Data ultimo pedido:'} fontWeight={600} />
+                        <TextApp texto={formatDateComHoras(ultimoPedidoSelecionado?.dataDoUltimoPedido)} />
+                    </BoxApp>
+                    <BoxApp display="flex" gap="0.5rem">
+                        <TextApp width={width} texto={'Total ultimo pedido:'} fontWeight={600} />
+                        <TextApp texto={formatMoney(ultimoPedidoSelecionado?.total)} />
+                    </BoxApp>
+                    <BoxApp display="flex" gap="0.5rem">
+                        <TextApp width={width} texto={'Número ultimo pedido:'} fontWeight={600} />
+                        <TextApp texto={`${ultimoPedidoSelecionado?.numeroDoPedido}`} />
+                    </BoxApp>
+                    {statusPedidoSelecionado && (
+                        <BoxApp display="flex" gap="0.5rem">
+                            <TextApp width={width} texto="Status:" fontWeight={600} />
+                            <StatusApp
+                                cor={statusPedidoSelecionado.color}
+                                titulo={statusPedidoSelecionado.title}
+                            />
+                        </BoxApp>
+                    )}
                 </BoxApp>
             </ModalWithChildren>
             <BoxApp padding="1rem 0rem 1rem 0rem" display="flex" alignItems="center" gap="1rem">
