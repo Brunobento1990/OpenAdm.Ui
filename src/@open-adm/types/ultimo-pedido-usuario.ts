@@ -3,6 +3,12 @@ export interface IPaginacaoUltimoPedidoUsuario {
     totalPagina: number
 }
 
+export interface IPaginacaoUltimoPedidoUsuarioRequest {
+    page: number;
+    search: string;
+    isJuridico: boolean;
+}
+
 export interface IUltimoPedidoUsuario {
     usuarioId: string,
     nome: string,

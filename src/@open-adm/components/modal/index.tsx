@@ -35,12 +35,12 @@ const CustomCloseButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
 interface modalWithChildrenProps {
     children: ReactNode;
     open: boolean;
-    confimerd: () => void;
+    confimerd?: () => void;
     close: () => void;
+    desabilitarFooter?: boolean;
 }
 
 export function ModalWithChildren(props: modalWithChildrenProps) {
-
     const { settings } = useSettings()
     const { direction } = settings;
     const arrowIcon = direction === 'ltr' ? 'tabler:chevron-right' : 'tabler:chevron-left'
@@ -66,15 +66,17 @@ export function ModalWithChildren(props: modalWithChildrenProps) {
                         <Icon icon='tabler:x' fontSize='1.25rem' />
                     </CustomCloseButton>
                     {props.children}
-                    <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <Button
-                            variant='contained'
-                            endIcon={<Icon icon={arrowIcon} />}
-                            onClick={props.confimerd}
-                        >
-                            Continue
-                        </Button>
-                    </Grid>
+                    {!props.desabilitarFooter && (
+                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <Button
+                                variant='contained'
+                                endIcon={<Icon icon={arrowIcon} />}
+                                onClick={props.confimerd}
+                            >
+                                Continue
+                            </Button>
+                        </Grid>
+                    )}
                 </DialogContent>
             </Dialog>
         </Card>

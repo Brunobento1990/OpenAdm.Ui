@@ -6,12 +6,13 @@ interface propsTextApp {
     fontWeight?: number;
     fontSize?: string;
     padding?: string;
+    width?: string;
 }
 
 export function TextApp(props: propsTextApp) {
     return (
         <Typography
-            sx={{ color: props.color ?? 'text.secondary', padding: props.padding }}
+            sx={{ color: props.color ?? 'text.secondary', padding: props.padding, width: props.width }}
             fontWeight={props.fontWeight}
             fontSize={props.fontSize}
         >
