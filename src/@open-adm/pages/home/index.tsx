@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { BoxApp } from "src/@open-adm/components/box";
 import { GridApp } from "src/@open-adm/components/grid";
 import { LoadingAppTexto } from "src/@open-adm/components/loading/loading-app-texto";
+import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { useNewApi } from "src/@open-adm/hooks/use-new-api";
 import { IHome } from "src/@open-adm/types/home";
+import { rotasApp } from "src/configs/rotasApp";
 
 const TopClientesMaisGastos = dynamic(() => import('src/@open-adm/views/home/top-clientes-mais-gastos'), {
     ssr: false,
@@ -49,7 +51,7 @@ const StatusPedidoHome = dynamic(() => import('src/@open-adm/views/home/pedidos-
 });
 
 export function HomePage() {
-
+    const { navigate } = useNavigateApp();
     const { fecth, statusRequisicao } = useNewApi({
         method: 'GET',
         url: 'home/adm',
@@ -107,8 +109,8 @@ export function HomePage() {
                     </Grid>
                     <Grid item xs={12} sm={3}>
                         <BoxApp display="flex" flexDirection="column" gap="0.5rem">
-                            <TotalUsuario cor="green" titulo="Qtd clientes CNPJ" total={home?.quantidadeDeUsuarioCnpj ?? 0} />
-                            <TotalUsuario cor="red" titulo="Qtd clientes CPF" total={home?.quantidadeDeUsuarioCpf ?? 0} />
+                            <TotalUsuario navigate={() => navigate(rotasApp.cliente.ultimosPedidoCnpj)} cor="green" titulo="Qtd clientes CNPJ" total={home?.quantidadeDeUsuarioCnpj ?? 0} />
+                            <TotalUsuario navigate={() => navigate(rotasApp.cliente.ultimosPedidoCpf)} cor="red" titulo="Qtd clientes CPF" total={home?.quantidadeDeUsuarioCpf ?? 0} />
                         </BoxApp>
                     </Grid>
                 </Grid>

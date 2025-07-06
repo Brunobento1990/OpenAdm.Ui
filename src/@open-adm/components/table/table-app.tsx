@@ -33,6 +33,7 @@ interface propsNewTable {
     heigth?: number | string;
     marginTop?: string;
     onDoubleClick?: (item: any, index: number, key?: string) => void;
+    getBackgroundColor?: (row: any) => string | undefined;
     borderCollapse?:
     | "collapse"
     | "inherit"
@@ -72,7 +73,7 @@ export function TableApp(props: propsNewTable) {
                                     padding: "3px 10px 3px 10px",
                                     fontWeight: 600,
                                     fontSize: "14px",
-                                    borderBottom: "1px solid #dbdbdb"
+                                    borderBottom: "1px solid #dbdbdb",
                                 }}
                                 onClick={() => {
                                     if (column.sortable && props.setSorting) {
@@ -125,6 +126,9 @@ export function TableApp(props: propsNewTable) {
                                         backgroundColor: "#f7faff",
                                     },
                                     borderBottom: "1px solid #f7faff",
+                                    backgroundColor: props.getBackgroundColor
+                                        ? props.getBackgroundColor(row)
+                                        : undefined,
                                 }}
                             >
                                 {props.columns.map((column, i) => (

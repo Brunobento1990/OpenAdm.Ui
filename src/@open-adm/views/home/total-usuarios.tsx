@@ -1,12 +1,15 @@
 import { BoxApp } from 'src/@open-adm/components/box';
 import { CardCustom } from 'src/@open-adm/components/cards';
 import { IconApp } from 'src/@open-adm/components/icon';
+import { IconButtonAppComTooltip } from 'src/@open-adm/components/icon/icon-button-app-tool-tip';
 import { TextApp } from 'src/@open-adm/components/text';
+import { listaIcones } from 'src/configs/listaIcones';
 
 interface propsTotalUsuarios {
     total: number;
     titulo: string;
-    cor: string
+    cor: string;
+    navigate: () => void;
 }
 
 const TotalUsuarios = (props: propsTotalUsuarios) => {
@@ -19,7 +22,10 @@ const TotalUsuarios = (props: propsTotalUsuarios) => {
                         <IconApp icon='icon-park-outline:avatar' color={props.cor} />
                     </BoxApp>
                 </BoxApp>
-                <TextApp fontSize='1.2rem' fontWeight={600} texto={`${props.total}`} />
+                <BoxApp display='flex' alignItems='center' gap='1rem'>
+                    <TextApp fontSize='1.2rem' fontWeight={600} texto={`${props.total}`} />
+                    <IconButtonAppComTooltip onClick={props.navigate} icon={listaIcones.redirect} titulo='Visualizar ultimos pedidos' />
+                </BoxApp>
             </BoxApp>
         </CardCustom>
     )
