@@ -7,4 +7,6 @@ export const listaIcones = {
     searchGlobal: "streamline-ultimate:network-search",
     loading: "eos-icons:bubble-loading",
     adicionar: "f7:plus-app",
+    redirect: "ion:arrow-redo-outline",
+    whatsApp: "logos:whatsapp-icon"
 }

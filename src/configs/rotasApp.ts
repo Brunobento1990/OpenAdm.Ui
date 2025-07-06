@@ -49,6 +49,8 @@ export const rotasApp = {
         create: "cliente/create",
         view: "cliente/view",
         paginacao: "/vendas/cliente",
+        ultimosPedidoCnpj: "/vendas/cliente/ultimos-pedido-cnpj",
+        ultimosPedidoCpf: "/vendas/cliente/ultimos-pedido-cpf",
     },
     tabelaDePreco: {
         create: "tabeladepreco/create",
