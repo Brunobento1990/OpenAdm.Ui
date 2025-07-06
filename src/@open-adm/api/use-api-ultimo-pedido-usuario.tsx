@@ -10,7 +10,7 @@ export function useApiUltimoPedidoUsuario() {
 
     async function listar(page: number, isJuridico: boolean, search?: string): Promise<IPaginacaoUltimoPedidoUsuario | undefined> {
         return await api.fecth({
-            urlParams: `?page:${page}&isJuridico=${isJuridico}&search=${search ?? ""}`
+            urlParams: `?page=${page}&isJuridico=${isJuridico}&search=${search ?? ""}`
         })
     }
 
