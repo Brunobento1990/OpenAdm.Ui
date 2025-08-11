@@ -1,17 +1,22 @@
 import { useNavigateApp } from '../../hooks/use-navigate-app';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Button } from '@mui/material';
 import { InputCustom } from '../input';
 import { BoxApp } from '../box';
+import { IconButtonAppComTooltip } from '../icon/icon-button-app-tool-tip';
+import { ModalWithChildren } from '../modal';
 
 interface propsHeaderTable {
     urlAdd?: string;
     notBtnAdd?: boolean;
     pesquisar: (search?: string) => void;
+    filtroChildren?: ReactNode;
+    atualizarFiltro?: () => void;
 }
 
 export function HeaderTable(props: propsHeaderTable) {
     const { navigate } = useNavigateApp();
+    const [openModalFiltro, setOpenModalFiltro] = useState(false);
     const [search, setSearch] = useState('');
     function handleBtnAdicionar() {
         if (props.notBtnAdd || !props.urlAdd) {
@@ -27,6 +32,17 @@ export function HeaderTable(props: propsHeaderTable) {
                 }}
             >Adicionar</Button>
         );
+    }
+
+    function fecharModal() {
+        setOpenModalFiltro(false);
+    }
+
+    function confirmarModal() {
+        if (props.atualizarFiltro) {
+            props.atualizarFiltro();
+        }
+        setOpenModalFiltro(false);
     }
 
     return (
@@ -65,6 +81,14 @@ export function HeaderTable(props: propsHeaderTable) {
                     fullWidth
                 />
             </form>
+            {props.filtroChildren && (
+                <IconButtonAppComTooltip onClick={() => setOpenModalFiltro(true)} width='32px' sx={{ marginTop: "1rem" }} icon='stash:filter-light' titulo="Filtros" />
+            )}
+            {props.filtroChildren && (
+                <ModalWithChildren confimerd={confirmarModal} open={openModalFiltro} close={fecharModal}>
+                    {props.filtroChildren}
+                </ModalWithChildren>
+            )}
         </BoxApp>
     );
 }

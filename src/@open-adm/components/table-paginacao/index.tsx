@@ -31,6 +31,7 @@ interface tableProps {
     metodo?: TypeMethod;
     childrenHeader?: ReactNode;
     minWidth?: number;
+    filtroChildren?: ReactNode;
 }
 
 export function TableIndex(props: tableProps) {
@@ -200,6 +201,7 @@ export function TableIndex(props: tableProps) {
                     urlAdd={props.urlAdd}
                     notBtnAdd={props.notBtnAdd}
                     pesquisar={refresh}
+                    filtroChildren={props.filtroChildren}
                 />
             )}
             <BoxApp

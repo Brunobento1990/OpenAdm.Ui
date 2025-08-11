@@ -7,6 +7,8 @@ export function EstoqueProduto() {
             columns={columns}
             url="estoques/paginacao"
             urlEdit="posicao-estoque/edit"
+            filtroChildren={<p>Filtros</p>}
+            minWidth={1300}
         />
     )
 }
