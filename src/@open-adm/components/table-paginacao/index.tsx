@@ -202,6 +202,7 @@ export function TableIndex(props: tableProps) {
                     notBtnAdd={props.notBtnAdd}
                     pesquisar={refresh}
                     filtroChildren={props.filtroChildren}
+                    atualizarFiltro={refresh}
                 />
             )}
             <BoxApp
