@@ -38,6 +38,7 @@ function ModalFiltroEstoque(props: ModalFiltroEstoqueProps) {
             <DropDownAutoFetchApp
                 onChange={(_, value) => {
                     props.setFiltros({
+                        ...props.filtros,
                         produto: value,
                         produtoId: value?.id
                     })
@@ -52,6 +53,7 @@ function ModalFiltroEstoque(props: ModalFiltroEstoqueProps) {
             <DropDownAutoFetchApp
                 onChange={(_, value) => {
                     props.setFiltros({
+                        ...props.filtros,
                         tamanho: value,
                         tamanhoId: value?.id
                     })
@@ -66,6 +68,7 @@ function ModalFiltroEstoque(props: ModalFiltroEstoqueProps) {
             <DropDownAutoFetchApp
                 onChange={(_, value) => {
                     props.setFiltros({
+                        ...props.filtros,
                         peso: value,
                         pesoId: value?.id
                     })
