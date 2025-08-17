@@ -1,5 +1,4 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { useLocalStorage } from 'src/hooks/useLocalStorage';
 import { TypeMethod, useNewApi } from 'src/@open-adm/hooks/use-new-api';
 import { ISortingTable, TablePaginacao } from './table';
 import { BoxApp } from '../box';
@@ -35,54 +34,44 @@ interface tableProps {
 }
 
 export function TableIndex(props: tableProps) {
-    const { getItem } = useLocalStorage();
     const { deleteApi } = useApi();
     const { navigate } = useNavigateApp();
     const modal = useModal();
-    const [totalDeRegistros, setTotalDeRegistros] = useState<number>(0);
     const [pagina, setPagina] = useState<number>(1);
-    const [loading, setLoading] = useState(true);
-    const [quantidadePorPagina, setQuantidadePorPagina] = useState<number>(
-        parseInt(getItem<string>('quantidade-por-pagina') ?? '5'),
-    );
     const [sorting, setSorting] = useState<ISortingTable>({
         field: 'numero',
         sort: 'desc',
     });
     const [quantidadePagina, setQuantidadePagina] = useState<number>(0);
     const [rows, setRows] = useState<any[]>([]);
-    const { fecth } = useNewApi({
+    const { fecth, statusRequisicao } = useNewApi({
         method: props.metodo ?? 'POST',
         url: props.url,
         naoRenderizarResposta: true
     });
 
+    const loading = statusRequisicao === 'loading';
+
     const body = {
         skip: pagina,
-        take:
-            typeof quantidadePorPagina === 'string'
-                ? parseInt(quantidadePorPagina)
-                : quantidadePorPagina,
+        take: 5,
         orderBy: sorting.field,
         asc: sorting.sort === 'asc',
         ...props.filtroComplementar,
     };
 
     async function refresh(searchP?: string) {
-        setLoading(true);
         const response = await fecth<any>({
             body: { ...body, search: searchP },
         });
         if (response?.values?.length > 0) {
             setRows(response.values);
-            setTotalDeRegistros(response.totalDeRegistros);
             setQuantidadePagina(response.totalPaginas);
         } else {
             if (rows?.length > 0) {
                 setRows([]);
             }
         }
-        setLoading(false);
     }
 
     function excluir(id: string) {
@@ -180,7 +169,6 @@ export function TableIndex(props: tableProps) {
         refresh();
     }, [
         pagina,
-        quantidadePorPagina,
         sorting,
         props.refreshPai,
     ]);
@@ -236,13 +224,9 @@ export function TableIndex(props: tableProps) {
                 marginBottom: '30px'
             }} />
             <FooterTable
-                quantidadePorPagina={quantidadePorPagina}
-                setQuantidadePorPagina={setQuantidadePorPagina}
                 pagina={pagina}
                 setPagina={setPagina}
                 quantidadePagina={quantidadePagina}
-                length={rows.length}
-                totalDeRegistros={totalDeRegistros}
             />
         </Card>
     );

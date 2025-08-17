@@ -16,6 +16,10 @@ export interface IMovimentoProduto {
 
 export interface IPosicaoEstoqueUpdate {
     produtoId: string;
+    pesoId?: string;
+    tamanhoId?: string;
     produto: string;
+    peso?: string;
+    tamanho?: string;
     quantidade: number;
 }

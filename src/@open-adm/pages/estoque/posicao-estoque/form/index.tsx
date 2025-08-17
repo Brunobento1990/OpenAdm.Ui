@@ -55,10 +55,31 @@ export function PosicaoEstoqueForm() {
         >
             <FormRoot.FormRow spacing={3}>
                 <FormRoot.FormItemRow xs={12} sm={6}>
-                    <BoxApp display="flex" alignItems="center" gap="1rem">
-                        <TextApp texto={"Produto:"} fontWeight={600} />
-                        <TextApp texto={form.values.produto} />
-                    </BoxApp>
+                    <InputApp
+                        label="Produto"
+                        id="produto"
+                        value={form.values.produto}
+                        required
+                        readonly
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={3}>
+                    <InputApp
+                        label="Peso"
+                        id="peso"
+                        value={form.values.peso}
+                        required
+                        readonly
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={3}>
+                    <InputApp
+                        label="Tamanho"
+                        id="tamanho"
+                        value={form.values.tamanho}
+                        required
+                        readonly
+                    />
                 </FormRoot.FormItemRow>
                 <FormRoot.FormItemRow xs={12} sm={3}>
                     <InputApp

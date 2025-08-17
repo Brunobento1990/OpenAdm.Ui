@@ -39,6 +39,18 @@ export function useConfig() {
         {
             flex: 0.175,
             width: 10,
+            field: 'temEstoqueDisponivel',
+            headerName: 'Estoque',
+            renderCell: (params: any) => {
+                if (params?.statusPedido > 0) {
+                    return 'Fechado';
+                }
+                return params?.temEstoqueDisponivel ? 'Suficiente' : 'Insuficiente'
+            }
+        },
+        {
+            flex: 0.175,
+            width: 10,
             field: 'status',
             headerName: 'Status',
             sortable: true,
