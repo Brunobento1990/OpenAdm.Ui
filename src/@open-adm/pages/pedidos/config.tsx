@@ -42,7 +42,7 @@ export function useConfig() {
             field: 'temEstoqueDisponivel',
             headerName: 'Estoque',
             renderCell: (params: any) => {
-                if (params?.statusPedido > 0) {
+                if (params?.statusPedido === 3) {
                     return 'Fechado';
                 }
                 return params?.temEstoqueDisponivel ? 'Suficiente' : 'Insuficiente'

@@ -85,16 +85,6 @@ export function ModificarStatusPedidoForm() {
                     (x) => x.id === form.values.statusPedido
                 )}
             />
-            {/* <RadioApp
-        label={"Atualizar status"}
-        id={"status"}
-        value={statusPedidoSelecionado}
-        row
-        onChange={(_, value) => setStatusPedidoSelecionado(value)}
-        options={[
-          
-        ]}
-      /> */}
         </FormRoot.Form>
     );
 }
