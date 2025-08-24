@@ -6,4 +6,5 @@ export interface IConfiguracaoDePedido extends IBase {
     logo?: string;
     pedidoMinimoAtacado?: number | string;
     pedidoMinimoVarejo?: number | string;
+    whatsApp?: string;
 }

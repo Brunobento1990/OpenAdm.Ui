@@ -7,7 +7,8 @@ import { useApiConfiguracaoPedido } from "src/@open-adm/api/use-api-configuracao
 import { FormRoot } from "src/@open-adm/components/form/form-root";
 import { InputApp, MaskType } from "src/@open-adm/components/input/input-app";
 import { IConfiguracaoDePedido } from "src/@open-adm/types/configuracao-pedido";
-import { cleanFormatMoney, formatMoney } from "src/@open-adm/utils/format-money";
+import { cleanFormatMoney } from "src/@open-adm/utils/format-money";
+import { clearMaskPhone } from "src/@open-adm/utils/mask";
 
 export function ConfiguracaoPedidoForm() {
     const { obter, update } = useApiConfiguracaoPedido();
@@ -21,6 +22,7 @@ export function ConfiguracaoPedidoForm() {
     async function submit() {
         await update.fetch({
             ...form.values,
+            whatsApp: clearMaskPhone(form.values.whatsApp),
             pedidoMinimoAtacado: cleanFormatMoney(form.values.pedidoMinimoAtacado),
             pedidoMinimoVarejo: cleanFormatMoney(form.values.pedidoMinimoVarejo)
         });
@@ -60,6 +62,18 @@ export function ConfiguracaoPedidoForm() {
                         type="email"
                         required
                         autoFocus
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <InputApp
+                        label="WhatsApp de envio"
+                        name="whatsApp"
+                        id="whatsApp"
+                        value={form.values.whatsApp}
+                        onBlur={form.onBlur}
+                        onChange={form.onChange}
+                        maxLength={255}
+                        mask={MaskType.TELEFONE}
                     />
                 </FormRoot.FormItemRow>
             </FormRoot.FormRow>
