@@ -15,6 +15,7 @@ export function EstoqueProduto() {
         <TableIndex
             columns={columns}
             url="estoques/paginacao"
+            take={10}
             urlEdit="posicao-estoque/edit"
             filtroChildren={<ModalFiltroEstoque filtros={filtros} setFiltros={setFiltros} />}
             minWidth={1300}

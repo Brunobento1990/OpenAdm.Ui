@@ -31,6 +31,7 @@ interface tableProps {
     childrenHeader?: ReactNode;
     minWidth?: number;
     filtroChildren?: ReactNode;
+    take?: number;
 }
 
 export function TableIndex(props: tableProps) {
@@ -54,7 +55,7 @@ export function TableIndex(props: tableProps) {
 
     const body = {
         skip: pagina,
-        take: 5,
+        take: props.take ?? 5,
         orderBy: sorting.field,
         asc: sorting.sort === 'asc',
         ...props.filtroComplementar,

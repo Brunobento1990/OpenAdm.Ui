@@ -65,6 +65,38 @@ export function MovimentoProdutoForm() {
                     />
                 </FormRoot.FormItemRow>
                 <FormRoot.FormItemRow xs={12} sm={3}>
+                    <DropDownAutoFetchApp
+                        onChange={(_, value) => {
+                            form.setValue({
+                                tamanho: value,
+                                tamanhoId: value?.id
+                            })
+                        }}
+                        value={form.values.tamanho}
+                        method="GET"
+                        label="Tamanho"
+                        id="tamanhoId"
+                        keyLabel="descricao"
+                        url="tamanhos/list"
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={3}>
+                    <DropDownAutoFetchApp
+                        onChange={(_, value) => {
+                            form.setValue({
+                                peso: value,
+                                pesoId: value?.id
+                            })
+                        }}
+                        value={form.values.peso}
+                        method="GET"
+                        label="Peso"
+                        id="pesoId"
+                        keyLabel="descricao"
+                        url="pesos/list"
+                    />
+                </FormRoot.FormItemRow>
+                <FormRoot.FormItemRow xs={12} sm={3}>
                     <DropDownApp
                         id="tipoMovimentacaoDeProduto"
                         keyLabel="descricao"
