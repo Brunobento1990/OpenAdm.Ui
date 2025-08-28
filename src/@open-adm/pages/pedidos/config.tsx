@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from '@mui/material'
+import { Chip, IconButton, Tooltip } from '@mui/material'
 import { GridColDef } from '@mui/x-data-grid'
 import IconifyIcon from 'src/@core/components/icon'
 import { ThemeColor } from 'src/@core/layouts/types'
@@ -45,7 +45,9 @@ export function useConfig() {
                 if (params?.statusPedido === 3) {
                     return 'Fechado';
                 }
-                return params?.temEstoqueDisponivel ? 'Suficiente' : 'Insuficiente'
+                const cor = params?.porcentagemEstoqueDisponivel <= 20 ? 'error'
+                    : params?.porcentagemEstoqueDisponivel <= 50 ? 'warning' : 'success';
+                return <Chip label={`${params?.porcentagemEstoqueDisponivel}%`} color={cor} />;
             }
         },
         {
