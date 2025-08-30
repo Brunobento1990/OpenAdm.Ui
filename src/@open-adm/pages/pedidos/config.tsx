@@ -45,9 +45,9 @@ export function useConfig() {
                 if (params?.statusPedido === 3) {
                     return 'Fechado';
                 }
-                const cor = params?.porcentagemEstoqueDisponivel <= 20 ? 'error'
-                    : params?.porcentagemEstoqueDisponivel <= 50 ? 'warning' : 'success';
-                return <Chip label={`${params?.porcentagemEstoqueDisponivel}%`} color={cor} />;
+                const cor = params?.porcentagemEstoqueAtendido <= 20 ? 'error'
+                    : params?.porcentagemEstoqueAtendido <= 50 ? 'warning' : 'success';
+                return <Chip label={`${params?.porcentagemEstoqueAtendido}%`} color={cor} />;
             }
         },
         {

@@ -51,5 +51,6 @@ export interface IItemPedido extends IBase {
     pedidoId: string,
     valorUnitario: number,
     quantidade: number,
-    valorTotal: number
+    valorTotal: number,
+    estoqueDisponivel: number;
 }
