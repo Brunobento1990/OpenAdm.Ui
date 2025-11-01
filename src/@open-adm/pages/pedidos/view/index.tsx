@@ -59,13 +59,13 @@ export function PedidoView() {
                             return <Chip label={`${item.estoqueDisponivel}`} color={cor} />;
                         }
                     },
+                    { field: "quantidade", headerName: "Quantidade" },
                     {
                         field: "produto", headerName: "Produto", renderCell: (item: IItemPedido) => item.produto?.descricao
                     },
                     {
                         field: "pedo", headerName: "Peso/Tamanho", renderCell: (item: IItemPedido) => item.peso ? `${item.peso.descricao}` : item.tamanho ? `${item.tamanho.descricao}` : ''
                     },
-                    { field: "quantidade", headerName: "Quantidade" },
                     { field: "valorUnitario", headerName: "Vlr", renderCell: (item: IItemPedido) => formatMoney(item.valorUnitario) }
                 ]}
                 rows={pedido?.itensPedido ?? []}
