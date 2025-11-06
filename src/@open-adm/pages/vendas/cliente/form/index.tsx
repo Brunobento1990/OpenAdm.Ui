@@ -26,10 +26,10 @@ export function ClienteForm(props: IFormTypes) {
             telefone: "",
         },
         validationSchema: new YupAdapter()
-            .email("email")
+            //.email("email")
             .string("nome")
-            .string("senha")
-            .string("reSenha")
+            // .string("senha")
+            // .string("reSenha")
             .string("telefone")
             .build(),
         onSubmit: submit,
@@ -132,11 +132,11 @@ export function ClienteForm(props: IFormTypes) {
                         onChange={form.onChange}
                         readonly={readonly}
                         onBlur={form.onBlur}
-                        required
+                        //required
                         type="email"
                         maxLength={255}
-                        error={form.error("email")}
-                        helperText={form.helperText("email")}
+                    // error={form.error("email")}
+                    // helperText={form.helperText("email")}
                     />
                 </FormRoot.FormItemRow>
             </FormRoot.FormRow>
@@ -149,11 +149,11 @@ export function ClienteForm(props: IFormTypes) {
                         onChange={form.onChange}
                         readonly={readonly}
                         onBlur={form.onBlur}
-                        required
+                        //required
                         maxLength={255}
                         isPassword
-                        error={form.error("senha")}
-                        helperText={form.helperText("senha")}
+                    // error={form.error("senha")}
+                    // helperText={form.helperText("senha")}
                     />
                 </FormRoot.FormItemRow>
                 <FormRoot.FormItemRow xs={12} sm={6}>
@@ -164,11 +164,11 @@ export function ClienteForm(props: IFormTypes) {
                         onChange={form.onChange}
                         readonly={readonly}
                         onBlur={form.onBlur}
-                        required
+                        //required
                         isPassword
                         maxLength={255}
-                        error={form.error("reSenha")}
-                        helperText={form.helperText("reSenha")}
+                    // error={form.error("reSenha")}
+                    // helperText={form.helperText("reSenha")}
                     />
                 </FormRoot.FormItemRow>
             </FormRoot.FormRow>
