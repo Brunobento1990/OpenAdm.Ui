@@ -7,7 +7,8 @@ export const defaultValues: IConfiguracaoDePedido = {
     id: "",
     dataDeCriacao: "",
     dataDeAtualizacao: "",
-    numero: 0
+    numero: 0,
+    vendaDeProdutoComEstoque: false,
 }
 
 export const schema = yup.object().shape({

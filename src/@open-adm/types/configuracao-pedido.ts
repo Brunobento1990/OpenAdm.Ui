@@ -7,4 +7,5 @@ export interface IConfiguracaoDePedido extends IBase {
     pedidoMinimoAtacado?: number | string;
     pedidoMinimoVarejo?: number | string;
     whatsApp?: string;
+    vendaDeProdutoComEstoque?: boolean;
 }

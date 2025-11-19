@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useFormikAdapter } from "src/@open-adm/adapters/formik-adapter";
 import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
 import { useApiConfiguracaoPedido } from "src/@open-adm/api/use-api-configuracao-pedido";
+import { CheckBoxApp } from "src/@open-adm/components/check-box";
 import { FormRoot } from "src/@open-adm/components/form/form-root";
 import { InputApp, MaskType } from "src/@open-adm/components/input/input-app";
 import { IConfiguracaoDePedido } from "src/@open-adm/types/configuracao-pedido";
@@ -98,6 +99,16 @@ export function ConfiguracaoPedidoForm() {
                         onBlur={form.onBlur}
                         onChange={form.onChange}
                         mask={MaskType.MONEY}
+                    />
+                </FormRoot.FormItemRow>
+            </FormRoot.FormRow>
+            <FormRoot.FormRow>
+                <FormRoot.FormItemRow xs={12} sm={6}>
+                    <CheckBoxApp
+                        label="Venda de produto somente com estoque"
+                        id="vendaDeProdutoComEstoque"
+                        value={form.values.vendaDeProdutoComEstoque}
+                        onChange={form.onChange}
                     />
                 </FormRoot.FormItemRow>
             </FormRoot.FormRow>
