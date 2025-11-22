@@ -24,6 +24,7 @@ export const rotasApi = {
         paginacaoDropdown: "usuarios/paginacao-drop-down",
         atualizarSenha: "usuario/atualizar-senha-adm",
         obter: "usuarios/get-conta-adm?id=",
+        ativarInativar: "usuarios/ativar-inativar?id=",
     },
     peso: {
         paginacao: "pesos/paginacao",

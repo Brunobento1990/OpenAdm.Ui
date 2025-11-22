@@ -15,6 +15,11 @@ export function useApiCliente() {
         url: rotasApi.cliente.atualizarSenha,
     });
 
+    const apiAtivarInativar = useNewApi({
+        method: "PUT",
+        url: rotasApi.cliente.ativarInativar,
+    });
+
     const apiGet = useNewApi({
         method: "GET",
         url: rotasApi.cliente.obter,
@@ -30,6 +35,12 @@ export function useApiCliente() {
 
     async function get(id: string): Promise<ICliente | undefined> {
         return await apiGet.fecth<ICliente>({
+            urlParams: id,
+        });
+    }
+
+    async function ativarInativar(id: string): Promise<any> {
+        return await apiAtivarInativar.fecth<any>({
             urlParams: id,
         });
     }
@@ -53,6 +64,10 @@ export function useApiCliente() {
         atualizarSenha: {
             fetch: atualizarSenha,
             status: apiAtualizarSenha.statusRequisicao,
+        },
+        ativarInativar: {
+            fetch: ativarInativar,
+            status: apiAtivarInativar.statusRequisicao,
         },
     };
 }

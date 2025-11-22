@@ -21,4 +21,5 @@ export interface ICliente extends IBase {
   senha: string;
   reSenha: string;
   enderecoUsuario?: IEnderecoBase;
+  ativo?: boolean;
 }
