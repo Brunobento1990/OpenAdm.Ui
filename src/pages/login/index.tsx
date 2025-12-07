@@ -99,7 +99,7 @@ const LoginPage = () => {
             </Box>
             <Box sx={{ mb: 6 }}>
               <Typography variant='h4' sx={{ mb: 1.5 }}>
-                {`Ben vindo a ${themeConfig.templateName}! 👋🏻`}
+                {`Bem vindo a ${themeConfig.templateName}! 👋🏻`}
               </Typography>
               <Typography sx={{ color: 'text.secondary' }}>
                 Por favor, efetue o login com suas credenciais de acesso !

@@ -50,6 +50,46 @@ export const columns: GridColDef[] = [
         }
     },
     {
+        flex: 0.200,
+        minWidth: 200,
+        field: 'quantidadeDisponivel',
+        headerName: 'Qtd. disponível',
+        renderCell: (params: any) => {
+            const status = quantidade[params.quantidadeDisponivel > 0 ? 1 : 0]
+
+            return (
+                <CustomChip
+                    rounded
+                    size='small'
+                    skin='light'
+                    color={status.color}
+                    label={params.quantidadeDisponivel}
+                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                />
+            )
+        }
+    },
+    {
+        flex: 0.200,
+        minWidth: 200,
+        field: 'quantidadeReservada',
+        headerName: 'Qtd. reservada',
+        renderCell: (params: any) => {
+            const status = quantidade[params.quantidadeReservada > 0 ? 1 : 0]
+
+            return (
+                <CustomChip
+                    rounded
+                    size='small'
+                    skin='light'
+                    color={status.color}
+                    label={params.quantidadeReservada}
+                    sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
+                />
+            )
+        }
+    },
+    {
         flex: 0.175,
         minWidth: 140,
         field: 'dataDeAtualizacao',
