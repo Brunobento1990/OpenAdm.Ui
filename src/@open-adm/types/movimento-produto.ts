@@ -19,7 +19,10 @@ export interface IPosicaoEstoqueUpdate {
     pesoId?: string;
     tamanhoId?: string;
     produto: string;
+    categoria?: string;
     peso?: string;
     tamanho?: string;
     quantidade: number;
+    quantidadeDisponivel: number;
+    quantidadeReservada: number;
 }

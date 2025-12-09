@@ -63,6 +63,11 @@ const navigation = (): VerticalNavItemsType => {
           icon: "mdi:report-finance",
           children: [
             {
+              title: 'Posição de estoque',
+              icon: "hugeicons:package-out-of-stock",
+              path: '/estoque/relatorio-posicao-estoque'
+            },
+            {
               title: 'Relatório de estoque',
               icon: "tabler:report-search",
               path: '/estoque/relatorio-estoque'

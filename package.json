@@ -24,6 +24,7 @@
     "@mui/material": "5.12.2",
     "@mui/system": "5.12.1",
     "@mui/x-data-grid": "6.0.3",
+    "ag-grid-react": "^34.3.1",
     "apexcharts": "^3.50.0",
     "apexcharts-clevision": "3.28.5",
     "axios": "1.4.0",

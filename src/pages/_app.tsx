@@ -62,6 +62,15 @@ import { useSnackbar } from 'src/@open-adm/components/snack'
 import { useModal } from 'src/@open-adm/components/modal/modal'
 import { useLoader } from 'src/@open-adm/components/loader'
 
+import {
+  ModuleRegistry,
+  AllCommunityModule,
+} from 'ag-grid-community';
+
+ModuleRegistry.registerModules([
+  AllCommunityModule,
+]);
+
 // ** Extend App Props with Emotion
 type ExtendedAppProps = AppProps & {
   Component: NextPage

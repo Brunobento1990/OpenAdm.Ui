@@ -41,7 +41,8 @@ export function FormApp(props: propsForm) {
                 height: "100%",
                 width: "100%",
                 maxWidth: props.maxWidth,
-                backgroundColor: palette.background.paper
+                backgroundColor: palette.background.paper,
+                borderRadius: "6px",
             }}
         >
             <BoxApp marginLeft="1rem">
@@ -62,9 +63,10 @@ export function FormApp(props: propsForm) {
                 display="flex"
                 justifyContent={props.footer?.justifyContent ?? "end"}
                 gap="20px"
-                height="30px"
+                height="50px"
                 alignItems="center"
-                padding={props.paddingFooter ?? "1rem"}
+                padding={props.paddingFooter}
+                paddingRight="1rem"
                 width="100%"
                 boxSizing="border-box"
             >
