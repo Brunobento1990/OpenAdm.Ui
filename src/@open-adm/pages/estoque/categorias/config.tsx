@@ -1,6 +1,6 @@
 import { Box, Checkbox, IconButton, Tooltip } from "@mui/material"
-import { GridColDef } from "@mui/x-data-grid"
 import IconifyIcon from "src/@core/components/icon";
+import { TypeColumns } from "src/@open-adm/components/table/tabela-com-drag";
 import * as yup from 'yup';
 
 interface propsColunsCategoria {
@@ -8,43 +8,39 @@ interface propsColunsCategoria {
 }
 
 export function colunsCategoria(props: propsColunsCategoria) {
-    const columns: GridColDef[] = [
+    const columns: TypeColumns[] = [
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'foto',
             headerName: 'Foto',
-            renderCell: (params: any) => (
+            cellRenderer: (params: { data: any }) => (
                 <Box
                     component="img"
-                    src={params.foto}
+                    src={params.data.foto}
                     sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
                 />
             )
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'descricao',
             headerName: 'Descricao',
             sortable: true,
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'inativoEcommerce',
             headerName: 'Inativo',
-            renderCell: (params: any) => <Checkbox disabled checked={params.inativoEcommerce} />
+            cellRenderer: (params: { data: any }) => <Checkbox disabled checked={params.data.inativoEcommerce} />
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'inativar',
             headerName: 'Inativar',
-            renderCell: (params: any) => (
+            cellRenderer: (params: { data: any }) => (
                 <Tooltip title="Inativar/Ativar" placement="top">
                     <IconButton
-                        onClick={() => props.inativarEcommerce(params.id, params.inativoEcommerce ?? false)}
+                        onClick={() => props.inativarEcommerce(params.data.id, params.data.inativoEcommerce ?? false)}
                     >
                         <IconifyIcon
                             icon='tabler:refresh'

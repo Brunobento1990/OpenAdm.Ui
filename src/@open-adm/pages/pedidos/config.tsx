@@ -1,11 +1,10 @@
 import { Chip, IconButton, Tooltip } from '@mui/material'
-import { GridColDef } from '@mui/x-data-grid'
 import IconifyIcon from 'src/@core/components/icon'
 import { ThemeColor } from 'src/@core/layouts/types'
 import { StatusApp } from 'src/@open-adm/components/chip'
+import { TypeColumns } from 'src/@open-adm/components/table/tabela-com-drag'
 import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
 import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
-//import { IPedido } from 'src/@open-adm/types/pedido'
 import { generatePdfFromBase64 } from 'src/@open-adm/utils/download-pdf'
 
 export function useConfig() {
@@ -29,35 +28,32 @@ export function useConfig() {
         }
     }
 
-    const columns: GridColDef[] = [
+    const columns: TypeColumns[] = [
         {
-            flex: 0.200,
             width: 200,
             field: 'usuario',
             headerName: 'Cliente',
         },
         {
-            flex: 0.175,
             width: 10,
             field: 'temEstoqueDisponivel',
             headerName: 'Estoque',
-            renderCell: (params: any) => {
-                if (params?.statusPedido === 3) {
+            cellRenderer: (params: { data: any }) => {
+                if (params?.data.statusPedido === 3) {
                     return 'Fechado';
                 }
-                const cor = params?.porcentagemEstoqueAtendido <= 20 ? 'error'
-                    : params?.porcentagemEstoqueAtendido <= 50 ? 'warning' : 'success';
-                return <Chip label={`${params?.porcentagemEstoqueAtendido}%`} color={cor} />;
+                const cor = params?.data.porcentagemEstoqueAtendido <= 20 ? 'error'
+                    : params?.data.porcentagemEstoqueAtendido <= 50 ? 'warning' : 'success';
+                return <Chip label={`${params?.data.porcentagemEstoqueAtendido}%`} color={cor} />;
             }
         },
         {
-            flex: 0.175,
             width: 10,
             field: 'status',
             headerName: 'Status',
             sortable: true,
-            renderCell: (params: any) => {
-                const status = statusPedido[params.statusPedido]
+            cellRenderer: (params: { data: any }) => {
+                const status = statusPedido[params.data.statusPedido]
 
                 return (
                     <StatusApp
@@ -70,11 +66,10 @@ export function useConfig() {
         {
             field: 'status2',
             headerName: 'Baixar',
-            align: 'center',
-            renderCell: (params) => {
+            cellRenderer: (params: { data: any }) => {
                 return (
                     <Tooltip title="Modificar status do pedido" placement="top">
-                        <IconButton onClick={() => navigate(`/pedidos/modificar-status-pedido/${params.id}`)}>
+                        <IconButton onClick={() => navigate(`/pedidos/modificar-status-pedido/${params.data.id}`)}>
                             <IconifyIcon
                                 icon='fe:app-menu'
                             />
@@ -86,12 +81,11 @@ export function useConfig() {
         {
             field: 'status3',
             headerName: 'PDF',
-            align: 'center',
-            renderCell: (params: any) => {
+            cellRenderer: (params: { data: any }) => {
                 return (
                     <Tooltip title="Download do pedido" placement="top">
                         <IconButton
-                            onClick={() => downloadPedido(`${params.id}`)}
+                            onClick={() => downloadPedido(`${params.data.id}`)}
                         >
                             <IconifyIcon
                                 icon='material-symbols-light:download'
@@ -101,24 +95,6 @@ export function useConfig() {
                 )
             }
         },
-        // {
-        //     field: 'pix',
-        //     headerName: 'PIX',
-        //     align: 'center',
-        //     renderCell: (params: any) => {
-        //         return (
-        //             <Tooltip title="PIX" placement="top">
-        //                 <IconButton
-        //                     onClick={() => navigate(`pedidos/gerar-pix/${params.id}`)}
-        //                 >
-        //                     <IconifyIcon
-        //                         icon='ic:sharp-pix'
-        //                     />
-        //                 </IconButton>
-        //             </Tooltip>
-        //         )
-        //     }
-        // }
     ]
 
     return {

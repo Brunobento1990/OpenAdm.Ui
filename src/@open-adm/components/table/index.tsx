@@ -12,6 +12,7 @@ import * as yup from 'yup'
 import { useModal } from '../modal/modal';
 import { useRouter } from 'next/router';
 import { generatePdfFromBase64 } from 'src/@open-adm/utils/download-pdf';
+import { TabelaComDrag, TypeColumns } from './tabela-com-drag';
 
 const defaultValues = {
     search: ''
@@ -22,7 +23,7 @@ const schema = yup.object().shape({
 })
 
 interface tableProps {
-    columns: GridColDef[];
+    columns: TypeColumns[];
     title: string;
     url: string;
     checkboxSelection?: boolean;
@@ -35,6 +36,7 @@ interface tableProps {
     routeView?: string;
     edit?: boolean;
     routeEdit?: string;
+    nomeDaTabela?: string;
 }
 
 const Table = (props: tableProps) => {
@@ -84,30 +86,28 @@ const Table = (props: tableProps) => {
         }
     }
 
-    function optionsColumns(): GridColDef<any>[] {
+    function optionsColumns(): TypeColumns[] {
         return [
             {
-                flex: 0.175,
-                minWidth: 140,
+                width: 100,
                 field: 'dataDeCriacao',
                 headerName: 'Data de cadastro',
-                valueGetter: (params: any) => {
-                    const newValue = params?.row?.dataDeCriacao?.slice(0, 10).split('-')
+                cellRenderer: (params: { data: any }) => {
+                    const newValue = params?.data?.dataDeCriacao?.slice(0, 10).split('-')
                     return `${newValue[2]}/${newValue[1]}/${newValue[0]}`
                 }
             },
             {
-                flex: 0.175,
-                minWidth: 140,
+                width: 100,
                 field: 'action',
                 headerName: 'Ações',
-                renderCell: (params: GridRenderCellParams) => {
+                cellRenderer: (params: { data: any }) => {
                     return (
                         <>
                             {props.isPedido &&
                                 <Tooltip title="Download do pedido" placement="top">
                                     <IconButton
-                                        onClick={() => downloadPedido(params.row.id)}
+                                        onClick={() => downloadPedido(params.data.id)}
                                     >
                                         <IconifyIcon
                                             icon='material-symbols-light:download'
@@ -118,7 +118,7 @@ const Table = (props: tableProps) => {
                             {props.view && props.routeView &&
                                 <Tooltip title="Visualizar" placement="top">
                                     <IconButton
-                                        onClick={() => router.replace(`${props.routeView}/${params.row.id}`)}
+                                        onClick={() => router.replace(`${props.routeView}/${params.data.id}`)}
                                     >
                                         <IconifyIcon
                                             icon='tabler:eye'
@@ -129,7 +129,7 @@ const Table = (props: tableProps) => {
                             {props.edit && props.routeEdit &&
                                 <Tooltip title="Editar" placement="top">
                                     <IconButton
-                                        onClick={() => router.replace(`${props.routeEdit}/${params.row.id}`)}
+                                        onClick={() => router.replace(`${props.routeEdit}/${params.data.id}`)}
                                     >
                                         <IconifyIcon
                                             icon='ep:edit'
@@ -140,7 +140,7 @@ const Table = (props: tableProps) => {
                             {props.delete && props.routeDelete &&
                                 <Tooltip title="Excluir" placement="top">
                                     <IconButton
-                                        onClick={() => excluir(params.row.id)}
+                                        onClick={() => excluir(params.data.id)}
                                     >
                                         <IconifyIcon
                                             icon='ph:trash'
@@ -156,18 +156,17 @@ const Table = (props: tableProps) => {
         ]
     }
 
-    function defaultColuns(): GridColDef<any>[] {
-        let columns: GridColDef<any>[] = [];
+    function defaultColuns(): TypeColumns[] {
+        let columns: TypeColumns[] = [];
 
         columns.push(
             {
                 field: 'numero',
                 headerName: 'Número',
-                flex: 0.100,
-                minWidth: 80,
-                renderCell: (params: GridRenderCellParams) => (
+                width: 80,
+                cellRenderer: (params: { data: any }) => (
                     <Typography variant='body2' sx={{ color: 'success' }}>
-                        #{params.row.numero}
+                        #{params.data.numero}
                     </Typography>
                 )
             },
@@ -271,12 +270,9 @@ const Table = (props: tableProps) => {
                         </FormControl>
                     </Grid>
                 }
-                <DataGrid
-                    autoHeight
+                <TabelaComDrag
                     rows={rows}
                     columns={[...defaultColuns(), ...props.columns, ...optionsColumns()]}
-                    checkboxSelection={props.checkboxSelection}
-                    hideFooterPagination
                 />
             </Card>
             <Card

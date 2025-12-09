@@ -11,6 +11,7 @@ export function Tamanhos() {
             urlDelete="tamanhos/delete"
             urlEdit="tamanho/edit"
             urlView="tamanho/view"
+            nomeDaTabela="tamanhos"
         />
     )
 }

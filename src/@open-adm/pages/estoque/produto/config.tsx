@@ -1,6 +1,6 @@
 import { Box, Checkbox, IconButton, Tooltip } from "@mui/material"
-import { GridColDef } from "@mui/x-data-grid"
 import IconifyIcon from "src/@core/components/icon";
+import { TypeColumns } from "src/@open-adm/components/table/tabela-com-drag";
 import { ICreateProdutoDto, IProduto } from "src/@open-adm/types/produto";
 import { IItensTabelaDePreco, ITabelaDePreco } from "src/@open-adm/types/tabela-de-preco";
 import * as yup from 'yup';
@@ -10,50 +10,45 @@ interface propsColunsProduto {
 }
 
 export function colunsProduto(props: propsColunsProduto) {
-    const columns: GridColDef[] = [
+    const columns: TypeColumns[] = [
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'foto',
             headerName: 'Foto',
-            renderCell: (params: any) => (
+            cellRenderer: (params: { data: any }) => (
                 <Box
                     component="img"
                     loading="lazy"
-                    src={params.foto}
-                    sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
+                    src={params.data.foto}
+                    sx={{ width: '200px', height: '50px', borderRadius: '5px' }}
                 />
             )
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'descricao',
             headerName: 'Descricao',
             sortable: true,
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'referencia',
             headerName: 'Referencia'
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'inativoEcommerce',
             headerName: 'Inativo',
-            renderCell: (params: any) => <Checkbox disabled checked={params.inativoEcommerce} />
+            cellRenderer: (params: { data: any }) => <Checkbox disabled checked={params.data.inativoEcommerce} />
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'inativar',
             headerName: 'Inativar',
-            renderCell: (params: any) => (
+            cellRenderer: (params: { data: any }) => (
                 <Tooltip title="Inativar" placement="top">
                     <IconButton
-                        onClick={() => props.inativarEcommerce(params.id, params.inativoEcommerce ?? false)}
+                        onClick={() => props.inativarEcommerce(params.data.id, params.data.inativoEcommerce ?? false)}
                     >
                         <IconifyIcon
                             icon='tabler:refresh'

@@ -14,7 +14,7 @@ export function FooterTable(props: propsFooterTable) {
             width='100%'
             justifyContent='space-between'
             gap='10px'
-            height='20px'
+            height='50px'
         >
             <Pagination
                 count={props.quantidadePagina}

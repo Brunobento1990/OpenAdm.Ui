@@ -10,6 +10,7 @@ export function ClientePaginacao() {
             urlAdd="cliente/create"
             minWidth={1200}
             urlView="cliente/view"
+            nomeDaTabela="cliente"
         />
     )
 }

@@ -1,19 +1,19 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { TypeMethod, useNewApi } from 'src/@open-adm/hooks/use-new-api';
-import { ISortingTable, TablePaginacao } from './table';
+import { ISortingTable } from './table';
 import { BoxApp } from '../box';
 import { FooterTable } from './footer';
 import { HeaderTable } from './header';
-import { Card, CircularProgress, Divider, IconButton, Tooltip, Typography } from '@mui/material';
-import { GridColDef } from '@mui/x-data-grid';
+import { Card, Divider, IconButton, Tooltip, Typography } from '@mui/material';
 import IconifyIcon from 'src/@core/components/icon';
 import { useApi } from 'src/@open-adm/hooks/use-api';
 import { useModal } from '../modal/modal';
 import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app';
 import { formatDate } from 'src/@open-adm/utils/convert-date';
+import { TabelaComDrag, TypeColumns } from '../table/tabela-com-drag';
 
 interface tableProps {
-    columns: any[];
+    columns: TypeColumns[];
     url: string;
     checkboxSelection?: boolean;
     urlDelete?: string;
@@ -32,6 +32,7 @@ interface tableProps {
     minWidth?: number;
     filtroChildren?: ReactNode;
     take?: number;
+    nomeDaTabela?: string;
 }
 
 export function TableIndex(props: tableProps) {
@@ -89,26 +90,26 @@ export function TableIndex(props: tableProps) {
         }
     }
 
-    function optionsColumns(): GridColDef<any>[] {
+    function optionsColumns(): TypeColumns[] {
         return [
             {
                 width: 200,
                 field: 'dataDeCriacao',
                 headerName: 'Cadastro',
-                renderCell: (params: any) => formatDate(params?.dataDeCriacao),
+                cellRenderer: (params: { data: any }) => formatDate(params?.data?.dataDeCriacao),
                 sortable: true,
             },
             {
                 width: 200,
                 field: 'action',
                 headerName: 'Ações',
-                renderCell: (params: any) => {
+                cellRenderer: (params: { data: any }) => {
                     return (
                         <>
                             {props.urlView &&
                                 <Tooltip title="Visualizar" placement="top">
                                     <IconButton
-                                        onClick={() => navigate(`${props.urlView}/${params.id}`)}
+                                        onClick={() => navigate(`${props.urlView}/${params?.data?.id}`)}
                                     >
                                         <IconifyIcon
                                             icon='tabler:eye'
@@ -119,7 +120,7 @@ export function TableIndex(props: tableProps) {
                             {props.urlEdit &&
                                 <Tooltip title="Editar" placement="top">
                                     <IconButton
-                                        onClick={() => navigate(`${props.urlEdit}/${params.id}`)}
+                                        onClick={() => navigate(`${props.urlEdit}/${params?.data?.id}`)}
                                     >
                                         <IconifyIcon
                                             icon='ep:edit'
@@ -130,7 +131,7 @@ export function TableIndex(props: tableProps) {
                             {props.urlDelete &&
                                 <Tooltip title="Excluir" placement="top">
                                     <IconButton
-                                        onClick={() => excluir(params.id)}
+                                        onClick={() => excluir(params?.data?.id)}
                                     >
                                         <IconifyIcon
                                             icon='ph:trash'
@@ -146,17 +147,17 @@ export function TableIndex(props: tableProps) {
         ]
     }
 
-    function defaultColuns(): GridColDef<any>[] {
-        let columns: GridColDef<any>[] = [];
+    function defaultColuns(): TypeColumns[] {
+        let columns: TypeColumns[] = [];
 
         columns.push(
             {
                 field: 'numero',
                 headerName: 'N°',
                 width: 80,
-                renderCell: (params: any) => (
+                cellRenderer: (params: { data: any }) => (
                     <Typography variant='body2' sx={{ color: 'success' }}>
-                        #{params.numero}
+                        #{params.data.numero}
                     </Typography>
                 ),
                 sortable: true,
@@ -200,30 +201,14 @@ export function TableIndex(props: tableProps) {
                 overflowy='auto'
                 width='100%'
             >
-                {loading ? (
-                    <BoxApp
-                        display='flex'
-                        width='100%'
-                        justifyContent='center'
-                        gap='20px'
-                    >
-                        <Typography>Carregando ... </Typography>
-                        <CircularProgress size={20} />
-                    </BoxApp>
-                ) : (
-                    <TablePaginacao
-                        columns={[...defaultColuns(), ...props.columns, ...optionsColumns()]}
-                        rows={rows}
-                        sorting={sorting}
-                        setSorting={setSorting}
-                        minWidth={props.minWidth}
-                    />
-                )}
+                <TabelaComDrag
+                    loading={loading}
+                    columns={[...defaultColuns(), ...props.columns, ...optionsColumns()]}
+                    rows={rows}
+                    minWidth={props.minWidth}
+                    nomeDaTabela={props.nomeDaTabela}
+                />
             </BoxApp>
-            <Divider sx={{
-                width: '100%',
-                marginBottom: '30px'
-            }} />
             <FooterTable
                 pagina={pagina}
                 setPagina={setPagina}

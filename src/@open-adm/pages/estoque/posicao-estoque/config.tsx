@@ -4,98 +4,89 @@ import CustomChip from 'src/@open-adm/components/chip'
 import { IEstoqueEdit } from "src/@open-adm/types/estoque";
 import * as yup from 'yup';
 import { formatDateComHoras } from "src/@open-adm/utils/convert-date";
+import { TypeColumns } from "src/@open-adm/components/table/tabela-com-drag";
 
 export const quantidade: StatusObj = {
     0: { title: 'Em aberto', color: 'warning' },
     1: { title: 'Entregue', color: 'success' },
 }
 
-export const columns: GridColDef[] = [
+export const columns: TypeColumns[] = [
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'produto',
         headerName: 'Produto'
     },
     {
-        flex: 0.100,
-        minWidth: 100,
+        width: 100,
         field: 'peso',
         headerName: 'Peso',
     },
     {
-        flex: 0.100,
-        minWidth: 100,
+        width: 100,
         field: 'tamanho',
         headerName: 'Tamanho',
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'quantidade',
         headerName: 'Posição do estoque',
-        renderCell: (params: any) => {
-            const status = quantidade[params.quantidade > 0 ? 1 : 0]
-
+        cellRenderer: (params: { data: any }) => {
+            const status = quantidade[params.data.quantidade > 0 ? 1 : 0]
             return (
                 <CustomChip
                     rounded
                     size='small'
                     skin='light'
                     color={status.color}
-                    label={params.quantidade}
+                    label={params.data.quantidade}
                     sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
                 />
             )
         }
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'quantidadeDisponivel',
         headerName: 'Qtd. disponível',
-        renderCell: (params: any) => {
-            const status = quantidade[params.quantidadeDisponivel > 0 ? 1 : 0]
-
+        cellRenderer: (params: { data: any }) => {
+            const status = quantidade[params.data.quantidadeDisponivel > 0 ? 1 : 0]
             return (
                 <CustomChip
                     rounded
                     size='small'
                     skin='light'
                     color={status.color}
-                    label={params.quantidadeDisponivel}
+                    label={params.data.quantidadeDisponivel}
                     sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
                 />
             )
         }
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'quantidadeReservada',
         headerName: 'Qtd. reservada',
-        renderCell: (params: any) => {
-            const status = quantidade[params.quantidadeReservada > 0 ? 1 : 0]
-
+        cellRenderer: (params: { data: any }) => {
+            const status = quantidade[params.data.quantidadeReservada > 0 ? 1 : 0]
             return (
                 <CustomChip
                     rounded
                     size='small'
                     skin='light'
                     color={status.color}
-                    label={params.quantidadeReservada}
+                    label={params.data.quantidadeReservada}
                     sx={{ '& .MuiChip-label': { textTransform: 'capitalize' } }}
                 />
             )
         }
     },
     {
-        flex: 0.175,
-        minWidth: 140,
+        width: 140,
         field: 'dataDeAtualizacao',
         headerName: 'Ultima movimentação',
-        renderCell: (params: any) => {
-            return formatDateComHoras(params.dataDeAtualizacao);
+        cellRenderer: (params: { data: any }) => {
+            return formatDateComHoras(params.data.dataDeAtualizacao);
         }
     }
 ]

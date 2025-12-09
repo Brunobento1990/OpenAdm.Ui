@@ -1,17 +1,15 @@
-import { GridColDef } from "@mui/x-data-grid"
+import { TypeColumns } from "src/@open-adm/components/table/tabela-com-drag";
 import * as yup from 'yup';
 
-export const columns: GridColDef[] = [
+export const columns: TypeColumns[] = [
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'descricao',
         headerName: 'Descricao',
         sortable: true,
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'pesoReal',
         headerName: 'Peso real'
     }

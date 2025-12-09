@@ -1,6 +1,7 @@
 import { AgGridReact } from "ag-grid-react";
 import { TextApp } from "../text";
 import { LoadingAppTexto } from "../loading/loading-app-texto";
+import { useMemo } from "react";
 
 export interface TypeColumns {
     field: string;
@@ -34,9 +35,44 @@ interface propsTabelaComDrag {
     suppressScrollOnNewData?: boolean;
     suppressAnimationFrame?: boolean;
     headerHeight?: number;
+    nomeDaTabela?: string;
 }
 
 export function TabelaComDrag(props: propsTabelaComDrag) {
+
+    function atualizarColunas(colunas: string) {
+        if (!props.nomeDaTabela) return;
+        localStorage.setItem(
+            `table_columns_${props.nomeDaTabela}`,
+            colunas,
+        );
+    }
+
+    const columns = useMemo(() => {
+        const addHeaderTooltip = (col: TypeColumns) => ({
+            ...col,
+            cellClass: 'ag-center-cols-cell',
+            headerTooltip: col.sortable
+                ? `Ordenar por ${col.headerName}`
+                : undefined,
+        });
+
+        const colunasLocalStorage = props.nomeDaTabela ? localStorage.getItem(`table_columns_${props.nomeDaTabela}`) : null;
+        const parsedColunas = colunasLocalStorage ? JSON.parse(colunasLocalStorage) : null;
+
+        if (
+            parsedColunas &&
+            Array.isArray(parsedColunas) &&
+            parsedColunas.length > 0
+        ) {
+            return [
+                ...mergeColumns(parsedColunas, props.columns).map(
+                    addHeaderTooltip,
+                ),
+            ];
+        }
+        return [...props.columns.map(addHeaderTooltip)];
+    }, [props.columns]);
 
     return (
         <div
@@ -72,6 +108,24 @@ export function TabelaComDrag(props: propsTabelaComDrag) {
                         JSON.stringify(params.data),
                     )
                 }
+                onColumnMoved={async (event) => {
+                    if (!event.finished || !props.nomeDaTabela) return;
+                    const orderedDefs = event.api
+                        .getAllGridColumns()
+                        .map((col) => col.getColDef());
+                    atualizarColunas(JSON.stringify(orderedDefs));
+                }}
+                onColumnResized={async (event) => {
+                    if (!event.finished || !props.nomeDaTabela) return;
+                    const orderedDefs = event.api.getAllGridColumns().map((col) => {
+                        const colDef = col.getColDef();
+                        return {
+                            ...colDef,
+                            width: col.getActualWidth(),
+                        };
+                    });
+                    atualizarColunas(JSON.stringify(orderedDefs));
+                }}
                 suppressAnimationFrame={props.suppressAnimationFrame}
                 onRowClicked={(event) => {
                     if (!props.selecionarLinha || event.event?.defaultPrevented) {
@@ -82,8 +136,25 @@ export function TabelaComDrag(props: propsTabelaComDrag) {
                 loading={props.loading}
                 rowData={props.rows}
                 rowHeight={props.rowHeight}
-                columnDefs={props.columns}
+                columnDefs={columns}
             />
         </div>
     );
+}
+
+export function mergeColumns(
+    backendCols: any[],
+    originalCols: TypeColumns[],
+): TypeColumns[] {
+    return backendCols.map((backendCol) => {
+        const original = originalCols.find(
+            (col) => col.field === backendCol.field,
+        );
+        return {
+            ...backendCol,
+            ...(original?.cellRenderer && {
+                cellRenderer: original.cellRenderer,
+            }),
+        };
+    });
 }

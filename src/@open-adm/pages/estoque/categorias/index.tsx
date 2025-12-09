@@ -57,6 +57,7 @@ export function Categorias() {
                 urlDelete="categorias/delete"
                 urlEdit="categoria/edit"
                 urlView="categoria/view"
+                nomeDaTabela='categorias'
             />
         </>
     )

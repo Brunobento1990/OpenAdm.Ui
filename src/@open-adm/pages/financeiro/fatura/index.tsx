@@ -47,54 +47,54 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
                     field: 'numeroDaFatura',
                     headerName: 'N° fatura',
                     sortable: true,
-                    renderCell: (params: any) => params.fatura?.numero,
+                    cellRenderer: (params: { data: any }) => params.data.fatura?.numero,
                 },
                 {
                     width: 130,
                     field: 'numeroDaParcela',
                     headerName: 'N° parcela',
                     sortable: true,
-                    renderCell: (params: any) => params.numeroDaParcela,
+                    cellRenderer: (params: { data: any }) => params.data.numeroDaParcela,
                 },
                 {
                     width: 130,
                     field: 'numeroDoPedido',
                     headerName: 'N° pedido',
-                    renderCell: (row: any) => `#${row.numeroDoPedido ?? ''}`
+                    cellRenderer: (params: { data: any }) => `#${params.data.numeroDoPedido ?? ''}`
                 },
                 {
                     width: 250,
                     field: 'cliente',
                     headerName: 'Cliente',
-                    renderCell: (row: any) => `${row.fatura?.usuario?.nome ?? ''}`
+                    cellRenderer: (params: { data: any }) => `${params.data.fatura?.usuario?.nome ?? ''}`
                 },
                 {
                     width: 130,
                     field: 'valor',
                     headerName: 'Valor',
-                    renderCell: (params: any) => formatMoney(params.valor),
+                    cellRenderer: (params: { data: any }) => formatMoney(params.data.valor),
                     sortable: true,
                 },
                 {
                     width: 130,
                     field: 'valor_pago_recebido',
                     headerName: 'Valor pago',
-                    renderCell: (params: any) => formatMoney(params.valorPagoRecebido),
+                    cellRenderer: (params: { data: any }) => formatMoney(params.data.valorPagoRecebido),
                     sortable: true,
                 },
                 {
                     width: 140,
                     field: 'valor_pagar',
                     headerName: 'Valor a pagar',
-                    renderCell: (params: any) => formatMoney(params.valorAPagarAReceber),
+                    cellRenderer: (params: { data: any }) => formatMoney(params.data.valorAPagarAReceber),
                     sortable: true,
                 },
                 {
                     width: 130,
                     field: 'status',
                     headerName: 'Status',
-                    renderCell: (params: any) => {
-                        const status = statusFatura[params.status]
+                    cellRenderer: (params: { data: any }) => {
+                        const status = statusFatura[params.data.status]
                         return (
                             <StatusApp cor={status.color} titulo={status.title} />
                         )
@@ -105,16 +105,16 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
                     width: 150,
                     field: 'vencimento',
                     headerName: 'Vencimento',
-                    renderCell: (params: any) => formatDate(params.dataDeVencimento),
+                    cellRenderer: (params: { data: any }) => formatDate(params.data.dataDeVencimento),
                     sortable: true,
                 },
                 {
                     width: 100,
                     field: 'baixa',
                     headerName: 'Baixar',
-                    renderCell: (params: any) => {
+                    cellRenderer: (params: { data: any }) => {
                         return (
-                            <IconButton onClick={() => navigate(`/financeiro/fatura/baixar/${params.id}`)}>
+                            <IconButton onClick={() => navigate(`/financeiro/fatura/baixar/${params.data.id}`)}>
                                 <IconifyIcon
                                     icon='fe:app-menu'
                                 />
@@ -126,9 +126,9 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
                     width: 140,
                     field: 'estornar',
                     headerName: 'Estornar',
-                    renderCell: (params: IParcela) => {
+                    cellRenderer: (params: { data: any }) => {
                         return (
-                            <IconButton onClick={async () => await estornar(params)}>
+                            <IconButton onClick={async () => await estornar(params.data)}>
                                 <IconifyIcon
                                     icon='mage:reload-reverse'
                                 />
@@ -141,6 +141,7 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
             urlView={props.urlView}
             urlEdit={props.urlEdit}
             urlAdd={props.urlAdd}
+            nomeDaTabela="fatura"
             filtroComplementar={{
                 tipo: props.tipo
             }}

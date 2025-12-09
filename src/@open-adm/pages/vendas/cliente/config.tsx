@@ -3,6 +3,7 @@ import { IconButton } from "@mui/material";
 import { useApiCliente } from "src/@open-adm/api/use-api-cliente";
 import { IconButtonAppComTooltip } from "src/@open-adm/components/icon/icon-button-app-tool-tip";
 import { useModal } from "src/@open-adm/components/modal/modal";
+import { TypeColumns } from "src/@open-adm/components/table/tabela-com-drag";
 import { useNavigateApp } from "src/@open-adm/hooks/use-navigate-app";
 import { ICliente } from "src/@open-adm/types/cliente";
 import { maskCNPJ, maskCPF, maskPhone } from "src/@open-adm/utils/mask";
@@ -25,55 +26,50 @@ export function useColumns() {
         })
     }
 
-    const columns = [
+    const columns: TypeColumns[] = [
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'nome',
             headerName: 'Nome',
             sortable: true,
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'senha',
             headerName: 'Atualizar senha',
-            renderCell: (params: any) => {
+            cellRenderer: (params: { data: any }) => {
                 return (
-                    <IconButton onClick={() => navigate(`/vendas/cliente/atualizar-senha-adm/${params.id}`)}>
+                    <IconButton onClick={() => navigate(`/vendas/cliente/atualizar-senha-adm/${params.data.id}`)}>
                         <Icon icon="material-symbols-light:refresh-rounded" />
                     </IconButton>
                 )
             }
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'ativarAcesso',
             headerName: 'Ativar/Bloquear Acesso',
-            renderCell: (params: any) => {
+            cellRenderer: (params: { data: any }) => {
                 return (
                     <IconButtonAppComTooltip
-                        titulo={params?.ativo ? "Bloquear Acesso" : "Ativar Acesso"}
-                        icon={!params?.ativo ? "fontisto:checkbox-active" : "material-symbols:block-outline"}
-                        onClick={() => ativarCadastro(params)}
+                        titulo={params.data?.ativo ? "Bloquear Acesso" : "Ativar Acesso"}
+                        icon={!params.data?.ativo ? "fontisto:checkbox-active" : "material-symbols:block-outline"}
+                        onClick={() => ativarCadastro(params.data)}
                     />
                 )
             }
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'telefone',
             headerName: 'Telefone',
-            renderCell: (params: any) => maskPhone(params?.telefone)
+            cellRenderer: (params: { data: any }) => maskPhone(params.data?.telefone)
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'cpf',
             headerName: 'CPF/CNPJ',
-            renderCell: (params: any) => params?.cpf ? maskCPF(params.cpf) : maskCNPJ(params?.cnpj)
+            cellRenderer: (params: { data: any }) => params.data?.cpf ? maskCPF(params.data.cpf) : maskCNPJ(params.data?.cnpj)
         },
     ]
 

@@ -13,6 +13,7 @@ export function Banners() {
             urlDelete="banners/delete"
             urlView="banners/view"
             urlEdit="banners/edit"
+            nomeDaTabela="banners"
         />
     )
 }

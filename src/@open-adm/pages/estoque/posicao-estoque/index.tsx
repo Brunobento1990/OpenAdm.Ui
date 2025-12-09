@@ -24,6 +24,7 @@ export function EstoqueProduto() {
                 pesoId: filtros?.pesoId,
                 tamanhoId: filtros?.tamanhoId
             }}
+            nomeDaTabela="estoques"
         />
     )
 }

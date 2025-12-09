@@ -55,6 +55,7 @@ export function Produtos() {
                 urlView="produto/view"
                 minWidth={1600}
                 refreshPai={refresh}
+                nomeDaTabela='produtos'
             />
         </>
     )

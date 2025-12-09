@@ -7,6 +7,7 @@ export function MovimentacaoDeProdutos() {
             columns={columns}
             url="movimentacao-de-produto/paginacao"
             urlAdd="movimentacao-produto/create"
+            nomeDaTabela="movimentacao-de-produto"
         />
     )
 }

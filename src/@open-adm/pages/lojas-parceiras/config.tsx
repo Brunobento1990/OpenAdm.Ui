@@ -1,39 +1,36 @@
 import { Box, Typography } from "@mui/material"
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
+import { TypeColumns } from "src/@open-adm/components/table/tabela-com-drag";
 import { ILojasParceiras } from "src/@open-adm/types/lojas-parceiras";
 import { maskPhone } from "src/@open-adm/utils/mask";
 import * as yup from 'yup'
 
 
-export const columns: GridColDef[] = [
+export const columns: TypeColumns[] = [
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'foto',
         headerName: 'Foto',
-        renderCell: (params: any) => (
+        cellRenderer: (params: { data: any }) => (
             <Box
                 component="img"
-                src={params.foto}
+                src={params.data.foto}
                 sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
             />
         )
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'nome',
         headerName: 'Nome',
         sortable: true,
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'contato',
         headerName: 'Contato',
-        renderCell: (params: any) => (
+        cellRenderer: (params: { data: any }) => (
             <Typography>
-                {maskPhone(params.contato)}
+                {maskPhone(params.data.contato)}
             </Typography>
         )
     }

@@ -1,30 +1,28 @@
 import { Box, Checkbox } from "@mui/material"
-import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
+import { TypeColumns } from "src/@open-adm/components/table/tabela-com-drag"
 
 export function useConfig() {
 
-    const columns: GridColDef[] = [
+    const columns: TypeColumns[] = [
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'foto',
             headerName: 'Foto',
-            renderCell: (params: any) => (
+            cellRenderer: (params: { data: any }) => (
                 <Box
                     component="img"
-                    src={params.foto}
+                    src={params.data.foto}
                     sx={{ width: '100px', height: '50px', borderRadius: '5px' }}
                 />
             ),
             sortable: true,
         },
         {
-            flex: 0.200,
-            minWidth: 200,
+            width: 200,
             field: 'ativo',
             headerName: 'Ativo',
-            renderCell: (params: any) => (
-                <Checkbox checked={params.ativo} />
+            cellRenderer: (params: { data: any }) => (
+                <Checkbox checked={params.data.ativo} />
             ),
             sortable: true,
         }

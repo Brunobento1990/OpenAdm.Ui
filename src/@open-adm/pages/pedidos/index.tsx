@@ -61,6 +61,7 @@ export function Pedidos() {
                 statusPedido: status > 0 ? status - 1 : undefined
             }}
             refreshPai={status}
+            nomeDaTabela='pedidos'
         />
     )
 }

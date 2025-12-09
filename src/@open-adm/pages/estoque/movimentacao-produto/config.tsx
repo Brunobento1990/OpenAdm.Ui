@@ -3,45 +3,41 @@ import { StatusObj } from "../../pedidos/config"
 import CustomChip from 'src/@open-adm/components/chip'
 import { IMovimentacaoDeProduto } from "src/@open-adm/types/estoque"
 import * as yup from 'yup'
+import { TypeColumns } from "src/@open-adm/components/table/tabela-com-drag"
 
 export const tipoMovimentacaoDeProduto: StatusObj = {
     0: { title: 'Entrada', color: 'info' },
     1: { title: 'Saída', color: 'success' },
 }
 
-export const columns: GridColDef[] = [
+export const columns: TypeColumns[] = [
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'produto',
         headerName: 'Produto'
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'peso',
         headerName: 'Peso',
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'tamanho',
         headerName: 'Tamanho',
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'quantidadeMovimentada',
         headerName: 'Quantidade movimentadao',
         sortable: true,
     },
     {
-        flex: 0.200,
-        minWidth: 200,
+        width: 200,
         field: 'tipoMovimentacaoDeProduto',
         headerName: 'Tipo Movimentação',
-        renderCell: (params: any) => {
-            const status = tipoMovimentacaoDeProduto[params.tipoMovimentacaoDeProduto]
+        cellRenderer: (params: { data: any }) => {
+            const status = tipoMovimentacaoDeProduto[params.data.tipoMovimentacaoDeProduto]
 
             return (
                 <CustomChip

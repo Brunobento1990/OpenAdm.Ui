@@ -11,6 +11,7 @@ export function Pesos() {
             urlDelete="pesos/delete"
             urlEdit="peso/edit"
             urlView="peso/view"
+            nomeDaTabela='pesos'
         />
     )
 }
