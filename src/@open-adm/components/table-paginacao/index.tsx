@@ -35,17 +35,30 @@ interface tableProps {
     nomeDaTabela?: string;
 }
 
+interface IPaginacao {
+    pagina: number;
+    values: any[];
+    quantidadePorPagina: number;
+    quantidadePagina: number;
+    sorting: ISortingTable;
+}
+
 export function TableIndex(props: tableProps) {
     const { deleteApi } = useApi();
     const { navigate } = useNavigateApp();
     const modal = useModal();
-    const [pagina, setPagina] = useState<number>(1);
-    const [sorting, setSorting] = useState<ISortingTable>({
-        field: 'numero',
-        sort: 'desc',
+
+    const [paginacao, setPaginacao] = useState<IPaginacao>({
+        pagina: 1,
+        values: [],
+        quantidadePorPagina: Number(localStorage.getItem('paginacao-quantidadePorPagina')) || 10,
+        quantidadePagina: 0,
+        sorting: {
+            field: 'numero',
+            sort: 'desc',
+        }
     });
-    const [quantidadePagina, setQuantidadePagina] = useState<number>(0);
-    const [rows, setRows] = useState<any[]>([]);
+
     const { fecth, statusRequisicao } = useNewApi({
         method: props.metodo ?? 'POST',
         url: props.url,
@@ -54,24 +67,34 @@ export function TableIndex(props: tableProps) {
 
     const loading = statusRequisicao === 'loading';
 
-    const body = {
-        skip: pagina,
-        take: props.take ?? 5,
-        orderBy: sorting.field,
-        asc: sorting.sort === 'asc',
-        ...props.filtroComplementar,
-    };
-
     async function refresh(searchP?: string) {
         const response = await fecth<any>({
-            body: { ...body, search: searchP },
+            body: {
+                skip: paginacao.pagina,
+                take: props.take ?? paginacao.quantidadePorPagina,
+                orderBy: paginacao.sorting.field,
+                asc: paginacao.sorting.sort === 'asc',
+                search: searchP,
+                ...props.filtroComplementar,
+            },
         });
         if (response?.values?.length > 0) {
-            setRows(response.values);
-            setQuantidadePagina(response.totalPaginas);
+            setPaginacao(state => {
+                return {
+                    ...state,
+                    quantidadePagina: response.totalPaginas,
+                    values: response.values
+                }
+            })
         } else {
-            if (rows?.length > 0) {
-                setRows([]);
+            if (paginacao.values?.length > 0) {
+                setPaginacao(state => {
+                    return {
+                        ...state,
+                        quantidadePagina: 0,
+                        values: []
+                    }
+                })
             }
         }
     }
@@ -170,9 +193,9 @@ export function TableIndex(props: tableProps) {
     useEffect(() => {
         refresh();
     }, [
-        pagina,
-        sorting,
         props.refreshPai,
+        paginacao.pagina,
+        paginacao.quantidadePorPagina
     ]);
 
     return (
@@ -204,15 +227,20 @@ export function TableIndex(props: tableProps) {
                 <TabelaComDrag
                     loading={loading}
                     columns={[...defaultColuns(), ...props.columns, ...optionsColumns()]}
-                    rows={rows}
+                    rows={paginacao.values}
                     minWidth={props.minWidth}
                     nomeDaTabela={props.nomeDaTabela}
                 />
             </BoxApp>
             <FooterTable
-                pagina={pagina}
-                setPagina={setPagina}
-                quantidadePagina={quantidadePagina}
+                pagina={paginacao.pagina}
+                setPagina={(newPage: number) => setPaginacao(state => ({ ...state, pagina: newPage }))}
+                quantidadePagina={paginacao.quantidadePagina}
+                quantidadePorPagina={paginacao.quantidadePorPagina}
+                setQuantidadePorPagina={(qtd) => {
+                    localStorage.setItem('paginacao-quantidadePorPagina', qtd.toString());
+                    setPaginacao(state => ({ ...state, quantidadePorPagina: qtd }));
+                }}
             />
         </Card>
     );
