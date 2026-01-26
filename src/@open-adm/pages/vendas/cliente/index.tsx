@@ -11,6 +11,7 @@ export function ClientePaginacao() {
             minWidth={1200}
             urlView="cliente/view"
             nomeDaTabela="cliente"
+
         />
     )
 }

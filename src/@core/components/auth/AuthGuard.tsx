@@ -22,12 +22,20 @@ const AuthGuard = (props: AuthGuardProps) => {
       }
       if (auth.user === null && !getItem(authConfig.keyUserdata)) {
         if (router.asPath !== '/') {
-          router.replace({
+          router.push({
             pathname: '/login',
             query: { returnUrl: router.asPath }
+          }).catch((err) => {
+            if (!err.cancelled) {
+              throw err;
+            }
           })
         } else {
-          router.replace('/login')
+          router.push('/login').catch((err) => {
+            if (!err.cancelled) {
+              throw err;
+            }
+          })
         }
       }
     },

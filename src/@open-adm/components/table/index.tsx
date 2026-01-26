@@ -118,7 +118,7 @@ const Table = (props: tableProps) => {
                             {props.view && props.routeView &&
                                 <Tooltip title="Visualizar" placement="top">
                                     <IconButton
-                                        onClick={() => router.replace(`${props.routeView}/${params.data.id}`)}
+                                        onClick={() => router.push(`${props.routeView}/${params.data.id}`).catch((err) => { if (!err.cancelled) throw err; })}
                                     >
                                         <IconifyIcon
                                             icon='tabler:eye'
@@ -129,7 +129,7 @@ const Table = (props: tableProps) => {
                             {props.edit && props.routeEdit &&
                                 <Tooltip title="Editar" placement="top">
                                     <IconButton
-                                        onClick={() => router.replace(`${props.routeEdit}/${params.data.id}`)}
+                                        onClick={() => router.push(`${props.routeEdit}/${params.data.id}`).catch((err) => { if (!err.cancelled) throw err; })}
                                     >
                                         <IconifyIcon
                                             icon='ep:edit'
@@ -241,7 +241,7 @@ const Table = (props: tableProps) => {
                 {props.add && props.routeAdd &&
                     <Box width='90%' display='flex' alignItems='center' justifyContent='end' marginBottom={5}>
                         <Button
-                            onClick={() => router.replace(props.routeAdd ?? '')}
+                            onClick={() => router.push(props.routeAdd ?? '').catch((err) => { if (!err.cancelled) throw err; })}
                             variant='contained'
                             sx={{
                                 marginLeft: 5

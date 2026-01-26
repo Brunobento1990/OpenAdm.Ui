@@ -80,7 +80,11 @@ const AuthProvider = ({ children }: Props) => {
           remove(authConfig.lembreMe);
         }
 
-        router.replace(redirectURL as string)
+        router.push(redirectURL as string).catch((err) => {
+          if (!err.cancelled) {
+            throw err;
+          }
+        })
       } else {
         if (errorCallback) errorCallback();
       }

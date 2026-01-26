@@ -21,7 +21,11 @@ const GuestGuard = (props: GuestGuardProps) => {
     }
 
     if (getItem(authConfig.keyUserdata)) {
-      router.replace('/')
+      router.push('/').catch((err) => {
+        if (!err.cancelled) {
+          throw err;
+        }
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.route])

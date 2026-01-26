@@ -7,7 +7,11 @@ export function useNavigateApp() {
 
     function navigate(url?: string) {
         if (url) {
-            router.replace(url);
+            router.push(url).catch((err) => {
+                if (!err.cancelled) {
+                    throw err;
+                }
+            });
         }
     }
 
