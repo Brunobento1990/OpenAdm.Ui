@@ -2,7 +2,7 @@
 import { createContext, useState, ReactNode, useEffect } from 'react'
 
 // ** MUI Imports
-import { Direction } from '@mui/material'
+import type { Direction } from '@mui/material'
 
 // ** ThemeConfig Import
 import themeConfig from 'src/configs/themeConfig'

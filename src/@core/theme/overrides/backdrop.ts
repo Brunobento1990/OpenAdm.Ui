@@ -11,7 +11,7 @@ const Backdrop = () => {
         root: ({ theme }: OwnerStateThemeType) => ({
           backgroundColor:
             theme.palette.mode === 'light'
-              ? `rgba(${theme.palette.customColors.main}, 0.7)`
+              ? `rgba(${theme.palette.customColors.mainRgb}, 0.7)`
               : hexToRGBA(theme.palette.background.default, 0.7)
         }),
         invisible: {

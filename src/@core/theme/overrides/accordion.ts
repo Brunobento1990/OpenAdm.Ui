@@ -20,7 +20,7 @@ const Accordion = () => {
           boxShadow: theme.shadows[skin === 'bordered' ? 0 : 2],
           ...(skin === 'bordered' && { border: `1px solid ${theme.palette.divider}` }),
           '&.Mui-disabled': {
-            backgroundColor: `rgba(${theme.palette.customColors.main}, 0.12)`
+            backgroundColor: `rgba(${theme.palette.customColors.mainRgb}, 0.12)`
           },
           '&.Mui-expanded': {
             margin: theme.spacing(2, 0),

@@ -1,6 +1,7 @@
 import { rotasApi } from "src/configs/rotasApi";
 import { useNewApi } from "../hooks/use-new-api";
 import { IMovimentoProduto, IPosicaoEstoqueUpdate } from "../types/movimento-produto";
+import { ITodosEstoqueProdutos, IUpdateEstoques } from "../types/estoque";
 
 
 export function useApiEstoque() {
@@ -12,6 +13,16 @@ export function useApiEstoque() {
     const apiObter = useNewApi({
         method: "GET",
         url: rotasApi.posicaoEstoque.obter,
+    });
+
+    const apiObterTodosEstoqueProdutos = useNewApi({
+        method: "GET",
+        url: rotasApi.posicaoEstoque.todosEstoqueProdutos,
+    });
+
+    const apiUpdateEstoques = useNewApi({
+        method: "PUT",
+        url: rotasApi.posicaoEstoque.updateEstoques,
     });
 
     const apiAtualizarEstoque = useNewApi({
@@ -33,6 +44,17 @@ export function useApiEstoque() {
         });
     }
 
+    async function todosEstoqueProdutos(produtoId: string): Promise<ITodosEstoqueProdutos | undefined> {
+        return await apiObterTodosEstoqueProdutos.fecth({ urlParams: produtoId });
+    }
+
+    async function updateEstoques(body: IUpdateEstoques): Promise<any> {
+        return await apiUpdateEstoques.fecth({
+            body,
+            message: "Atualização de estoque concluida",
+        });
+    }
+
     async function obter(id: string): Promise<any> {
         return await apiObter.fecth({ urlParams: id });
     }
@@ -49,6 +71,14 @@ export function useApiEstoque() {
         obter: {
             fetch: obter,
             status: apiObter.statusRequisicao,
+        },
+        todosEstoqueProdutos: {
+            fetch: todosEstoqueProdutos,
+            status: apiObterTodosEstoqueProdutos.statusRequisicao,
+        },
+        updateEstoques: {
+            fetch: updateEstoques,
+            status: apiUpdateEstoques.statusRequisicao,
         },
     };
 }

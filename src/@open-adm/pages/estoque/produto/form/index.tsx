@@ -7,6 +7,7 @@ import { YupAdapter } from "src/@open-adm/adapters/yup-adapter";
 import { useApiProduto } from "src/@open-adm/api/use-api-produto";
 import { useApiTabelaDePreco } from "src/@open-adm/api/UseApiTabelaDePreco";
 import { BoxApp } from "src/@open-adm/components/box";
+import { ButtonApp } from "src/@open-adm/components/buttons";
 import { DividerApp } from "src/@open-adm/components/divider";
 import { DropDownAutoFetchApp } from "src/@open-adm/components/drop-down/drop-down-auto-fetch-app";
 import { DropDownMultiploFetchApp } from "src/@open-adm/components/drop-down/drop-down-multiplo-fetch-app";
@@ -25,6 +26,7 @@ import { IItensTabelaDePreco, ITabelaDePreco } from "src/@open-adm/types/tabela-
 import { ITamanho } from "src/@open-adm/types/tamanho";
 import { clearMaskMoney } from "src/@open-adm/utils/mask";
 import { rotasApp } from "src/configs/rotasApp";
+import { ModalEstoque } from "./modal-estoque";
 
 export function ProdutoForm(props: IFormTypes) {
     const { create, obter, update } = useApiProduto();
@@ -130,6 +132,15 @@ export function ProdutoForm(props: IFormTypes) {
             titulo="Produto"
             urlVoltar={rotasApp.produto.pagincao}
             readonly={readonly}
+            footer={{
+                children: (
+                    <BoxApp>
+                        {props.action === 'edit' && (
+                            <ModalEstoque produtoId={form.values.id} />
+                        )}
+                    </BoxApp>
+                )
+            }}
         >
             <Tab.Component tabs={[{ titulo: "Produto" }, { titulo: "Preços" }]} />
             <CollapseApp in={Tab.value === 0}>
@@ -276,25 +287,11 @@ export function ProdutoForm(props: IFormTypes) {
                         </FormRoot.FormItemRow>
                     )}
                 </FormRoot.FormRow>
-                {form.values.novaFoto ? (
-                    <>
-                        <img
-                            style={{ maxWidth: "300px" }}
-                            src={form.values.novaFoto}
-                            alt="produto"
-                        />
-                    </>
-                ) : (
-                    <>
-                        {form.values.foto && (
-                            <img
-                                style={{ maxWidth: "300px" }}
-                                src={form.values.foto}
-                                alt="produto"
-                            />
-                        )}
-                    </>
-                )}
+                <img
+                    style={{ maxWidth: "300px", borderRadius: 8, marginTop: "1rem" }}
+                    src={form.values.novaFoto ?? form.values.foto}
+                    alt="produto"
+                />
             </CollapseApp>
             <CollapseApp in={Tab.value === 1}>
                 {!tabelaDePreco ? (

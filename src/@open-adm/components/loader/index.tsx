@@ -23,7 +23,7 @@ function LoaderComponent() {
                     alignItems: 'center',
                     flexDirection: 'column',
                     justifyContent: 'center',
-                    background: 'rgba(255, 255, 255, 0.6)',
+                    background: 'rgba(255,255,255,0.6)',
                     height: '100vh',
                     width: '100%',
                     cursor: 'not-allowed',

@@ -6,7 +6,7 @@
  */
 
 // ** MUI Imports
-import { Direction } from '@mui/material'
+import type { Direction } from '@mui/material'
 
 // ** Types
 import {

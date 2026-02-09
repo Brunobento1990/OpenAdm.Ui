@@ -58,7 +58,9 @@ export const rotasApi = {
     posicaoEstoque: {
         paginacao: "estoques/paginacao",
         update: "estoques/update",
+        updateEstoques: "estoques/update-estoques",
         obter: "estoques/get-estoque?id=",
+        todosEstoqueProdutos: "estoques/posicao-estoque-produto?produtoId=",
     },
     pedido: {
         paginacao: "pedidos/paginacao",

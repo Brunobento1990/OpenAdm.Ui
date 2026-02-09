@@ -4,6 +4,9 @@ declare module '@mui/material/styles' {
       dark: string
       main: string
       light: string
+      darkRgb: string
+      mainRgb: string
+      lightRgb: string
       bodyBg: string
       trackBg: string
       avatarBg: string
@@ -17,6 +20,9 @@ declare module '@mui/material/styles' {
       dark?: string
       main?: string
       light?: string
+      darkRgb?: string
+      mainRgb?: string
+      lightRgb?: string
       bodyBg?: string
       trackBg?: string
       avatarBg?: string
@@ -39,4 +45,4 @@ declare module '@mui/material/ButtonGroup' {
   }
 }
 
-export {}
+export { }

@@ -53,9 +53,8 @@ const Radio = () => {
           '&.Mui-checked': {
             '& svg': {
               fill: theme.palette.primary.main,
-              filter: `drop-shadow(0 2px 3px rgba(${
-                theme.palette.mode === 'light' ? theme.palette.customColors.main : '12, 16, 27'
-              }, 0.16))`
+              filter: `drop-shadow(0 2px 3px rgba(${theme.palette.mode === 'light' ? theme.palette.customColors.main : '12,16,27'
+                }, 0.16))`
             },
             '&.Mui-disabled svg': {
               opacity: 0.4,

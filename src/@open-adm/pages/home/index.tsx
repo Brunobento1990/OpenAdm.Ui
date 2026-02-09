@@ -61,7 +61,7 @@ export function HomePage() {
     const [home, setHome] = useState<IHome>();
 
     async function init() {
-        var response = await fecth<IHome>();
+        const response = await fecth<IHome>();
         if (response)
             setHome(response);
     }

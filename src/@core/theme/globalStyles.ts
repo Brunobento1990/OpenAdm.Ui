@@ -28,7 +28,7 @@ const GlobalStyles = (theme: Theme) => {
         right: '3px !important',
         left: 'auto !important',
         backgroundColor:
-          theme.palette.mode === 'light' ? 'rgba(93, 89, 108, 0.2) !important' : 'rgba(207, 211, 236, 0.3) !important'
+          theme.palette.mode === 'light' ? 'rgba(93,89,108,0.2) !important' : 'rgba(207,211,236,0.3) !important'
       },
       '.layout-vertical-nav &': {
         '& .ps__thumb-y': {

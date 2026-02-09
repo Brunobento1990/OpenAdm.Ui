@@ -13,13 +13,13 @@ const Tooltip = () => {
           fontSize: theme.typography.body1.fontSize,
           backgroundColor:
             theme.palette.mode === 'light'
-              ? `rgba(${theme.palette.customColors.main}, 0.9)`
+              ? `rgba(${theme.palette.customColors.mainRgb}, 0.9)`
               : hexToRGBA(theme.palette.customColors.trackBg, 0.9)
         }),
         arrow: ({ theme }: OwnerStateThemeType) => ({
           color:
             theme.palette.mode === 'light'
-              ? `rgba(${theme.palette.customColors.main}, 0.9)`
+              ? `rgba(${theme.palette.customColors.mainRgb}, 0.9)`
               : hexToRGBA(theme.palette.customColors.trackBg, 0.9)
         })
       }

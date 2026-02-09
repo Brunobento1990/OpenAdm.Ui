@@ -1,4 +1,3 @@
-import { GridColDef } from "@mui/x-data-grid";
 import { StatusObj } from "../../pedidos/config";
 import CustomChip from 'src/@open-adm/components/chip'
 import { IEstoqueEdit } from "src/@open-adm/types/estoque";
