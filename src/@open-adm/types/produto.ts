@@ -14,6 +14,7 @@ export interface IProduto extends IBase {
     tamanhos: ITamanho[];
     pesos: IPeso[];
     peso?: number;
+    vendaSomenteComEstoqueDisponivel: boolean;
 }
 
 export interface ICreateProdutoDto {
