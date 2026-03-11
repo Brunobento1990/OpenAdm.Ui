@@ -33,7 +33,7 @@ function VariacaoMensalPedidoHome(props: PropsVariacaoMensalPedidoHome) {
                     </BoxApp>
                 </BoxApp>
                 <BoxApp display="flex" alignItems="center">
-                    <TextApp fontSize="1.2rem" fontWeight={600} texto={`${variacao.porcentagem}%`} color={corVariacaoPorcentagem} />
+                    <TextApp fontSize="1.2rem" fontWeight={600} texto={`${Math.round(variacao.porcentagem)}%`} color={corVariacaoPorcentagem} />
                     <IconApp icon={variacao.porcentagem > 0 ? 'lucide:arrow-up' : 'lucide:arrow-down'} color={corVariacaoPorcentagem} />
                 </BoxApp>
                 <DividerApp width="100%" />
