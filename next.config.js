@@ -8,6 +8,11 @@ const path = require('path')
 module.exports = {
   trailingSlash: true,
   reactStrictMode: false,
+  turbopack: {
+    resolveAlias: {
+      apexcharts: './node_modules/apexcharts-clevision'
+    }
+  },
   webpack: config => {
     config.resolve.alias = {
       ...config.resolve.alias,

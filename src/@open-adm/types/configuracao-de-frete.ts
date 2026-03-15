@@ -1,24 +1,9 @@
-export interface IConfiguracaoDeFrete {
-    id: string,
-    cepOrigem: string,
-    alturaEmbalagem: string,
-    larguraEmbalagem: string,
-    comprimentoEmbalagem: string,
-    chaveApi: string,
-    peso?: number,
-    cobrarCpf?: boolean,
-    cobrarCnpj?: boolean,
-    inativo?: boolean
-}
+import { IBase } from './base'
 
-export interface IConfiguracaoDeFreteCreate {
-    cepOrigem: string,
-    alturaEmbalagem: string,
-    larguraEmbalagem: string,
-    comprimentoEmbalagem: string,
-    chaveApi: string,
-    peso?: number,
-    cobrarCpf?: boolean,
-    cobrarCnpj?: boolean,
-    inativo?: boolean
+export interface IConfiguracaoDeFrete extends IBase {
+  token: string
+  ativo: boolean
+  cobrarCnpj: boolean
+  cobrarCpf: boolean
+  cepOrigem?: string
 }

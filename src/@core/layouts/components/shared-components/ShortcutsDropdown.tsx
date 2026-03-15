@@ -150,8 +150,7 @@ const ShortcutsDropdown = (props: Props) => {
           >
             {shortcuts.map(shortcut => (
               <Grid
-                item
-                xs={6}
+                size={{ xs: 6 }}
                 key={shortcut.title}
                 onClick={handleDropdownClose}
                 sx={{ cursor: 'pointer', '&:hover': { backgroundColor: 'action.hover' } }}
