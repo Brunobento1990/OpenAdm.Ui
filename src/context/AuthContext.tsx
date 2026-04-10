@@ -25,23 +25,23 @@ const AuthProvider = ({ children }: Props) => {
   // ** States
   const [user, setUser] = useState<UserDataType | null>(defaultProvider.user)
   const [loading, setLoading] = useState<boolean>(defaultProvider.loading)
-  const { setItem, remove, getItem } = useLocalStorage();
+  const { setItem, remove, getItem } = useLocalStorage()
   // ** Hooks
-  const router = useRouter();
+  const router = useRouter()
   const { fecth } = useNewApi({
     method: 'POST',
     url: 'login/funcionario',
     naoRenderizarResposta: true
-  });
+  })
 
   useEffect(() => {
     const initAuth = async (): Promise<void> => {
       const storedToken = getItem<string>(authConfig.storageTokenKeyName)!
-      const user = getItem<string>(authConfig.keyUserdata);
+      const user = getItem<string>(authConfig.keyUserdata)
       if (storedToken && user) {
         setLoading(true)
-        setUser(JSON.parse(user));
-        setLoading(false);
+        setUser(JSON.parse(user))
+        setLoading(false)
       } else {
         localStorage.removeItem(authConfig.keyUserdata)
         localStorage.removeItem(authConfig.storageTokenKeyName)
@@ -54,42 +54,42 @@ const AuthProvider = ({ children }: Props) => {
   }, [])
 
   const handleLogin = async (params: LoginParams, errorCallback?: ErrCallbackType) => {
-
     try {
       const response = await fecth<ILoginResponse>({
         body: {
           email: params.email,
           senha: params.password
-        },
+        }
       })
 
       if (response?.token) {
         setItem(authConfig.storageTokenKeyName, response.token)
-        const returnUrl = router.query.returnUrl;
-        const user = { ...response.usuario, role: 'admin' };
+        setItem(authConfig.onTokenExpiration, response.refreshToken)
+        const returnUrl = router.query.returnUrl
+        const user = { ...response.usuario, role: 'admin' }
         setUser(user)
-        setItem(authConfig.keyUserdata, user, true);
+        setItem(authConfig.keyUserdata, user, true)
 
         const redirectURL = returnUrl && returnUrl !== '/' ? returnUrl : '/'
 
         if (params.rememberMe) {
-          setItem(authConfig.lembreMe, 'true');
-          setItem(authConfig.lembreMeEmail, params.email);
+          setItem(authConfig.lembreMe, 'true')
+          setItem(authConfig.lembreMeEmail, params.email)
         } else {
-          remove(authConfig.lembreMeEmail);
-          remove(authConfig.lembreMe);
+          remove(authConfig.lembreMeEmail)
+          remove(authConfig.lembreMe)
         }
 
-        router.push(redirectURL as string).catch((err) => {
+        router.push(redirectURL as string).catch(err => {
           if (!err.cancelled) {
-            throw err;
+            throw err
           }
         })
       } else {
-        if (errorCallback) errorCallback();
+        if (errorCallback) errorCallback()
       }
     } catch (error: any) {
-      if (errorCallback) errorCallback(error?.response?.data?.message);
+      if (errorCallback) errorCallback(error?.response?.data?.message)
     }
   }
 
@@ -97,6 +97,7 @@ const AuthProvider = ({ children }: Props) => {
     setUser(null)
     remove(authConfig.keyUserdata)
     remove(authConfig.storageTokenKeyName)
+    remove(authConfig.onTokenExpiration)
     router.push('/login')
   }
 

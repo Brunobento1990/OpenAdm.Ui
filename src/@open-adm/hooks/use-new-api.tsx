@@ -91,8 +91,10 @@ export function useNewApi(props: propsUseApi) {
       abortControllerRef.current = new AbortController()
       const { signal } = abortControllerRef.current
       const jwt = getItem<string>(authConfig.storageTokenKeyName)
+      const refreshToken = getItem<string>(authConfig.onTokenExpiration)
       const headers = {
-        Authorization: `Bearer ${jwt ?? ''}`,
+        Authorization: `Bearer ${jwt || ''}`,
+        RefreshToken: `${refreshToken || ''}`,
         ...(props.header ?? {})
       }
       const response = await api.request({
@@ -107,9 +109,9 @@ export function useNewApi(props: propsUseApi) {
         snack.show(message, 'success')
       }
       const responseHeader = response.headers as any
-      // if (responseHeader["novotoken"]) {
-      //     setItem(keysLocalStorage.jwt, responseHeader["novotoken"]?.toString());
-      // }
+      if (responseHeader['novotoken']) {
+        setItem(authConfig.onTokenExpiration, responseHeader['novotoken']?.toString())
+      }
       setStatusRequisicao('sucesso')
       return response?.data as T
     } catch (err: any) {
