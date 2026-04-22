@@ -6,7 +6,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Home',
       path: '/home',
-      icon: 'clarity:home-line',
+      icon: 'clarity:home-line'
     },
     {
       title: 'Ecommerce',
@@ -15,13 +15,13 @@ const navigation = (): VerticalNavItemsType => {
         {
           title: 'Banners',
           path: '/banners',
-          icon: 'material-symbols-light:planner-banner-ad-pt-outline',
+          icon: 'material-symbols-light:planner-banner-ad-pt-outline'
         },
         {
           title: 'Lojas parceiras',
           path: '/lojas-parceiras',
           icon: 'mdi:store-check-outline'
-        },
+        }
       ]
     },
     {
@@ -29,24 +29,24 @@ const navigation = (): VerticalNavItemsType => {
       icon: 'healthicons:stock-out-outline',
       children: [
         {
-          'title': 'Categoria',
-          'path': '/estoque/categoria',
-          'icon': 'mdi:category-outline'
+          title: 'Categoria',
+          path: '/estoque/categoria',
+          icon: 'mdi:category-outline'
         },
         {
-          'title': 'Produto',
-          'path': '/estoque/produto',
-          'icon': 'fluent-mdl2:product-variant'
+          title: 'Produto',
+          path: '/estoque/produto',
+          icon: 'fluent-mdl2:product-variant'
         },
         {
-          'title': 'Peso',
-          'path': '/estoque/peso',
-          'icon': 'game-icons:weight'
+          title: 'Peso',
+          path: '/estoque/peso',
+          icon: 'game-icons:weight'
         },
         {
-          'title': 'Tamanho',
-          'path': '/estoque/tamanho',
-          'icon': 'bx:font-size'
+          title: 'Tamanho',
+          path: '/estoque/tamanho',
+          icon: 'bx:font-size'
         },
         {
           title: 'Movimento produto',
@@ -60,35 +60,35 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Relatórios',
-          icon: "mdi:report-finance",
+          icon: 'mdi:report-finance',
           children: [
             {
               title: 'Posição de estoque',
-              icon: "hugeicons:package-out-of-stock",
+              icon: 'hugeicons:package-out-of-stock',
               path: '/estoque/relatorio-posicao-estoque'
             },
             {
               title: 'Relatório de estoque',
-              icon: "tabler:report-search",
+              icon: 'tabler:report-search',
               path: '/estoque/relatorio-estoque'
             },
             {
               title: 'Relatório de produção',
-              icon: "simple-icons:soundcharts",
+              icon: 'simple-icons:soundcharts',
               path: '/estoque/relatorio-producao'
-            },
+            }
           ]
-        },
+        }
       ]
     },
     {
-      'title': 'Vendas',
-      'icon': 'carbon:sales-ops',
-      'children': [
+      title: 'Vendas',
+      icon: 'carbon:sales-ops',
+      children: [
         {
           title: 'Pedidos',
           path: '/pedidos',
-          icon: 'material-symbols:order-approve-outline',
+          icon: 'material-symbols:order-approve-outline'
         },
         {
           title: 'Tabela de preço',
@@ -107,19 +107,19 @@ const navigation = (): VerticalNavItemsType => {
         },
         {
           title: 'Relatório por período',
-          icon: "tabler:report-search",
+          icon: 'tabler:report-search',
           path: '/vendas/relatorio-por-periodo'
         },
         {
           title: 'Clientes',
-          icon: "solar:user-id-linear",
+          icon: 'solar:user-id-linear',
           path: '/vendas/cliente'
         }
       ]
     },
     {
-      'title': 'Configurações',
-      'icon': 'iwwa:settings',
+      title: 'Configurações',
+      icon: 'iwwa:settings',
       children: [
         {
           title: 'Minha empresa',
@@ -129,17 +129,17 @@ const navigation = (): VerticalNavItemsType => {
         {
           title: 'Pedidos',
           path: '/configuracao/pedido',
-          icon: 'material-symbols:order-approve-outline',
+          icon: 'material-symbols:order-approve-outline'
         },
         {
-          title: "Mercado pago",
-          path: "/configuracao/mercado-pago",
-          icon: "simple-icons:mercadopago"
+          title: 'Mercado pago',
+          path: '/configuracao/mercado-pago',
+          icon: 'simple-icons:mercadopago'
         },
         {
-          title: "Frete",
-          path: "/configuracao/frete",
-          icon: "fluent:vehicle-truck-cube-24-regular"
+          title: 'Frete',
+          path: '/configuracao/frete',
+          icon: 'fluent:vehicle-truck-cube-24-regular'
         }
       ]
     },
@@ -161,6 +161,11 @@ const navigation = (): VerticalNavItemsType => {
           title: 'Transações',
           icon: 'grommet-icons:transaction',
           path: '/financeiro/transacao-financeira'
+        },
+        {
+          title: 'Mensalidades',
+          icon: 'hugeicons:payment-02',
+          path: '/financeiro/cobranca'
         }
       ]
     }
