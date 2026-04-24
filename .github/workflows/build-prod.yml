@@ -10,15 +10,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Make envfile
+      # 📥 Checkout do código
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 📄 Criar env de produção
+      - name: Create .env.production
         run: |
-          cat > .env.production
           echo "NEXT_PUBLIC_URL_API=${{ secrets.URL_API }}" >> .env.production
-          echo "$(<.env.production)"
-      - name: Build
-        run: docker build . -t brunobentocaina/open-adm-ui:${GITHUB_REF#refs/*/}
-      - name: Push
-        run: |
-          docker login -u brunobentocaina -p ${{ secrets.DOCKER_HUB_KEY }}
-          docker push brunobentocaina/open-adm-ui:${GITHUB_REF#refs/*/}
+
+      # ⚙️ Setup do Docker Buildx (necessário pra cache e multi-arch)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 🔐 Login no Docker Hub (seguro)
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: brunobentocaina
+          password: ${{ secrets.DOCKER_HUB_KEY }}
+
+      # 🏷️ Gerar metadata (tags automáticas)
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: brunobentocaina/open-adm-ui
+          tags: |
+            type=semver,pattern={{version}}
+            type=raw,value=latest
+
+      # 🐳 Build + Push com cache
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
