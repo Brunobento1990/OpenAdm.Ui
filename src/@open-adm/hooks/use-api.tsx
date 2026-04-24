@@ -32,7 +32,7 @@ export function useApi() {
       return;
     }
 
-    if (error?.response?.status === 401 || !error?.response) {
+    if (error?.response?.status === 401) {
       remove(authConfig.storageTokenKeyName);
       remove(authConfig.keyUserdata);
       snack.show("É necessário efetuar o login novamente!")
