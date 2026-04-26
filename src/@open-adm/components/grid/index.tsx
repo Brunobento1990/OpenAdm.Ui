@@ -14,7 +14,7 @@ interface propsGridCustom {
 
 export function GridApp(props: propsGridCustom) {
   return (
-    <Grid sx={{ marginTop: props.marginTop }} container spacing={props.spacing}>
+    <Grid sx={{ marginTop: props.marginTop }} container spacing={props.spacing ?? 3}>
       {props.children}
     </Grid>
   )

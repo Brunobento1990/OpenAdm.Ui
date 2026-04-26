@@ -2,7 +2,8 @@ import { Grid } from '@mui/material'
 import dynamic from 'next/dynamic'
 import { useState, useEffect } from 'react'
 import { BoxApp } from 'src/@open-adm/components/box'
-import { GridApp } from 'src/@open-adm/components/grid'
+import { GraficoVelaVertical } from 'src/@open-adm/components/graficos/grafico-vela-vertical'
+import { GridApp, GridItemApp } from 'src/@open-adm/components/grid'
 import { LoadingAppTexto } from 'src/@open-adm/components/loading/loading-app-texto'
 import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
 import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
@@ -71,14 +72,33 @@ export function HomePage() {
   return (
     <>
       {statusRequisicao === 'loading' && <LoadingAppTexto comBox />}
-      <BoxApp padding='1rem'>
+      <BoxApp padding='1rem' display='flex' flexDirection='column' gap='1rem'>
+        <GridApp container>
+          <GridItemApp xs={12} item sm={6}>
+            <StatusPedidoHome pedidos={home?.statusPedido ?? []} />
+          </GridItemApp>
+          <GridItemApp xs={12} item sm={6}>
+            <GraficoVelaVertical
+              dados={
+                home?.pedidosPorDia?.map(x => {
+                  return {
+                    ...x,
+                    descricaoDia: x.diaSemana
+                  }
+                }) || []
+              }
+              subTitulo='Pedido gerador por dia'
+              titulo='Volume por Dia
+'
+            />
+          </GridItemApp>
+        </GridApp>
         <GridApp container spacing={3}>
           <GridApp item xs={12} sm={9}>
             <Movimentos movimentos={home?.movimentos ?? []} />
           </GridApp>
           <GridApp item xs={12} sm={3}>
             <BoxApp display='flex' flexDirection='column' gap='1rem'>
-              <StatusPedidoHome pedidos={home?.statusPedido ?? []} />
               <VariacaoMensalPedidoHome variacaoMensalPedido={home?.variacaoMensalPedido} />
             </BoxApp>
           </GridApp>
