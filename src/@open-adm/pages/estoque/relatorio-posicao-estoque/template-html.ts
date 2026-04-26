@@ -1,27 +1,28 @@
-import { IPosicaoEstoqueUpdate } from "src/@open-adm/types/movimento-produto";
+import { IPosicaoEstoqueUpdate } from 'src/@open-adm/types/movimento-produto'
 
 export const gerarHtmlRelatorioPosicaoEstoque = (dados: IPosicaoEstoqueUpdate[]): string => {
+  const totalItens = dados.length
+  const quantidadeTotal = dados.reduce((acc, item) => acc + (item.quantidade || 0), 0)
 
-    const totalItens = dados.length;
-    const quantidadeTotal = dados.reduce((acc, item) => acc + item.quantidade, 0);
-
-    const gerarLinhasTabela = () => {
-        return dados.map((item) => {
-            return `
+  const gerarLinhasTabela = () => {
+    return dados
+      .map(item => {
+        return `
         <tr>
           <td>${item.produto}</td>
           <td>${item.categoria || ''}</td>
           <td>${item.peso || ''}</td>
           <td>${item.tamanho || ''}</td>
-          <td>${item.quantidade.toFixed(2)}</td>
+          <td>${item.quantidade?.toFixed(2)}</td>
           <td>${item.quantidadeDisponivel.toFixed(2)}</td>
           <td>${item.quantidadeReservada.toFixed(2)}</td>
         </tr>
-      `;
-        }).join('');
-    };
+      `
+      })
+      .join('')
+  }
 
-    return `
+  return `
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -174,5 +175,5 @@ export const gerarHtmlRelatorioPosicaoEstoque = (dados: IPosicaoEstoqueUpdate[])
     </div>
 </body>
 </html>
-  `;
-};
+  `
+}
