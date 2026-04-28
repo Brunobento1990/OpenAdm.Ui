@@ -8,6 +8,7 @@ import { LoadingAppTexto } from 'src/@open-adm/components/loading/loading-app-te
 import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
 import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
 import { IHome } from 'src/@open-adm/types/home'
+import StatusPedidoHome from 'src/@open-adm/views/home/pedidos-em-aberto-grafico'
 import { rotasApp } from 'src/configs/rotasApp'
 
 const TopClientesMaisGastos = dynamic(() => import('src/@open-adm/views/home/top-clientes-mais-gastos'), {
@@ -43,10 +44,6 @@ const VariacaoMensalPedidoHome = dynamic(() => import('src/@open-adm/views/home/
 })
 
 const FaturasTotalizador = dynamic(() => import('src/@open-adm/views/home/totalizacao-faturas'), {
-  ssr: false
-})
-
-const StatusPedidoHome = dynamic(() => import('src/@open-adm/views/home/pedidos-em-aberto-grafico'), {
   ssr: false
 })
 
@@ -94,14 +91,14 @@ export function HomePage() {
           </GridItemApp>
         </GridApp>
         <GridApp container spacing={3}>
-          <GridApp item xs={12} sm={9}>
+          <GridItemApp xs={12} sm={6}>
             <Movimentos movimentos={home?.movimentos ?? []} />
-          </GridApp>
-          <GridApp item xs={12} sm={3}>
+          </GridItemApp>
+          <GridItemApp item xs={12} sm={6}>
             <BoxApp display='flex' flexDirection='column' gap='1rem'>
               <VariacaoMensalPedidoHome variacaoMensalPedido={home?.variacaoMensalPedido} />
             </BoxApp>
-          </GridApp>
+          </GridItemApp>
         </GridApp>
       </BoxApp>
       <BoxApp padding='1rem' display='flex' flexDirection='column' gap='1rem'>
