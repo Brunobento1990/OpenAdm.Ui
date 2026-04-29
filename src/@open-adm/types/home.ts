@@ -15,6 +15,9 @@ export interface IHome {
   usuarioSemPedidoCpf: ICliente[]
   usuarioSemPedidoCnpj: ICliente[]
   pedidosPorDia: IPedidosPorDia[]
+  totalProdutoEstoque: number
+  totalProdutoEstoqueReservado: number
+  quantidadeProdutoDisponivel: number
 }
 
 export interface IStatusPedidoHome {

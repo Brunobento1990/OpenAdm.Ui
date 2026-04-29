@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material'
 import dynamic from 'next/dynamic'
+import { useTheme } from '@mui/material/styles'
 import { useState, useEffect } from 'react'
 import { BoxApp } from 'src/@open-adm/components/box'
 import { GraficoVelaVertical } from 'src/@open-adm/components/graficos/grafico-vela-vertical'
@@ -8,8 +9,10 @@ import { LoadingAppTexto } from 'src/@open-adm/components/loading/loading-app-te
 import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
 import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
 import { IHome } from 'src/@open-adm/types/home'
+import { CardTotalizador } from 'src/@open-adm/views/home/card-totalizador'
 import StatusPedidoHome from 'src/@open-adm/views/home/pedidos-em-aberto-grafico'
 import { rotasApp } from 'src/configs/rotasApp'
+import { GraficoVelaVerticalAgrupado } from 'src/@open-adm/components/graficos/grafico-vela-vertical-agrupada'
 
 const TopClientesMaisGastos = dynamic(() => import('src/@open-adm/views/home/top-clientes-mais-gastos'), {
   ssr: false
@@ -24,10 +27,6 @@ const AcessoUsuarioEcommerce = dynamic(() => import('src/@open-adm/views/home/ac
 })
 
 const TopClientesMaisPedidos = dynamic(() => import('src/@open-adm/views/home/top-clientes-mais-pedidos'), {
-  ssr: false
-})
-
-const Movimentos = dynamic(() => import('src/@open-adm/views/home/movimentos'), {
   ssr: false
 })
 
@@ -49,6 +48,7 @@ const FaturasTotalizador = dynamic(() => import('src/@open-adm/views/home/totali
 
 export function HomePage() {
   const { navigate } = useNavigateApp()
+  const { palette } = useTheme()
   const { fecth, statusRequisicao } = useNewApi({
     method: 'GET',
     url: 'home/adm',
@@ -71,6 +71,35 @@ export function HomePage() {
       {statusRequisicao === 'loading' && <LoadingAppTexto comBox />}
       <BoxApp padding='1rem' display='flex' flexDirection='column' gap='1rem'>
         <GridApp container>
+          <GridItemApp item xs={12} sm={3}>
+            <VariacaoMensalPedidoHome variacaoMensalPedido={home?.variacaoMensalPedido} />
+          </GridItemApp>
+          <GridItemApp item xs={12} sm={3}>
+            <CardTotalizador
+              total={home?.totalProdutoEstoque ?? 0}
+              titulo='Produtos em estoque'
+              color={palette.success.main}
+              icon='lsicon:management-stockout-outline'
+            />
+          </GridItemApp>
+          <GridItemApp item xs={12} sm={3}>
+            <CardTotalizador
+              total={home?.totalProdutoEstoqueReservado ?? 0}
+              titulo='Produtos reservados'
+              color={palette.warning.main}
+              icon='icon-park-outline:shopping'
+            />
+          </GridItemApp>
+          <GridItemApp item xs={12} sm={3}>
+            <CardTotalizador
+              total={home?.quantidadeProdutoDisponivel ?? 0}
+              titulo='Produtos disponíveis'
+              color={palette.info.main}
+              icon='proicons:info'
+            />
+          </GridItemApp>
+        </GridApp>
+        <GridApp container>
           <GridItemApp xs={12} item sm={6}>
             <StatusPedidoHome pedidos={home?.statusPedido ?? []} />
           </GridItemApp>
@@ -85,19 +114,17 @@ export function HomePage() {
                 }) || []
               }
               subTitulo='Pedido gerador por dia'
-              titulo='Volume por Dia
-'
+              titulo='Volume por Dia'
             />
           </GridItemApp>
         </GridApp>
         <GridApp container spacing={3}>
           <GridItemApp xs={12} sm={6}>
-            <Movimentos movimentos={home?.movimentos ?? []} />
-          </GridItemApp>
-          <GridItemApp item xs={12} sm={6}>
-            <BoxApp display='flex' flexDirection='column' gap='1rem'>
-              <VariacaoMensalPedidoHome variacaoMensalPedido={home?.variacaoMensalPedido} />
-            </BoxApp>
+            <GraficoVelaVerticalAgrupado
+              dados={home?.movimentos || []}
+              subTitulo='Por categoria'
+              titulo={`Movimentação de produtos nos ultimos ${home?.movimentos?.length || 0} meses`}
+            />
           </GridItemApp>
         </GridApp>
       </BoxApp>
