@@ -81,13 +81,13 @@ export function GraficoVelaVerticalAgrupado(props: GraficoVelasProps) {
                 sx={{ flex: 1, height: '100%' }}
               >
                 {/* VALOR TOTAL DO MÊS */}
-                <TextApp
+                {/* <TextApp
                   texto={String(item.dados.reduce((acc, x) => acc + x.quantidade, 0))}
                   fontSize='11px'
                   fontWeight={600}
                   color='textSecondary'
                   textAlign='center'
-                />
+                /> */}
 
                 {/* BARRAS AGRUPADAS */}
                 <BoxApp
@@ -103,16 +103,34 @@ export function GraficoVelaVerticalAgrupado(props: GraficoVelasProps) {
                     return (
                       <BoxApp
                         key={j}
-                        sx={{
-                          flex: 1,
-                          height: `${alturaPx}px`,
-                          borderRadius: '4px 4px 0 0',
-                          transition: 'height 0.8s cubic-bezier(.34,1.56,.64,1)',
-                          opacity: 0.9
-                        }}
-                        backgroundColor={getColor(j)}
+                        display='flex'
+                        flexDirection='column'
+                        alignItems='center'
+                        justifyContent='end'
+                        sx={{ flex: 1, height: '100%' }}
                       >
-                        <>{''}</>
+                        {/* 🔥 VALOR DA CATEGORIA */}
+                        <TextApp
+                          texto={String(dado.quantidade)}
+                          fontSize='10px'
+                          fontWeight={600}
+                          color='textSecondary'
+                          textAlign='center'
+                        />
+
+                        {/* 🔥 BARRA */}
+                        <BoxApp
+                          sx={{
+                            width: '100%',
+                            height: `${alturaPx}px`,
+                            borderRadius: '4px 4px 0 0',
+                            transition: 'height 0.8s cubic-bezier(.34,1.56,.64,1)',
+                            opacity: 0.9
+                          }}
+                          backgroundColor={getColor(j)}
+                        >
+                          <></>
+                        </BoxApp>
                       </BoxApp>
                     )
                   })}
