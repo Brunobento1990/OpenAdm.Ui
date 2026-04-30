@@ -123,7 +123,7 @@ export function HomePage() {
             <GraficoVelaVerticalAgrupado
               dados={home?.movimentos || []}
               subTitulo='Por categoria'
-              titulo={`Movimentação de produtos nos ultimos ${home?.movimentos?.length || 0} meses`}
+              titulo={`Movimentação de produtos`}
             />
           </GridItemApp>
         </GridApp>
