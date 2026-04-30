@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material/styles'
 import { BoxApp } from '../box'
 import { TextApp } from '../text'
 import { Tooltip } from '@mui/material'
+import { useState } from 'react'
 
 interface IDadoCategoria {
   quantidade: number
@@ -25,6 +26,8 @@ interface GraficoVelasProps {
 const ALTURA_AREA_BARRAS = 200
 
 export function GraficoVelaVerticalAgrupado(props: GraficoVelasProps) {
+  const [tooltipOpen, setTooltipOpen] = useState<string | null>(null)
+
   const { palette, shape } = useTheme()
 
   const maxTotal = Math.max(...props.dados.flatMap(d => d.dados.map(x => x.quantidade)), 1)
@@ -34,6 +37,8 @@ export function GraficoVelaVerticalAgrupado(props: GraficoVelasProps) {
   const fallbackColors = [palette.primary.main, palette.success.main, palette.info.main, palette.error.main]
 
   const getColor = (index: number) => fallbackColors[index % fallbackColors.length]
+
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
   return (
     <BoxApp
@@ -100,15 +105,33 @@ export function GraficoVelaVerticalAgrupado(props: GraficoVelasProps) {
                 >
                   {item.dados.map((dado, j) => {
                     const alturaPx = Math.max(Math.round((dado.quantidade / maxTotal) * ALTURA_AREA_BARRAS), 4)
-
+                    const id = `${i}-${j}`
                     return (
-                      <Tooltip key={j} title={`${dado.categoria} - ${dado.quantidade}`} arrow placement='top'>
+                      <Tooltip
+                        key={j + i}
+                        title={`${dado.categoria} - ${dado.quantidade}`}
+                        arrow
+                        open={tooltipOpen === id}
+                        onClose={() => setTooltipOpen(null)}
+                        disableHoverListener
+                        disableFocusListener
+                        disableTouchListener
+                        placement='top'
+                      >
                         <BoxApp
                           display='flex'
                           flexDirection='column'
                           alignItems='center'
                           justifyContent='end'
-                          sx={{ flex: 1, height: '100%' }}
+                          onClick={() => {
+                            setTooltipOpen(prev => (prev === id ? null : id))
+                          }}
+                          sx={{
+                            flex: 1,
+                            height: '100%',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
                         >
                           {/* 🔥 VALOR DA CATEGORIA */}
                           <TextApp
