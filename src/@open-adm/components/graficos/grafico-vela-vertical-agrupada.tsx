@@ -3,6 +3,7 @@
 import { useTheme } from '@mui/material/styles'
 import { BoxApp } from '../box'
 import { TextApp } from '../text'
+import { Tooltip } from '@mui/material'
 
 interface IDadoCategoria {
   quantidade: number
@@ -101,37 +102,38 @@ export function GraficoVelaVerticalAgrupado(props: GraficoVelasProps) {
                     const alturaPx = Math.max(Math.round((dado.quantidade / maxTotal) * ALTURA_AREA_BARRAS), 4)
 
                     return (
-                      <BoxApp
-                        key={j}
-                        display='flex'
-                        flexDirection='column'
-                        alignItems='center'
-                        justifyContent='end'
-                        sx={{ flex: 1, height: '100%' }}
-                      >
-                        {/* 🔥 VALOR DA CATEGORIA */}
-                        <TextApp
-                          texto={String(dado.quantidade)}
-                          fontSize='10px'
-                          fontWeight={600}
-                          color='textSecondary'
-                          textAlign='center'
-                        />
-
-                        {/* 🔥 BARRA */}
+                      <Tooltip key={j} title={`${dado.categoria} - ${dado.quantidade}`} arrow placement='top'>
                         <BoxApp
-                          sx={{
-                            width: '100%',
-                            height: `${alturaPx}px`,
-                            borderRadius: '4px 4px 0 0',
-                            transition: 'height 0.8s cubic-bezier(.34,1.56,.64,1)',
-                            opacity: 0.9
-                          }}
-                          backgroundColor={getColor(j)}
+                          display='flex'
+                          flexDirection='column'
+                          alignItems='center'
+                          justifyContent='end'
+                          sx={{ flex: 1, height: '100%' }}
                         >
-                          <></>
+                          {/* 🔥 VALOR DA CATEGORIA */}
+                          <TextApp
+                            texto={String(dado.quantidade)}
+                            fontSize='10px'
+                            fontWeight={600}
+                            color='textSecondary'
+                            textAlign='center'
+                          />
+
+                          {/* 🔥 BARRA */}
+                          <BoxApp
+                            sx={{
+                              width: '100%',
+                              height: `${alturaPx}px`,
+                              borderRadius: '4px 4px 0 0',
+                              transition: 'height 0.8s cubic-bezier(.34,1.56,.64,1)',
+                              opacity: 0.9
+                            }}
+                            backgroundColor={getColor(j)}
+                          >
+                            <></>
+                          </BoxApp>
                         </BoxApp>
-                      </BoxApp>
+                      </Tooltip>
                     )
                   })}
                 </BoxApp>
