@@ -124,10 +124,10 @@ export function GraficoVelaVerticalAgrupado(props: GraficoVelasProps) {
                           onClick={() => {
                             setTooltipOpen(prev => (prev === id ? null : id))
                           }}
+                          cursor='pointer'
                           sx={{
                             flex: 1,
                             height: '100%',
-                            cursor: 'pointer',
                             transition: 'all 0.2s ease'
                           }}
                         >
