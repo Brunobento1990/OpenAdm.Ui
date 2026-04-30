@@ -38,8 +38,6 @@ export function GraficoVelaVerticalAgrupado(props: GraficoVelasProps) {
 
   const getColor = (index: number) => fallbackColors[index % fallbackColors.length]
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-
   return (
     <BoxApp
       sx={{
