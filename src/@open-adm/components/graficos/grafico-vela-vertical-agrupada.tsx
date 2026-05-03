@@ -128,11 +128,11 @@ export function GraficoVelaVerticalAgrupado(props: GraficoVelasProps) {
                             alignItems='center'
                             justifyContent='end'
                             onClick={() => setTooltipOpen(prev => (prev === id ? null : id))}
+                            cursor='pointer'
                             sx={{
                               flex: 1,
                               maxWidth: '16px',
                               height: '100%',
-                              cursor: 'pointer',
                               transition: 'all 0.2s ease',
                               '&:hover': {
                                 transform: 'scale(1.05)',

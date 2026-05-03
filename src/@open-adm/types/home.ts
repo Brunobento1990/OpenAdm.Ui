@@ -1,9 +1,6 @@
 import { ICliente } from './cliente'
 
 export interface IHome {
-  posicaoDeEstoques: IPosicaoEstoqueHome[]
-  topUsuariosTotalCompra: IUsuarioHome[]
-  topUsuariosTotalPedido: IUsuarioHome[]
   movimentos: IMovimentoProdutoHome[]
   faturas: IFaturaHome[]
   totalAReceber: number
@@ -18,6 +15,17 @@ export interface IHome {
   totalProdutoEstoque: number
   totalProdutoEstoqueReservado: number
   quantidadeProdutoDisponivel: number
+  produtosMaisVendidos: IVendaProduto[]
+  produtosMenosVendidos: IVendaProduto[]
+}
+
+export interface IVendaProduto {
+  id: string
+  descricao: string
+  foto: string
+  peso?: string
+  tamanho?: string
+  quantidade: number
 }
 
 export interface IStatusPedidoHome {

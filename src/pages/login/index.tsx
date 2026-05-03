@@ -32,9 +32,9 @@ const FormControlLabel = styled(MuiFormControlLabel)<FormControlLabelProps>(({ t
     color: theme.palette.text.secondary
   }
 }))
-const messageRequered = "Este campo é obrigatório!";
+const messageRequered = 'Este campo é obrigatório!'
 const schema = yup.object().shape({
-  email: yup.string().email("E-mail inválido!").required(messageRequered),
+  email: yup.string().email('E-mail inválido!').required(messageRequered),
   password: yup.string().required(messageRequered)
 })
 
@@ -50,19 +50,19 @@ interface FormData {
 
 const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState<boolean>(true)
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const { getItem } = useLocalStorage();
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
+  const { getItem } = useLocalStorage()
 
   // ** Hooks
   const auth = useAuth()
 
   useEffect(() => {
-    const lembreMe = getItem<string>(authConfig.lembreMe);
-    const lembreMeEmail = getItem<string>(authConfig.lembreMeEmail);
+    const lembreMe = getItem<string>(authConfig.lembreMe)
+    const lembreMeEmail = getItem<string>(authConfig.lembreMeEmail)
     if (lembreMe === 'true' && lembreMeEmail) {
-      setRememberMe(true);
-      setValue("email", lembreMeEmail);
+      setRememberMe(true)
+      setValue('email', lembreMeEmail)
     } else {
       setRememberMe(false)
     }
@@ -80,10 +80,10 @@ const LoginPage = () => {
   })
 
   const onSubmit = async (data: FormData) => {
-    setLoading(true);
+    setLoading(true)
     const { email, password } = data
-    await auth.login({ email, password, rememberMe });
-    setLoading(false);
+    await auth.login({ email, password, rememberMe })
+    setLoading(false)
   }
 
   return (
@@ -122,7 +122,8 @@ const LoginPage = () => {
                     error={Boolean(errors.email)}
                     {...(errors.email && { helperText: errors.email.message })}
                   />
-                )} />
+                )}
+              />
               <Controller
                 name='password'
                 control={control}

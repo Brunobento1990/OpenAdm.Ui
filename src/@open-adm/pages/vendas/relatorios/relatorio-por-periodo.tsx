@@ -1,13 +1,17 @@
 import { Grid } from '@mui/material'
 import { useFormik } from 'formik'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import CustomTextField from 'src/@core/components/mui/text-field'
+import { useFormikAdapter } from 'src/@open-adm/adapters/formik-adapter'
 import { YupAdapter } from 'src/@open-adm/adapters/yup-adapter'
+import { DropDownAutoFetchApp } from 'src/@open-adm/components/drop-down/drop-down-auto-fetch-app'
 import { FormApp } from 'src/@open-adm/components/form'
-import { GridApp } from 'src/@open-adm/components/grid'
-import SelectCustom from 'src/@open-adm/components/select'
+import { GridApp, GridItemApp } from 'src/@open-adm/components/grid'
+import { InputApp } from 'src/@open-adm/components/input/input-app'
+import { InputDate } from 'src/@open-adm/components/input/input-date'
 import { useSnackbar } from 'src/@open-adm/components/snack'
-import { useApi } from 'src/@open-adm/hooks/use-api'
+import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
+import { IUsuarioHome } from 'src/@open-adm/types/home'
 import { generatePdfFromBase64 } from 'src/@open-adm/utils/download-pdf'
 
 const defaultValues = {
@@ -16,29 +20,31 @@ const defaultValues = {
   usuarioId: ''
 }
 
+interface IRelatorioPorPeriodo {
+  dataInicial: string
+  dataFinal: string
+  usuarioId?: string
+  usuario?: IUsuarioHome
+}
+
 export function RelatorioPorPeriodo() {
-  const [usuarios, setUsuarios] = useState<any[]>([])
-  const { post, get } = useApi()
+  const { fecth, loading } = useNewApi({
+    method: 'POST',
+    url: 'pedidos/relatorio-por-periodo'
+  })
   const snack = useSnackbar()
-  const formik = useFormik({
+  const formik = useFormikAdapter<IRelatorioPorPeriodo>({
     initialValues: defaultValues,
     validationSchema: new YupAdapter().string('dataInicial').string('dataFinal').build(),
     onSubmit: values => submit(values)
   })
-
-  async function init() {
-    const response = await get<any>('usuarios/list')
-    if (response) {
-      setUsuarios(response)
-    }
-  }
 
   async function submit(values: any) {
     try {
       if (!values.usuarioId) {
         delete values.usuarioId
       }
-      const response = await post('pedidos/relatorio-por-periodo', values, 'Download efetuado com sucesso!')
+      const response = await fecth<any>({ body: values, message: 'Download efetuado com sucesso!' })
       if (response?.count === 0) {
         snack.show('Não há pedidos para o período selecionado!', 'error')
         return
@@ -55,58 +61,47 @@ export function RelatorioPorPeriodo() {
     } catch (error) {}
   }
 
-  useEffect(() => {
-    init()
-  }, [])
-
   return (
-    <FormApp submit={formik.submitForm} titulo='Relatório por período' tituloBotaoSalvar='Download'>
-      <Grid container spacing={5}>
-        <GridApp item xs={12} sm={4}>
-          <CustomTextField
-            fullWidth
+    <FormApp loading={loading} submit={formik.onSubmit} titulo='Relatório por período' tituloBotaoSalvar='Download'>
+      <GridApp container spacing={5}>
+        <GridItemApp item xs={12} sm={4}>
+          <InputDate
             label='Data inicial'
             name='dataInicial'
             id='dataInicial'
             required
             value={formik.values.dataInicial}
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            helperText={formik.touched.dataInicial && formik.errors.dataInicial}
-            error={!!(formik.touched.dataInicial && formik.errors.dataInicial)}
-            type='date'
+            onBlur={formik.onBlur}
+            onChange={formik.onChange}
+            helperText={formik.helperText('dataInicial')}
+            error={formik.error('dataInicial')}
           />
-        </GridApp>
-        <GridApp item xs={12} sm={4}>
-          <CustomTextField
-            fullWidth
+        </GridItemApp>
+        <GridItemApp item xs={12} sm={4}>
+          <InputDate
             label='Data final'
             name='dataFinal'
             id='dataFinal'
             required
             value={formik.values.dataFinal}
-            onBlur={formik.handleBlur}
-            onChange={formik.handleChange}
-            helperText={formik.touched.dataFinal && formik.errors.dataFinal}
-            error={!!(formik.touched.dataFinal && formik.errors.dataFinal)}
-            type='date'
+            onBlur={formik.onBlur}
+            onChange={formik.onChange}
+            helperText={formik.helperText('dataFinal')}
+            error={formik.error('dataFinal')}
           />
-        </GridApp>
-        <GridApp item xs={12} sm={4}>
-          <SelectCustom
+        </GridItemApp>
+        <GridItemApp item xs={12} sm={4}>
+          <DropDownAutoFetchApp
+            method='GET'
             id='usuarios'
-            getOptionLabel={option => option.nome || ''}
-            onInputChange={(_, newInputValue) =>
-              formik.setValues({
-                ...formik.values,
-                usuarioId: usuarios.find(x => x.nome === newInputValue)?.id
-              })
-            }
-            options={usuarios}
-            renderInput={params => <CustomTextField {...params} label='Selecione um cliente' />}
+            label={'Selecione um cliente'}
+            url={'usuarios/list'}
+            keyLabel={'nome'}
+            value={formik.values.usuario}
+            onChange={(_, value) => formik.setValue({ usuarioId: value?.id, usuario: value })}
           />
-        </GridApp>
-      </Grid>
+        </GridItemApp>
+      </GridApp>
     </FormApp>
   )
 }

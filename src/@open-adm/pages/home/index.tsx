@@ -14,19 +14,11 @@ import StatusPedidoHome from 'src/@open-adm/views/home/pedidos-em-aberto-grafico
 import { rotasApp } from 'src/configs/rotasApp'
 import { GraficoVelaVerticalAgrupado } from 'src/@open-adm/components/graficos/grafico-vela-vertical-agrupada'
 
-const TopClientesMaisGastos = dynamic(() => import('src/@open-adm/views/home/top-clientes-mais-gastos'), {
-  ssr: false
-})
-
 const TotalUsuario = dynamic(() => import('src/@open-adm/views/home/total-usuarios'), {
   ssr: false
 })
 
 const AcessoUsuarioEcommerce = dynamic(() => import('src/@open-adm/views/home/acesso-usuario-ecommerce'), {
-  ssr: false
-})
-
-const TopClientesMaisPedidos = dynamic(() => import('src/@open-adm/views/home/top-clientes-mais-pedidos'), {
   ssr: false
 })
 
@@ -139,46 +131,41 @@ export function HomePage() {
         />
       </BoxApp>
       <BoxApp padding='1rem'>
-        <Grid container spacing={5}>
-          <Grid size={{ xs: 12, sm: 6 }}>
+        <GridApp container spacing={5}>
+          <GridItemApp xs={12} sm={3}>
             <AcessoUsuarioEcommerce total={home?.quantidadeDeAcessoEcommerce ?? 0} />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6 }}>
+          </GridItemApp>
+          <GridItemApp xs={12} sm={3}>
             <FaturasTotalizador total={home?.totalAReceber ?? 0} />
-          </Grid>
-        </Grid>
+          </GridItemApp>
+          <GridItemApp xs={12} sm={3}>
+            <TotalUsuario
+              navigate={() => navigate(rotasApp.cliente.ultimosPedidoCnpj)}
+              cor='green'
+              titulo='Qtd clientes CNPJ'
+              total={home?.quantidadeDeUsuarioCnpj ?? 0}
+            />
+          </GridItemApp>
+          <GridItemApp xs={12} sm={3}>
+            <TotalUsuario
+              navigate={() => navigate(rotasApp.cliente.ultimosPedidoCpf)}
+              cor='red'
+              titulo='Qtd clientes CPF'
+              total={home?.quantidadeDeUsuarioCpf ?? 0}
+            />
+          </GridItemApp>
+        </GridApp>
       </BoxApp>
       <BoxApp padding='1rem'>
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, sm: 9 }}>
-            <EstoquesHome estoques={home?.posicaoDeEstoques ?? []} />
-          </Grid>
-          <Grid size={{ xs: 12, sm: 3 }}>
-            <BoxApp display='flex' flexDirection='column' gap='0.5rem'>
-              <TotalUsuario
-                navigate={() => navigate(rotasApp.cliente.ultimosPedidoCnpj)}
-                cor='green'
-                titulo='Qtd clientes CNPJ'
-                total={home?.quantidadeDeUsuarioCnpj ?? 0}
-              />
-              <TotalUsuario
-                navigate={() => navigate(rotasApp.cliente.ultimosPedidoCpf)}
-                cor='red'
-                titulo='Qtd clientes CPF'
-                total={home?.quantidadeDeUsuarioCpf ?? 0}
-              />
-            </BoxApp>
-          </Grid>
-        </Grid>
+        <GridApp container spacing={3}>
+          <GridItemApp xs={12} sm={6}>
+            <EstoquesHome estoques={home?.produtosMaisVendidos ?? []} titulo='Produtos mais vendidos' />
+          </GridItemApp>
+          <GridItemApp xs={12} sm={6}>
+            <EstoquesHome estoques={home?.produtosMenosVendidos ?? []} titulo='Produtos menos vendidos' />
+          </GridItemApp>
+        </GridApp>
       </BoxApp>
-      <Grid container spacing={5} padding={2}>
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <TopClientesMaisGastos topUsuarios={home?.topUsuariosTotalCompra ?? []} />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <TopClientesMaisPedidos topUsuarios={home?.topUsuariosTotalPedido ?? []} />
-        </Grid>
-      </Grid>
     </>
   )
 }
