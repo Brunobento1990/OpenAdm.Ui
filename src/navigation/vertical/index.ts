@@ -111,6 +111,11 @@ const navigation = (): VerticalNavItemsType => {
           path: '/vendas/relatorio-por-periodo'
         },
         {
+          title: 'Relatório venda produto',
+          icon: 'fluent-mdl2:product-variant',
+          path: '/vendas/relatorio-venda-produto'
+        },
+        {
           title: 'Clientes',
           icon: 'solar:user-id-linear',
           path: '/vendas/cliente'
