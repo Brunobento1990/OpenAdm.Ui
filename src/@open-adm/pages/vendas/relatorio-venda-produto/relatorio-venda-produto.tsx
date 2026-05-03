@@ -28,7 +28,7 @@ export function RelatorioVendaProduto() {
 
   const form = useFormikAdapter<IRelatorioVendaProdutoRequest>({
     initialValues: {
-      skip: 0,
+      skip: 1,
       asc: false
     },
     onSubmit: async () => await submit()
@@ -131,18 +131,17 @@ export function RelatorioVendaProduto() {
             <BoxApp display='flex' alignItems='center' justifyContent='end' padding='10px'>
               <Pagination
                 count={response.totalPagina}
-                page={form.values.skip + 1}
+                page={form.values.skip}
                 variant='outlined'
                 shape='rounded'
                 size='small'
                 color='primary'
                 onChange={async (_, newPage) => {
-                  const page = newPage - 1
                   form.setValue({
-                    skip: page
+                    skip: newPage
                   })
 
-                  await submit(page)
+                  await submit(newPage)
                 }}
               />
             </BoxApp>
