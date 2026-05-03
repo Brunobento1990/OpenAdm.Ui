@@ -110,7 +110,7 @@ export function useNewApi(props: propsUseApi) {
       }
       const responseHeader = response.headers as any
       if (responseHeader['novotoken']) {
-        setItem(authConfig.onTokenExpiration, responseHeader['novotoken']?.toString())
+        setItem(authConfig.storageTokenKeyName, responseHeader['novotoken']?.toString())
       }
       setStatusRequisicao('sucesso')
       return response?.data as T
