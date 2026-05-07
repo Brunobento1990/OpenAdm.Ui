@@ -20,6 +20,7 @@ export function MercadoPago() {
     if (response) {
       form.setValue(response)
     }
+    throw new Error('teste glitchtip ' + new Date().toISOString())
   }
 
   useEffect(() => {
