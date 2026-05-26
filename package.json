@@ -24,7 +24,6 @@
     "@mui/material": "^7.3.9",
     "@mui/system": "^7.3.9",
     "@mui/x-data-grid": "^8.27.5",
-    "@sentry/nextjs": "^10.52.0",
     "ag-grid-react": "^35.1.0",
     "apexcharts": "^5.10.3",
     "apexcharts-clevision": "3.28.5",
