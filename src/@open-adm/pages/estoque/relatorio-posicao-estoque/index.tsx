@@ -17,7 +17,7 @@ import { BoxApp } from 'src/@open-adm/components/box'
 import { ButtonApp } from 'src/@open-adm/components/buttons'
 import { useArquivo } from 'src/@open-adm/hooks/use-arquivo'
 import { gerarHtmlRelatorioPosicaoEstoque } from './template-html'
-import { GridApp } from 'src/@open-adm/components/grid'
+import { GridApp, GridItemApp } from 'src/@open-adm/components/grid'
 
 export function RelatorioPosicaoEstoque() {
   const [resultado, setResultado] = useState<IRelatorioPosicaoEstoqueResponse>()
@@ -71,8 +71,8 @@ export function RelatorioPosicaoEstoque() {
       }}
     >
       <DividerApp chip='Filtros' />
-      <Grid container spacing={5}>
-        <GridApp item xs={12} sm={4}>
+      <GridApp container spacing={5}>
+        <GridItemApp item xs={12} sm={3}>
           <DropDownMultiple
             id='produtoId'
             label='Produtos'
@@ -81,19 +81,18 @@ export function RelatorioPosicaoEstoque() {
             onChange={produtos => form.setValue({ produtos })}
             url='produtos/all-list'
           />
-        </GridApp>
-        <GridApp item xs={12} sm={4}>
+        </GridItemApp>
+        <GridItemApp item xs={12} sm={3}>
           <DropDownMultiple
             id='categoriasId'
             label='Categorias'
-            primeiraKey='numero'
-            segundaKey='descricao'
+            primeiraKey='descricao'
             onChange={categorias => form.setValue({ categorias })}
-            url='categorias/list-drop-down'
+            url='/ecommerce/categorias/listar'
             method='GET'
           />
-        </GridApp>
-        <GridApp item xs={12} sm={4}>
+        </GridItemApp>
+        <GridItemApp item xs={12} sm={3}>
           <DropDownMultiple
             id='pesoId'
             label='Pesos'
@@ -102,8 +101,8 @@ export function RelatorioPosicaoEstoque() {
             onChange={pesos => form.setValue({ pesos })}
             url='pesos/list'
           />
-        </GridApp>
-        <GridApp item xs={12} sm={4}>
+        </GridItemApp>
+        <GridItemApp item xs={12} sm={3}>
           <DropDownMultiple
             id='tamanhoId'
             label='Tamanhos'
@@ -112,8 +111,8 @@ export function RelatorioPosicaoEstoque() {
             onChange={tamanhos => form.setValue({ tamanhos })}
             url='tamanhos/list'
           />
-        </GridApp>
-      </Grid>
+        </GridItemApp>
+      </GridApp>
       <DividerApp chip='Produtos' marginBotton='1rem' />
       <TabelaComDrag
         columns={[

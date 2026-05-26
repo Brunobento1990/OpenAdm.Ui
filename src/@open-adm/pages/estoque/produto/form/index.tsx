@@ -248,7 +248,7 @@ export function ProdutoForm(props: IFormTypes) {
               method='GET'
               keyLabel='descricao'
               label='Categoria'
-              url='/categorias/list-drop-down'
+              url='/ecommerce/categorias/listar'
               value={form.values.categoria}
               error={form.error('categoriaId')}
               helperText={form.helperText('categoriaId')}
