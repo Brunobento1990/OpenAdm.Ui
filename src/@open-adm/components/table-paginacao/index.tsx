@@ -11,6 +11,8 @@ import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
 import { formatDate } from 'src/@open-adm/utils/convert-date'
 import { TabelaComDrag, TypeColumns } from '../table/tabela-com-drag'
 
+const keyQuantidadePorPagina = 'paginacao-quantidadePorPagina'
+
 interface tableProps {
   columns: TypeColumns[]
   url: string
@@ -53,7 +55,7 @@ export function TableIndex(props: tableProps) {
   const [paginacao, setPaginacao] = useState<IPaginacao>({
     pagina: 1,
     values: [],
-    quantidadePorPagina: Number(localStorage.getItem('paginacao-quantidadePorPagina')) || 10,
+    quantidadePorPagina: Number(localStorage.getItem(keyQuantidadePorPagina)) || 10,
     quantidadePagina: 0,
     sorting: {
       field: 'numero',
@@ -73,7 +75,7 @@ export function TableIndex(props: tableProps) {
     const response = await fecth<any>({
       body: {
         skip: paginacao.pagina,
-        take: props.take ?? paginacao.quantidadePorPagina,
+        take: props.take || paginacao.quantidadePorPagina,
         orderBy: paginacao.sorting.field,
         asc: paginacao.sorting.sort === 'asc',
         search: searchP,
@@ -214,7 +216,7 @@ export function TableIndex(props: tableProps) {
         quantidadePagina={paginacao.quantidadePagina}
         quantidadePorPagina={paginacao.quantidadePorPagina}
         setQuantidadePorPagina={qtd => {
-          localStorage.setItem('paginacao-quantidadePorPagina', qtd.toString())
+          localStorage.setItem(keyQuantidadePorPagina, qtd.toString())
           setPaginacao(state => ({ ...state, quantidadePorPagina: qtd }))
         }}
       />
