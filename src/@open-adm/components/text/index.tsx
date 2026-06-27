@@ -9,6 +9,7 @@ interface propsTextApp {
   width?: string
   textAlign?: string
   marginBottom?: string
+  noWrap?: boolean
 }
 
 export function TextApp(props: propsTextApp) {
@@ -17,6 +18,7 @@ export function TextApp(props: propsTextApp) {
       sx={{ color: props.color ?? 'text.secondary', padding: props.padding, width: props.width }}
       fontWeight={props.fontWeight}
       fontSize={props.fontSize}
+      noWrap={props.noWrap}
       marginBottom={props.marginBottom}
       textAlign={props.textAlign as any}
     >

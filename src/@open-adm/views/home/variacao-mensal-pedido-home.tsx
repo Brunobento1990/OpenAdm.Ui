@@ -1,5 +1,4 @@
 import { BoxApp } from 'src/@open-adm/components/box'
-import { CardCustom } from 'src/@open-adm/components/cards'
 import { DividerApp } from 'src/@open-adm/components/divider'
 import { IconApp } from 'src/@open-adm/components/icon'
 import { TextApp } from 'src/@open-adm/components/text'

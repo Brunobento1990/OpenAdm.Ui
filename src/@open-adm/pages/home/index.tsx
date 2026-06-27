@@ -13,6 +13,8 @@ import { CardTotalizador } from 'src/@open-adm/views/home/card-totalizador'
 import StatusPedidoHome from 'src/@open-adm/views/home/pedidos-em-aberto-grafico'
 import { rotasApp } from 'src/configs/rotasApp'
 import { GraficoVelaVerticalAgrupado } from 'src/@open-adm/components/graficos/grafico-vela-vertical-agrupada'
+import CobrancaPeriodoHome from 'src/@open-adm/views/home/cobranca-periodo-home'
+import { DividerApp } from 'src/@open-adm/components/divider'
 
 const TotalUsuario = dynamic(() => import('src/@open-adm/views/home/total-usuarios'), {
   ssr: false
@@ -62,6 +64,8 @@ export function HomePage() {
     <>
       {statusRequisicao === 'loading' && <LoadingAppTexto comBox />}
       <BoxApp padding='1rem' display='flex' flexDirection='column' gap='1rem'>
+        <CobrancaPeriodoHome cobranca={home?.cobranca} />
+        <DividerApp chip='Estoque' />
         <GridApp container>
           <GridItemApp item xs={12} sm={3}>
             <VariacaoMensalPedidoHome variacaoMensalPedido={home?.variacaoMensalPedido} />
@@ -91,6 +95,7 @@ export function HomePage() {
             />
           </GridItemApp>
         </GridApp>
+        <DividerApp chip='Pedidos' />
         <GridApp container>
           <GridItemApp xs={12} item sm={6}>
             <StatusPedidoHome pedidos={home?.statusPedido ?? []} />
@@ -120,7 +125,7 @@ export function HomePage() {
           </GridItemApp>
         </GridApp>
       </BoxApp>
-      <BoxApp padding='1rem' display='flex' flexDirection='column' gap='1rem'>
+      {/* <BoxApp padding='1rem' display='flex' flexDirection='column' gap='1rem'>
         <ClientesSemPedidoHome
           titulo={`${home?.usuarioSemPedidoCnpj?.length ?? 0} Clientes sem pedido CNPJ`}
           cliente={home?.usuarioSemPedidoCnpj ?? []}
@@ -129,15 +134,15 @@ export function HomePage() {
           titulo={`${home?.usuarioSemPedidoCpf?.length ?? 0} Clientes sem pedido CPF`}
           cliente={home?.usuarioSemPedidoCpf ?? []}
         />
-      </BoxApp>
+      </BoxApp> */}
       <BoxApp padding='1rem'>
         <GridApp container spacing={5}>
           <GridItemApp xs={12} sm={3}>
             <AcessoUsuarioEcommerce total={home?.quantidadeDeAcessoEcommerce ?? 0} />
           </GridItemApp>
-          <GridItemApp xs={12} sm={3}>
+          {/* <GridItemApp xs={12} sm={3}>
             <FaturasTotalizador total={home?.totalAReceber ?? 0} />
-          </GridItemApp>
+          </GridItemApp> */}
           <GridItemApp xs={12} sm={3}>
             <TotalUsuario
               navigate={() => navigate(rotasApp.cliente.ultimosPedidoCnpj)}

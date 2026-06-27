@@ -17,6 +17,23 @@ export interface IHome {
   quantidadeProdutoDisponivel: number
   produtosMaisVendidos: IVendaProduto[]
   produtosMenosVendidos: IVendaProduto[]
+  cobranca: ICobrancaHome
+}
+
+export interface ICobrancaHome {
+  totalHoje: number
+  totalSemana: number
+  totalCobranca: number
+  quantidadeACobrar: number
+  cobrancasMaisAntigas: IItemCobrancaHome[]
+}
+
+interface IItemCobrancaHome {
+  pedidoId: string
+  numeroPedido: number
+  valor: number
+  aDias: number
+  cliente: string
 }
 
 export interface IVendaProduto {
