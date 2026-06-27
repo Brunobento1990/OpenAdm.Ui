@@ -43,6 +43,7 @@ export interface IVendaProduto {
   peso?: string
   tamanho?: string
   quantidade: number
+  valorTotal: number
 }
 
 export interface IStatusPedidoHome {

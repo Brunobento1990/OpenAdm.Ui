@@ -1,4 +1,3 @@
-import { Grid } from '@mui/material'
 import dynamic from 'next/dynamic'
 import { useTheme } from '@mui/material/styles'
 import { useState, useEffect } from 'react'
@@ -28,15 +27,7 @@ const EstoquesHome = dynamic(() => import('src/@open-adm/views/home/estoques-hom
   ssr: false
 })
 
-const ClientesSemPedidoHome = dynamic(() => import('src/@open-adm/views/home/clientes-sem-pedido-home'), {
-  ssr: false
-})
-
 const VariacaoMensalPedidoHome = dynamic(() => import('src/@open-adm/views/home/variacao-mensal-pedido-home'), {
-  ssr: false
-})
-
-const FaturasTotalizador = dynamic(() => import('src/@open-adm/views/home/totalizacao-faturas'), {
   ssr: false
 })
 
@@ -136,6 +127,27 @@ export function HomePage() {
         />
       </BoxApp> */}
       <BoxApp padding='1rem'>
+        <DividerApp chip='Produtos' marginBotton='1rem' />
+        <GridApp container spacing={3}>
+          <GridItemApp xs={12} sm={6}>
+            <EstoquesHome
+              corIcone='#00CFE8'
+              icone='ant-design:product-outlined'
+              estoques={home?.produtosMaisVendidos ?? []}
+              titulo='Produtos mais vendidos (Quantidade)'
+            />
+          </GridItemApp>
+          <GridItemApp xs={12} sm={6}>
+            <EstoquesHome
+              corIcone='#FF9F43'
+              icone='ant-design:product-outlined'
+              estoques={home?.produtosMenosVendidos ?? []}
+              titulo='Produtos menos vendidos (Quantidade)'
+            />
+          </GridItemApp>
+        </GridApp>
+      </BoxApp>
+      <BoxApp padding='1rem'>
         <GridApp container spacing={5}>
           <GridItemApp xs={12} sm={3}>
             <AcessoUsuarioEcommerce total={home?.quantidadeDeAcessoEcommerce ?? 0} />
@@ -158,16 +170,6 @@ export function HomePage() {
               titulo='Qtd clientes CPF'
               total={home?.quantidadeDeUsuarioCpf ?? 0}
             />
-          </GridItemApp>
-        </GridApp>
-      </BoxApp>
-      <BoxApp padding='1rem'>
-        <GridApp container spacing={3}>
-          <GridItemApp xs={12} sm={6}>
-            <EstoquesHome estoques={home?.produtosMaisVendidos ?? []} titulo='Produtos mais vendidos' />
-          </GridItemApp>
-          <GridItemApp xs={12} sm={6}>
-            <EstoquesHome estoques={home?.produtosMenosVendidos ?? []} titulo='Produtos menos vendidos' />
           </GridItemApp>
         </GridApp>
       </BoxApp>
