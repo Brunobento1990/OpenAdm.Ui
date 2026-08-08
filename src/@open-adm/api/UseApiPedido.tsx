@@ -1,6 +1,7 @@
 import { rotasApi } from "src/configs/rotasApi";
 import { useNewApi } from "../hooks/use-new-api";
 import { IPedido } from "../types/pedido";
+import { ICobrancaPedidoResponse } from "../types/fatura";
 
 
 export function useApiPedido() {
@@ -22,6 +23,11 @@ export function useApiPedido() {
     const apiAtualizarStatus = useNewApi({
         method: "PUT",
         url: rotasApi.pedido.atualizaStatus,
+    });
+
+    const apiCobranca = useNewApi({
+        method: "GET",
+        url: rotasApi.pedido.cobranca,
     });
 
     async function downloadPedido(id: string): Promise<any> {
@@ -48,6 +54,12 @@ export function useApiPedido() {
         });
     }
 
+    async function obterCobranca(pedidoId: string): Promise<ICobrancaPedidoResponse | undefined> {
+        return await apiCobranca.fecth<ICobrancaPedidoResponse>({
+            urlParams: `?pedidoId=${pedidoId}`,
+        });
+    }
+
     return {
         downloadPedido: {
             fetch: downloadPedido,
@@ -64,6 +76,10 @@ export function useApiPedido() {
         criar: {
             fetch: criar,
             status: apiCriar.statusRequisicao,
+        },
+        cobranca: {
+            fetch: obterCobranca,
+            status: apiCobranca.statusRequisicao,
         },
     };
 }

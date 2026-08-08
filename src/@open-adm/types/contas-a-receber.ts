@@ -1,5 +1,6 @@
 import { IBase } from "./base";
 import { IPedido } from "./pedido";
+import { MeioDePagamentoEnum } from "../enuns/meio-de-pagamento-enum";
 
 export interface IContasAReceber extends IBase {
     status: 0,
@@ -14,23 +15,23 @@ export interface IContasAReceber extends IBase {
 
 export const meiosDePagamentos: any[] = [
     {
-        id: 1,
+        id: MeioDePagamentoEnum.Dinheiro,
         descricao: 'Dinheiro'
     },
     {
-        id: 2,
+        id: MeioDePagamentoEnum.Pix,
         descricao: 'Pix'
     },
     {
-        id: 3,
+        id: MeioDePagamentoEnum.CartaoDeDebito,
         descricao: 'Cartão de débito'
     },
     {
-        id: 4,
+        id: MeioDePagamentoEnum.CartaoDeCredito,
         descricao: 'Cartão de crédito'
     },
     {
-        id: 5,
+        id: MeioDePagamentoEnum.Boleto,
         descricao: 'Boleto'
     }
 ]

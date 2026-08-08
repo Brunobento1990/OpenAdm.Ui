@@ -68,6 +68,7 @@ export const rotasApi = {
         obter: "pedidos/get",
         atualizaStatus: "pedidos/update-status",
         criar: "pedidos-adm/create",
+        cobranca: "pedido/cobranca",
     },
     parceiro: {
         obter: "parceiro/obter",

@@ -69,4 +69,7 @@ export const rotasApp = {
         create: "/vendas/pedidos/create",
         paginacao: "/pedidos",
     },
+    financeiro: {
+        negociarCobranca: "/financeiro/fatura/negociar-cobranca",
+    },
 };

@@ -1,4 +1,4 @@
-import { IconButton, Tooltip } from "@mui/material";
+import { IconButton, IconButtonProps, Tooltip } from "@mui/material";
 import { IconApp } from ".";
 
 export type placement =
@@ -24,12 +24,22 @@ interface propsIconButtonComTooltip {
     titulo: string | string[];
     placement?: placement;
     active?: any;
+    disabled?: boolean;
+    ariaLabel?: string;
+    color?: IconButtonProps['color'];
 }
 
 export function IconButtonAppComTooltip(props: propsIconButtonComTooltip) {
     return (
         <Tooltip title={props.titulo} placement={props.placement}>
-            <IconButton onClick={props.onClick} sx={props.sx} size="small">
+            <IconButton
+                aria-label={props.ariaLabel}
+                color={props.color}
+                disabled={props.disabled}
+                onClick={props.onClick}
+                sx={props.sx}
+                size="small"
+            >
                 <IconApp width={props.width} icon={props.icon} color={props.cor} />
             </IconButton>
         </Tooltip>

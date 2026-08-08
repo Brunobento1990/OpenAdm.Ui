@@ -1,9 +1,14 @@
 import { useNewApi } from "../hooks/use-new-api";
 import { IFaturaContasAReceber, IPagarFaturaAReceber } from "../types/contas-a-receber";
-import { IFatura, IParcela } from "../types/fatura";
+import { ICriarFaturaRequest, IFatura, IParcela } from "../types/fatura";
 import { IResultado } from "../types/base";
 
 export function useApiFatura() {
+    const negociarFaturaApi = useNewApi({
+        method: 'POST',
+        url: 'fatura/negociar'
+    })
+
     const baixaAutomaticaApi = useNewApi({
         method: 'POST',
         url: 'fatura/baixa-automatica'
@@ -92,6 +97,13 @@ export function useApiFatura() {
         })
     }
 
+    async function negociar(body: ICriarFaturaRequest): Promise<unknown | undefined> {
+        return await negociarFaturaApi.fecth({
+            body,
+            message: 'Cobrança parcelada com sucesso'
+        })
+    }
+
     return {
         editarParcela,
         getFatura,
@@ -104,6 +116,10 @@ export function useApiFatura() {
         baixarAutomaticamente: {
             fetch: baixarAutomaticamente,
             status: baixaAutomaticaApi.statusRequisicao
+        },
+        negociar: {
+            fetch: negociar,
+            status: negociarFaturaApi.statusRequisicao
         }
     }
 }

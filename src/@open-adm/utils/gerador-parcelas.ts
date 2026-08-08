@@ -1,109 +1,50 @@
-
-import { IParcela } from '../types/fatura';
-import { cleanFormatMoney } from './format-money';
+import { IParcelaCriar } from '../types/fatura'
+import { MeioDePagamentoEnum } from '../enuns/meio-de-pagamento-enum'
+import { cleanFormatMoney } from './format-money'
 
 interface IPropsGerarParcela {
-    valor?: string | number;
-    quantidadeDeParcelas: number;
+  valor?: string | number
+  quantidadeDeParcelas: number
 }
 
-export function geradorParcelas(
-    props: IPropsGerarParcela,
-): IParcela[] | undefined {
-    if (!props.valor || !props.quantidadeDeParcelas) {
-        return undefined;
+export function geradorParcelas(props: IPropsGerarParcela): IParcelaCriar[] | undefined {
+  const valor = cleanFormatMoney(props.valor)
+  const quantidadeDeParcelas = Number(props.quantidadeDeParcelas)
+
+  if (!valor || !Number.isInteger(quantidadeDeParcelas) || quantidadeDeParcelas < 1) {
+    return undefined
+  }
+
+  const totalEmCentavos = Math.round(valor * 100)
+  const valorBaseEmCentavos = Math.floor(totalEmCentavos / quantidadeDeParcelas)
+  const centavosRestantes = totalEmCentavos - valorBaseEmCentavos * quantidadeDeParcelas
+
+  return Array.from({ length: quantidadeDeParcelas }, (_, index) => {
+    const ultimaParcela = index === quantidadeDeParcelas - 1
+    const valorEmCentavos = valorBaseEmCentavos + (ultimaParcela ? centavosRestantes : 0)
+
+    return {
+      dataDeVencimento: proximoVencimento(index + 1),
+      numeroDaParcela: index + 1,
+      meioDePagamento: MeioDePagamentoEnum.Dinheiro,
+      valor: valorEmCentavos / 100
     }
-    const valor = cleanFormatMoney(props.valor) ?? 0;
-    const dataAtual = new Date();
-    let novasParcelas: IParcela[] = [];
-    const valorParcela =
-        Math.floor((valor / props.quantidadeDeParcelas) * 100) /
-        100;
-    const valorUltimaParcela =
-        valor - valorParcela * (props.quantidadeDeParcelas - 1);
-
-    let proximoMesVencimento = dataAtual.getMonth() + 1;
-    let proximoAnoVencimento = dataAtual.getFullYear();
-
-    for (let i = 0; i < props.quantidadeDeParcelas - 1; i++) {
-        proximoMesVencimento++;
-        if (proximoMesVencimento > 12) {
-            proximoMesVencimento = 1;
-            proximoAnoVencimento += 1;
-        }
-        const proximoDiaVencimento = diaVencimentoDaParcela(
-            dataAtual,
-            proximoMesVencimento,
-        );
-        novasParcelas.push({
-            dataDeVencimento: dataVencimentoJson(
-                proximoAnoVencimento,
-                proximoMesVencimento,
-                proximoDiaVencimento,
-            ),
-            numeroDaParcela: i + 1,
-            valor: valorParcela,
-        } as any);
-    }
-
-    proximoMesVencimento += 1;
-    if (proximoMesVencimento > 12) {
-        proximoMesVencimento = 1;
-        proximoAnoVencimento += 1;
-    }
-    const proximoDiaVencimento = diaVencimentoDaParcela(
-        dataAtual,
-        proximoMesVencimento,
-    );
-    novasParcelas.push({
-        dataDeVencimento: dataVencimentoJson(
-            proximoAnoVencimento,
-            proximoMesVencimento,
-            proximoDiaVencimento,
-        ),
-        numeroDaParcela: props.quantidadeDeParcelas,
-        valor: valorUltimaParcela
-    } as any);
-
-    return novasParcelas;
+  })
 }
 
-function dataVencimentoJson(
-    proximoAnoVencimento: number,
-    proximoMesVencimento: number,
-    proximoDiaVencimento: number,
-) {
-    return `${proximoAnoVencimento}-${proximoMesVencimento
-        .toString()
-        .padStart(2, '0')}-${proximoDiaVencimento
-            .toString()
-            .padStart(2, '0')}`;
+function proximoVencimento(mesesAAdicionar: number): string {
+  const hoje = new Date()
+  const primeiroDiaDoMes = new Date(hoje.getFullYear(), hoje.getMonth() + mesesAAdicionar, 1)
+  const ultimoDiaDoMes = new Date(
+    primeiroDiaDoMes.getFullYear(),
+    primeiroDiaDoMes.getMonth() + 1,
+    0
+  ).getDate()
+  const dia = Math.min(hoje.getDate(), ultimoDiaDoMes)
+
+  return [
+    primeiroDiaDoMes.getFullYear(),
+    String(primeiroDiaDoMes.getMonth() + 1).padStart(2, '0'),
+    String(dia).padStart(2, '0')
+  ].join('-')
 }
-
-function diaVencimentoDaParcela(
-    dataAtual: Date,
-    proximoMesVencimento: number
-): number {
-    let proximoDiaVencimento = dataAtual.getDate();
-
-    if (proximoDiaVencimento > diaMaxDoMes[proximoMesVencimento]) {
-        proximoDiaVencimento = diaMaxDoMes[proximoMesVencimento];
-    }
-
-    return proximoDiaVencimento;
-}
-
-export const diaMaxDoMes: any = {
-    1: 31,
-    2: 28,
-    3: 31,
-    4: 30,
-    5: 31,
-    6: 30,
-    7: 31,
-    8: 31,
-    9: 30,
-    10: 31,
-    11: 30,
-    12: 31,
-};

@@ -23,8 +23,32 @@ export interface IFaturaCriar {
     pedidoId?: string,
     tipo: TipoFaturaEnum,
     quantidadeDeParcelas: number,
-    parcelas: IParcela[],
+    parcelas: IParcelaCriar[],
     total: number;
+}
+
+export interface IParcelaCriar {
+    dataDeVencimento: string,
+    numeroDaParcela: number,
+    meioDePagamento?: number,
+    valor: number,
+    desconto?: number,
+    observacao?: string
+}
+
+export interface ICriarFaturaRequest {
+    usuarioId?: string,
+    pedidoId?: string,
+    tipo: TipoFaturaEnum,
+    parcelas: IParcelaCriar[]
+}
+
+export interface ICobrancaPedidoResponse {
+    id: string,
+    numero: number,
+    pedidoId: string,
+    total: number,
+    status: number
 }
 
 export interface IPagarParcela {

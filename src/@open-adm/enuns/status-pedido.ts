@@ -6,7 +6,13 @@ export const statusPedido: any = {
     4: { title: "Cancelado", color: "error" }, //warning
 };
 
-export type StatusPedidoEnum = 0 | 1 | 2 | 3 | 4;
+export enum StatusPedidoEnum {
+    EmAberto = 0,
+    Faturado = 1,
+    EmEntrega = 2,
+    Entregue = 3,
+    Cancelado = 4
+}
 
 export const opcoesStatusPedido = [
     {
