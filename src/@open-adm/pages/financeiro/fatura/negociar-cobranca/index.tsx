@@ -5,6 +5,7 @@ import { useFormikAdapter } from 'src/@open-adm/adapters/formik-adapter'
 import { useApiPedido } from 'src/@open-adm/api/UseApiPedido'
 import { useApiFatura } from 'src/@open-adm/api/use-api-fatura'
 import { BoxApp } from 'src/@open-adm/components/box'
+import { CheckBoxApp } from 'src/@open-adm/components/check-box'
 import { DividerApp } from 'src/@open-adm/components/divider'
 import { DropDown } from 'src/@open-adm/components/drop-down'
 import { FormApp } from 'src/@open-adm/components/form'
@@ -196,7 +197,16 @@ export function NegociarCobrancaPage() {
               height='100%'
               boxSizing='border-box'
             >
-              <TextApp texto={`Parcela ${parcela.numeroDaParcela}`} color='primary.main' fontWeight={600} />
+              <BoxApp display='flex' alignItems='center' justifyContent='space-between'>
+                <TextApp texto={`Parcela ${parcela.numeroDaParcela}`} color='primary.main' fontWeight={600} />
+                <CheckBoxApp
+                  id={`aVista-${index}`}
+                  label='À vista'
+                  padding='0.25rem'
+                  value={parcela.aVista}
+                  onChange={(_, value) => editarParcela(index, 'aVista', value)}
+                />
+              </BoxApp>
               <InputCustom
                 fullWidth
                 required

@@ -27,6 +27,7 @@ export function geradorParcelas(props: IPropsGerarParcela): IParcelaCriar[] | un
       dataDeVencimento: proximoVencimento(index + 1),
       numeroDaParcela: index + 1,
       meioDePagamento: MeioDePagamentoEnum.Dinheiro,
+      aVista: false,
       valor: valorEmCentavos / 100
     }
   })

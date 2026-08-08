@@ -32,6 +32,7 @@ export interface IParcelaCriar {
     numeroDaParcela: number,
     meioDePagamento?: number,
     valor: number,
+    aVista: boolean,
     desconto?: number,
     observacao?: string
 }

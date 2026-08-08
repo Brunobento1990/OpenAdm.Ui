@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { ReactNode } from "react";
+import { AriaRole, KeyboardEventHandler, ReactNode } from "react";
 
 export type justifyContent =
   | "start"
@@ -26,6 +26,9 @@ export type textAlign =
 export type visibility = "visible" | "hidden" | "collapse";
 
 export interface propsBoxApp {
+  role?: AriaRole;
+  tabIndex?: number;
+  onKeyDown?: KeyboardEventHandler<HTMLElement>;
   visibility?: visibility;
   margin?: string;
   flex?: number;
