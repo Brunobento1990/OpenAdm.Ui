@@ -5,6 +5,10 @@ export interface IBase {
     numero: number;
 }
 
+export interface IResultado {
+    resultado: boolean;
+}
+
 export interface IEnderecoBase {
     id: string;
     cep: string;

@@ -1,8 +1,14 @@
 import { useNewApi } from "../hooks/use-new-api";
 import { IFaturaContasAReceber, IPagarFaturaAReceber } from "../types/contas-a-receber";
 import { IFatura, IParcela } from "../types/fatura";
+import { IResultado } from "../types/base";
 
 export function useApiFatura() {
+    const baixaAutomaticaApi = useNewApi({
+        method: 'POST',
+        url: 'fatura/baixa-automatica'
+    })
+
     const editarParcelaApi = useNewApi({
         method: 'PUT',
         url: 'parcela/editar-parcela'
@@ -79,6 +85,13 @@ export function useApiFatura() {
         return await excluirParcelaApi.fecth({ urlParams: id })
     }
 
+    async function baixarAutomaticamente(pedidoId: string): Promise<IResultado | undefined> {
+        return await baixaAutomaticaApi.fecth<IResultado>({
+            body: { pedidoId },
+            message: 'Fatura baixada com sucesso'
+        })
+    }
+
     return {
         editarParcela,
         getFatura,
@@ -87,6 +100,10 @@ export function useApiFatura() {
         parcelasDoPedido,
         pagar,
         get,
-        edit
+        edit,
+        baixarAutomaticamente: {
+            fetch: baixarAutomaticamente,
+            status: baixaAutomaticaApi.statusRequisicao
+        }
     }
 }

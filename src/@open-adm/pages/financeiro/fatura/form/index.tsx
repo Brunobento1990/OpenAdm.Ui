@@ -16,14 +16,15 @@ import { meiosDePagamentos } from "src/@open-adm/types/contas-a-receber";
 import { IFaturaCriar } from "src/@open-adm/types/fatura";
 import { cleanFormatMoney } from "src/@open-adm/utils/format-money";
 import { geradorParcelas } from "src/@open-adm/utils/gerador-parcelas";
+import { TipoFaturaEnum } from "src/@open-adm/enuns/tipo-fatura-enum";
 
 interface propsCreateFatura {
-    tipo: 0 | 1,
+    tipo: TipoFaturaEnum,
     urlVoltar: string;
 }
 
 export function CreateFatura(props: propsCreateFatura) {
-    const titulo = props.tipo === 0 ? 'Contas a pagar' : 'Contas a receber'
+    const titulo = props.tipo === TipoFaturaEnum.APagar ? 'Contas a pagar' : 'Contas a receber'
     const { navigate } = useNavigateApp();
     const [loading, setLoading] = useState(false)
     const form = useFormikAdapter<IFaturaCriar>({
@@ -92,7 +93,7 @@ export function CreateFatura(props: propsCreateFatura) {
                     <DropDownAutoFetchApp
                         id="usuarioId"
                         keyLabel={"nome"}
-                        label={props.tipo === 0 ? "Fornecedor" : "Cliente"}
+                        label={props.tipo === TipoFaturaEnum.APagar ? "Fornecedor" : "Cliente"}
                         url="usuarios/paginacao-drop-down"
                         onChange={form.onChange}
                         error={form.error("usuarioId")}

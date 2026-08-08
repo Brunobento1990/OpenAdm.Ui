@@ -34,6 +34,7 @@ interface tableProps {
   filtroChildren?: ReactNode
   take?: number
   nomeDaTabela?: string
+  desabilitarColunaNumero?: boolean
 }
 
 interface IPaginacao {
@@ -204,7 +205,7 @@ export function TableIndex(props: tableProps) {
       <BoxApp maxHeight='calc(100% - 120px)' height='100%' overflowy='auto' width='100%'>
         <TabelaComDrag
           loading={loading}
-          columns={[...defaultColuns(), ...props.columns, ...optionsColumns()]}
+          columns={[...(props.desabilitarColunaNumero ? [] : defaultColuns()), ...props.columns, ...optionsColumns()]}
           rows={paginacao.values}
           minWidth={props.minWidth}
           nomeDaTabela={props.nomeDaTabela}

@@ -14,23 +14,23 @@ export interface IContasAReceber extends IBase {
 
 export const meiosDePagamentos: any[] = [
     {
-        id: 0,
+        id: 1,
         descricao: 'Dinheiro'
     },
     {
-        id: 1,
+        id: 2,
         descricao: 'Pix'
     },
     {
-        id: 2,
+        id: 3,
         descricao: 'Cartão de débito'
     },
     {
-        id: 3,
+        id: 4,
         descricao: 'Cartão de crédito'
     },
     {
-        id: 4,
+        id: 5,
         descricao: 'Boleto'
     }
 ]
