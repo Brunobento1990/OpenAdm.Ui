@@ -14,6 +14,7 @@ import { rotasApp } from 'src/configs/rotasApp'
 import { GraficoVelaVerticalAgrupado } from 'src/@open-adm/components/graficos/grafico-vela-vertical-agrupada'
 import CobrancaPeriodoHome from 'src/@open-adm/views/home/cobranca-periodo-home'
 import { DividerApp } from 'src/@open-adm/components/divider'
+import ParcelasVencimentoHome from 'src/@open-adm/views/home/parcelas-vencimento-home'
 
 const TotalUsuario = dynamic(() => import('src/@open-adm/views/home/total-usuarios'), {
   ssr: false
@@ -55,6 +56,12 @@ export function HomePage() {
     <>
       {statusRequisicao === 'loading' && <LoadingAppTexto comBox />}
       <BoxApp padding='1rem' display='flex' flexDirection='column' gap='1rem'>
+        <DividerApp chip='Financeiro' />
+        <GridApp container>
+          <GridItemApp item xs={12} sm={6}>
+            <ParcelasVencimentoHome parcelas={home?.parcelas} />
+          </GridItemApp>
+        </GridApp>
         <CobrancaPeriodoHome cobranca={home?.cobranca} />
         <DividerApp chip='Estoque' />
         <GridApp container>

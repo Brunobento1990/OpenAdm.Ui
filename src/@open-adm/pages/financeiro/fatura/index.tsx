@@ -11,6 +11,10 @@ import { TipoFaturaEnum } from 'src/@open-adm/enuns/tipo-fatura-enum'
 import { StatusParcelaEnum } from 'src/@open-adm/enuns/status-parcela-enum'
 import { useModal } from 'src/@open-adm/components/modal/modal'
 import { useState } from 'react'
+import { InputDate } from 'src/@open-adm/components/input/input-date'
+import { FormRow } from 'src/@open-adm/components/form/row'
+import { FormItemRow } from 'src/@open-adm/components/form/item-row'
+import { DropDownApp } from 'src/@open-adm/components/drop-down/drop-down-app'
 
 interface propsFaturaPaginacao {
   tipo: TipoFaturaEnum
@@ -23,17 +27,35 @@ interface ParcelaCellRendererParams {
   data: IParcelaPaginacaoResponse
 }
 
+interface IFiltroFatura {
+  dataVencimentoInicial?: string
+  dataVencimentoFinal?: string
+  quitada?: boolean
+}
+
+interface FiltroVencimentoFaturaProps {
+  filtros: IFiltroFatura
+  setFiltros: (filtros: IFiltroFatura) => void
+}
+
 const statusParcela = {
   [StatusParcelaEnum.Pendente]: { titulo: 'Pendente', cor: 'warning' },
   [StatusParcelaEnum.PagoParcial]: { titulo: 'Pago parcial', cor: 'info' },
   [StatusParcelaEnum.Pago]: { titulo: 'Pago', cor: 'success' }
 } as const
 
+const opcoesSituacaoFatura = [
+  { id: undefined, descricao: 'Todas' },
+  { id: false, descricao: 'Pendentes' },
+  { id: true, descricao: 'Quitadas' }
+]
+
 export function FaturaPaginacao(props: propsFaturaPaginacao) {
   const { navigate } = useNavigateApp()
   const { estornarParcela } = useApiParcela()
   const { show, close } = useModal()
   const [refreshPai, setRefreshPai] = useState(false)
+  const [filtros, setFiltros] = useState<IFiltroFatura>({})
 
   function estornar(parcela: IParcelaPaginacaoResponse) {
     show({
@@ -50,6 +72,7 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
     <TableIndex
       minWidth={2500}
       desabilitarColunaNumero
+      filtroChildren={<FiltroVencimentoFatura filtros={filtros} setFiltros={setFiltros} />}
       columns={[
         {
           width: 120,
@@ -150,14 +173,52 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
         }
       ]}
       url='parcela/paginacao'
-    //   urlView={props.urlView}
-    //   urlEdit={props.urlEdit}
+      //   urlView={props.urlView}
+      //   urlEdit={props.urlEdit}
       urlAdd={props.urlAdd}
       refreshPai={refreshPai}
       nomeDaTabela='fatura'
       filtroComplementar={{
-        tipo: props.tipo
+        tipo: props.tipo,
+        dataVencimentoInicial: filtros.dataVencimentoInicial,
+        dataVencimentoFinal: filtros.dataVencimentoFinal,
+        quitada: filtros.quitada
       }}
     />
+  )
+}
+
+function FiltroVencimentoFatura(props: FiltroVencimentoFaturaProps) {
+  return (
+    <FormRow marginBottom='1rem'>
+      <FormItemRow xs={12} sm={4}>
+        <InputDate
+          id='dataVencimentoInicial'
+          name='dataVencimentoInicial'
+          label='Vencimento inicial'
+          value={props.filtros.dataVencimentoInicial}
+          onChange={(_, value) => props.setFiltros({ ...props.filtros, dataVencimentoInicial: value })}
+        />
+      </FormItemRow>
+      <FormItemRow xs={12} sm={4}>
+        <InputDate
+          id='dataVencimentoFinal'
+          name='dataVencimentoFinal'
+          label='Vencimento final'
+          value={props.filtros.dataVencimentoFinal}
+          onChange={(_, value) => props.setFiltros({ ...props.filtros, dataVencimentoFinal: value })}
+        />
+      </FormItemRow>
+      <FormItemRow xs={12} sm={4}>
+        <DropDownApp
+          id='quitada'
+          keyLabel='descricao'
+          label='Situação'
+          values={opcoesSituacaoFatura}
+          value={opcoesSituacaoFatura.find(opcao => opcao.id === props.filtros.quitada)}
+          onChange={(_, value) => props.setFiltros({ ...props.filtros, quitada: value })}
+        />
+      </FormItemRow>
+    </FormRow>
   )
 }

@@ -20,6 +20,8 @@ Use two-space indentation, UTF-8, and LF line endings. Prettier enforces single 
 
 Avoid hardcoded domain values such as unexplained strings and numbers. Prefer named constants for isolated values and enums for finite sets of related values, reusing existing definitions whenever available.
 
+Lay out form and filter inputs with `FormRow` and `FormItemRow`. Set responsive grid sizes explicitly so fields share a row on wider screens and occupy the full width on mobile; avoid ad hoc flex containers for input layouts.
+
 ## Testing Guidelines
 
 No automated test framework or coverage threshold is currently configured. Do not run `npm run build` unless the user explicitly requests it. Exercise the affected route in `npm run dev` and run `npm run lint` before submitting when appropriate. If introducing tests, colocate them as `*.test.ts` or `*.test.tsx`, add the runner to `package.json`, and document the command in this guide.

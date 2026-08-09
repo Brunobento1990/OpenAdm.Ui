@@ -18,6 +18,14 @@ export interface IHome {
   produtosMaisVendidos: IVendaProduto[]
   produtosMenosVendidos: IVendaProduto[]
   cobranca: ICobrancaHome
+  parcelas: IParcelasVencimentoHome
+}
+
+export interface IParcelasVencimentoHome {
+  aReceberHoje: number
+  aReceberSemana: number
+  aPagarHoje: number
+  aPagarSemana: number
 }
 
 export interface ICobrancaHome {
