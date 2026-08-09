@@ -42,6 +42,7 @@ interface IPaginacao {
   values: any[]
   quantidadePorPagina: number
   quantidadePagina: number
+  totalDeRegistros: number
   sorting: ISortingTable
 }
 
@@ -58,6 +59,7 @@ export function TableIndex(props: tableProps) {
     values: [],
     quantidadePorPagina: Number(localStorage.getItem(keyQuantidadePorPagina)) || 10,
     quantidadePagina: 0,
+    totalDeRegistros: 0,
     sorting: {
       field: 'numero',
       sort: 'desc'
@@ -88,7 +90,8 @@ export function TableIndex(props: tableProps) {
         return {
           ...state,
           quantidadePagina: response.totalPaginas,
-          values: response.values
+          values: response.values,
+          totalDeRegistros: response.totalDeRegistros
         }
       })
     } else {
@@ -97,6 +100,7 @@ export function TableIndex(props: tableProps) {
           return {
             ...state,
             quantidadePagina: 0,
+            totalDeRegistros: 0,
             values: []
           }
         })
@@ -205,7 +209,11 @@ export function TableIndex(props: tableProps) {
       <BoxApp maxHeight='calc(100% - 120px)' height='100%' overflowy='auto' width='100%'>
         <TabelaComDrag
           loading={loading}
-          columns={[...(props.desabilitarColunaNumero ? [] : defaultColuns()), ...props.columns, ...optionsColumns()]}
+          columns={[
+            ...(props.desabilitarColunaNumero ? [] : defaultColuns()),
+            ...props.columns,
+            ...(props.desabilitarColunaAcoes ? [] : optionsColumns())
+          ]}
           rows={paginacao.values}
           minWidth={props.minWidth}
           nomeDaTabela={props.nomeDaTabela}
@@ -216,6 +224,7 @@ export function TableIndex(props: tableProps) {
         setPagina={(newPage: number) => setPaginacao(state => ({ ...state, pagina: newPage }))}
         quantidadePagina={paginacao.quantidadePagina}
         quantidadePorPagina={paginacao.quantidadePorPagina}
+        totalDeRegistros={paginacao.totalDeRegistros || 0}
         setQuantidadePorPagina={qtd => {
           localStorage.setItem(keyQuantidadePorPagina, qtd.toString())
           setPaginacao(state => ({ ...state, quantidadePorPagina: qtd }))

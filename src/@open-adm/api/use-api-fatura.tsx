@@ -14,6 +14,11 @@ export function useApiFatura() {
         url: 'fatura/baixa-automatica'
     })
 
+    const bonificarApi = useNewApi({
+        method: 'POST',
+        url: 'fatura/bonificar'
+    })
+
     const editarParcelaApi = useNewApi({
         method: 'PUT',
         url: 'parcela/editar-parcela'
@@ -97,6 +102,13 @@ export function useApiFatura() {
         })
     }
 
+    async function bonificar(pedidoId: string): Promise<IResultado | undefined> {
+        return await bonificarApi.fecth<IResultado>({
+            body: { pedidoId },
+            message: 'Pedido bonificado com sucesso'
+        })
+    }
+
     async function negociar(body: ICriarFaturaRequest): Promise<unknown | undefined> {
         return await negociarFaturaApi.fecth({
             body,
@@ -116,6 +128,10 @@ export function useApiFatura() {
         baixarAutomaticamente: {
             fetch: baixarAutomaticamente,
             status: baixaAutomaticaApi.statusRequisicao
+        },
+        bonificar: {
+            fetch: bonificar,
+            status: bonificarApi.statusRequisicao
         },
         negociar: {
             fetch: negociar,

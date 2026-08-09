@@ -22,7 +22,7 @@ import { rotasApp } from 'src/configs/rotasApp'
 
 export function ModificarStatusPedidoForm() {
   const { obter, atualizarStatus } = useApiPedido()
-  const { baixarAutomaticamente } = useApiFatura()
+  const { baixarAutomaticamente, bonificar } = useApiFatura()
   const { navigate, id } = useNavigateApp()
   const [modalParcelamentoAberto, setModalParcelamentoAberto] = useState(false)
   const form = useFormikAdapter<IPedido>({
@@ -73,11 +73,20 @@ export function ModificarStatusPedidoForm() {
     }
   }
 
+  async function bonificarPedido() {
+    const response = await bonificar.fetch(form.values.id)
+
+    if (response?.resultado) {
+      continuarAlteracaoStatus()
+    }
+  }
+
   useEffect(() => {
     init()
   }, [])
 
   const loading = obter.status === 'loading' || atualizarStatus.status === 'loading'
+  const loadingAcaoFatura = baixarAutomaticamente.status === 'loading' || bonificar.status === 'loading'
 
   return (
     <>
@@ -112,18 +121,35 @@ export function ModificarStatusPedidoForm() {
         <Typography variant='h3' sx={{ mb: 3 }}>
           Deseja parcelar o pedido?
         </Typography>
-        <Grid size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+        <Grid
+          size={{ xs: 12 }}
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            justifyContent: 'flex-end',
+            gap: 2,
+            '& > button': { width: { xs: '100%', sm: 'auto' } }
+          }}
+        >
+          <ButtonApp
+            variant='outlined'
+            onClick={bonificarPedido}
+            title='Bonificado'
+            loading={bonificar.status === 'loading'}
+            disabled={loadingAcaoFatura}
+          />
           <ButtonApp
             variant='outlined'
             onClick={baixarAVista}
             title='Baixar a vista'
             loading={baixarAutomaticamente.status === 'loading'}
+            disabled={loadingAcaoFatura}
           />
           <ButtonApp
             variant='contained'
             onClick={negociarCobranca}
             title='Parcelar'
-            disabled={baixarAutomaticamente.status === 'loading'}
+            disabled={loadingAcaoFatura}
           />
         </Grid>
       </ModalWithChildren>

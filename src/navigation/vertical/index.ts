@@ -163,6 +163,11 @@ const navigation = (): VerticalNavItemsType => {
           path: '/financeiro/contas-a-pagar'
         },
         {
+          title: 'Bonificados',
+          icon: 'mdi:gift-outline',
+          path: '/financeiro/bonificados'
+        },
+        {
           title: 'Transações',
           icon: 'grommet-icons:transaction',
           path: '/financeiro/transacao-financeira'
