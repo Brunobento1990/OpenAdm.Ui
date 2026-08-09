@@ -193,7 +193,9 @@ export function TableIndex(props: tableProps) {
       sx={{
         height: '100%',
         padding: '10px',
-        overflowY: 'auto'
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
       {props.childrenHeader && <>{props.childrenHeader}</>}
@@ -206,7 +208,7 @@ export function TableIndex(props: tableProps) {
           atualizarFiltro={refresh}
         />
       )}
-      <BoxApp maxHeight='calc(100% - 120px)' height='100%' overflowy='auto' width='100%'>
+      <BoxApp flex={1} minHeight='0' overflowy='hidden' width='100%'>
         <TabelaComDrag
           loading={loading}
           columns={[

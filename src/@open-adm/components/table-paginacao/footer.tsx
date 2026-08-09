@@ -39,11 +39,20 @@ export function FooterTable(props: propsFooterTable) {
       width='100%'
       justifyContent='space-between'
       gap='16px'
-      height='48px'
-      minHeight='48px'
       boxSizing='border-box'
+      sx={{
+        flexDirection: { xs: 'column', sm: 'row' },
+        alignItems: { xs: 'stretch', sm: 'center' },
+        minHeight: { xs: '104px', sm: '48px' },
+        padding: { xs: '8px 0', sm: 0 }
+      }}
     >
-      <BoxApp width='100%' display='flex' alignItems='center' justifyContent='start'>
+      <BoxApp
+        width='100%'
+        display='flex'
+        alignItems='center'
+        sx={{ justifyContent: { xs: 'center', sm: 'flex-start' } }}
+      >
         <Pagination
           count={props.quantidadePagina}
           page={props.pagina}
@@ -54,7 +63,13 @@ export function FooterTable(props: propsFooterTable) {
           onChange={(_, newPage) => props.setPagina(newPage)}
         />
       </BoxApp>
-      <BoxApp width='100%' display='flex' alignItems='center' justifyContent='end' gap='8px'>
+      <BoxApp
+        width='100%'
+        display='flex'
+        alignItems='center'
+        gap='8px'
+        sx={{ justifyContent: { xs: 'center', sm: 'flex-end' } }}
+      >
         {props.totalDeRegistros > 0 && (
           <TextApp texto={`Total: ${props.totalDeRegistros}`} color='text.primary' fontWeight={500} noWrap />
         )}
