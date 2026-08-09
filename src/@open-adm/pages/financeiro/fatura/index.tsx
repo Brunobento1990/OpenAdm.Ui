@@ -51,11 +51,12 @@ const opcoesSituacaoFatura = [
 ]
 
 export function FaturaPaginacao(props: propsFaturaPaginacao) {
-  const { navigate } = useNavigateApp()
+  const { navigate, query } = useNavigateApp()
   const { estornarParcela } = useApiParcela()
   const { show, close } = useModal()
   const [refreshPai, setRefreshPai] = useState(false)
   const [filtros, setFiltros] = useState<IFiltroFatura>({})
+  const pedidoId = typeof query.pedidoId === 'string' ? query.pedidoId : undefined
 
   function estornar(parcela: IParcelaPaginacaoResponse) {
     show({
@@ -176,13 +177,14 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
       //   urlView={props.urlView}
       //   urlEdit={props.urlEdit}
       urlAdd={props.urlAdd}
-      refreshPai={refreshPai}
+      refreshPai={`${refreshPai}-${pedidoId ?? ''}`}
       nomeDaTabela='fatura'
       filtroComplementar={{
         tipo: props.tipo,
         dataVencimentoInicial: filtros.dataVencimentoInicial,
         dataVencimentoFinal: filtros.dataVencimentoFinal,
-        quitada: filtros.quitada
+        quitada: filtros.quitada,
+        pedidoId
       }}
     />
   )

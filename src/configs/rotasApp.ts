@@ -71,5 +71,6 @@ export const rotasApp = {
     },
     financeiro: {
         negociarCobranca: "/financeiro/fatura/negociar-cobranca",
+        contasAReceber: "/financeiro/contas-a-receber",
     },
 };

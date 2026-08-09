@@ -6,6 +6,7 @@ import { TypeColumns } from 'src/@open-adm/components/table/tabela-com-drag'
 import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
 import { useNewApi } from 'src/@open-adm/hooks/use-new-api'
 import { generatePdfFromBase64 } from 'src/@open-adm/utils/download-pdf'
+import { rotasApp } from 'src/configs/rotasApp'
 
 export function useConfig() {
   const { navigate } = useNavigateApp()
@@ -85,6 +86,23 @@ export function useConfig() {
           <Tooltip title='Download do pedido' placement='top'>
             <IconButton onClick={() => downloadPedido(`${params.data.id}`)}>
               <IconifyIcon icon='material-symbols-light:download' />
+            </IconButton>
+          </Tooltip>
+        )
+      }
+    },
+    {
+      field: 'financeiro',
+      width: 110,
+      headerName: 'Financeiro',
+      cellRenderer: (params: { data: any }) => {
+        return (
+          <Tooltip title='Acessar financeiro do pedido' placement='top'>
+            <IconButton
+              onClick={() => navigate(`${rotasApp.financeiro.contasAReceber}?pedidoId=${params.data.id}`)}
+              aria-label='Acessar financeiro do pedido'
+            >
+              <IconifyIcon icon='solar:wallet-money-outline' />
             </IconButton>
           </Tooltip>
         )

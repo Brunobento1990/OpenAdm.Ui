@@ -22,6 +22,8 @@ Avoid hardcoded domain values such as unexplained strings and numbers. Prefer na
 
 Lay out form and filter inputs with `FormRow` and `FormItemRow`. Set responsive grid sizes explicitly so fields share a row on wider screens and occupy the full width on mobile; avoid ad hoc flex containers for input layouts.
 
+Implement all UI and responsive layouts mobile-first. Define the mobile behavior as the default or `xs` layout, then progressively adapt it for larger breakpoints such as `sm`, `md`, and `lg`. Always verify that controls, tables, modals, cards, and action groups remain usable without horizontal or parent-container overflow on small screens.
+
 ## Testing Guidelines
 
 No automated test framework or coverage threshold is currently configured. Do not run `npm run build` unless the user explicitly requests it. Exercise the affected route in `npm run dev` and run `npm run lint` before submitting when appropriate. If introducing tests, colocate them as `*.test.ts` or `*.test.tsx`, add the runner to `package.json`, and document the command in this guide.
