@@ -105,15 +105,19 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
           width: 130,
           field: 'valor',
           headerName: 'Valor',
-          cellRenderer: (params: ParcelaCellRendererParams) => formatMoney(params.data.valor),
-          sortable: true
+          cellRenderer: (params: ParcelaCellRendererParams) => formatMoney(params.data.valor)
         },
         {
           width: 130,
           field: 'valorPagoRecebido',
           headerName: 'Valor pago',
-          cellRenderer: (params: ParcelaCellRendererParams) => formatMoney(params.data.valorPagoRecebido),
-          sortable: true
+          cellRenderer: (params: ParcelaCellRendererParams) => formatMoney(params.data.valorPagoRecebidoLiquido)
+        },
+        {
+          width: 130,
+          field: 'desconto',
+          headerName: 'Desc. concedido',
+          cellRenderer: (params: ParcelaCellRendererParams) => formatMoney(params.data.descontoConcedido)
         },
         {
           width: 140,
@@ -177,6 +181,7 @@ export function FaturaPaginacao(props: propsFaturaPaginacao) {
       //   urlView={props.urlView}
       //   urlEdit={props.urlEdit}
       urlAdd={props.urlAdd}
+      desabilitarColunaAcoes
       refreshPai={`${refreshPai}-${pedidoId ?? ''}`}
       nomeDaTabela='fatura'
       filtroComplementar={{

@@ -14,6 +14,8 @@ export interface IParcelaPaginacaoResponse {
     status: StatusParcelaEnum,
     valorPagoRecebido: number,
     valorAPagarAReceber: number,
+    valorPagoRecebidoLiquido: number;
+    descontoConcedido: number;
     vencimento: string,
     quitada: boolean
 }
