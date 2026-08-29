@@ -46,6 +46,11 @@ export interface ICriarFaturaRequest {
     parcelas: IParcelaCriar[]
 }
 
+export interface IBaixarFaturaAutomaticamenteRequest {
+    pedidoId: string,
+    desconto: number
+}
+
 export interface ICobrancaPedidoResponse {
     id: string,
     numero: number,

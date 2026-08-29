@@ -10,14 +10,17 @@ import { BoxApp } from 'src/@open-adm/components/box'
 import { ButtonApp } from 'src/@open-adm/components/buttons'
 import { DividerApp } from 'src/@open-adm/components/divider'
 import { DropDownApp } from 'src/@open-adm/components/drop-down/drop-down-app'
+import { FormItemRow } from 'src/@open-adm/components/form/item-row'
+import { FormRow } from 'src/@open-adm/components/form/row'
 import { FormRoot } from 'src/@open-adm/components/form/form-root'
+import { InputCustom, MaskType } from 'src/@open-adm/components/input'
 import { ModalWithChildren } from 'src/@open-adm/components/modal'
 import { TextApp } from 'src/@open-adm/components/text'
 import { opcoesStatusPedido, StatusPedidoEnum } from 'src/@open-adm/enuns/status-pedido'
 import { useNavigateApp } from 'src/@open-adm/hooks/use-navigate-app'
 import { IPedido } from 'src/@open-adm/types/pedido'
 import { formatDateComHoras } from 'src/@open-adm/utils/convert-date'
-import { formatMoney } from 'src/@open-adm/utils/format-money'
+import { cleanFormatMoney, formatMoney } from 'src/@open-adm/utils/format-money'
 import { rotasApp } from 'src/configs/rotasApp'
 
 export function ModificarStatusPedidoForm() {
@@ -25,6 +28,8 @@ export function ModificarStatusPedidoForm() {
   const { baixarAutomaticamente, bonificar } = useApiFatura()
   const { navigate, id } = useNavigateApp()
   const [modalParcelamentoAberto, setModalParcelamentoAberto] = useState(false)
+  const [modalDescontoAberto, setModalDescontoAberto] = useState(false)
+  const [desconto, setDesconto] = useState('')
   const form = useFormikAdapter<IPedido>({
     onSubmit: submit
   })
@@ -65,10 +70,25 @@ export function ModificarStatusPedidoForm() {
     navigate(`${rotasApp.financeiro.negociarCobranca}/${form.values.id}`)
   }
 
+  function abrirDescontoAVista() {
+    setDesconto('')
+    setModalParcelamentoAberto(false)
+    setModalDescontoAberto(true)
+  }
+
+  function cancelarDescontoAVista() {
+    setModalDescontoAberto(false)
+    setModalParcelamentoAberto(true)
+  }
+
   async function baixarAVista() {
-    const response = await baixarAutomaticamente.fetch(form.values.id)
+    const response = await baixarAutomaticamente.fetch({
+      pedidoId: form.values.id,
+      desconto: valorDesconto
+    })
 
     if (response?.resultado) {
+      setModalDescontoAberto(false)
       continuarAlteracaoStatus()
     }
   }
@@ -87,6 +107,10 @@ export function ModificarStatusPedidoForm() {
 
   const loading = obter.status === 'loading' || atualizarStatus.status === 'loading'
   const loadingAcaoFatura = baixarAutomaticamente.status === 'loading' || bonificar.status === 'loading'
+  const valorDesconto = cleanFormatMoney(desconto) ?? 0
+  const valorTotal = form.values.valorTotal ?? 0
+  const descontoInvalido = valorDesconto > valorTotal
+  const valorFinal = Math.max(valorTotal - valorDesconto, 0)
 
   return (
     <>
@@ -140,9 +164,8 @@ export function ModificarStatusPedidoForm() {
           />
           <ButtonApp
             variant='outlined'
-            onClick={baixarAVista}
+            onClick={abrirDescontoAVista}
             title='Baixar a vista'
-            loading={baixarAutomaticamente.status === 'loading'}
             disabled={loadingAcaoFatura}
           />
           <ButtonApp
@@ -150,6 +173,56 @@ export function ModificarStatusPedidoForm() {
             onClick={negociarCobranca}
             title='Parcelar'
             disabled={loadingAcaoFatura}
+          />
+        </Grid>
+      </ModalWithChildren>
+      <ModalWithChildren open={modalDescontoAberto} close={cancelarDescontoAVista} desabilitarFooter>
+        <Typography variant='h3' sx={{ mb: 3 }}>
+          Baixar pedido à vista
+        </Typography>
+        <BoxApp>
+          <TextApp texto={`Valor do pedido: ${formatMoney(valorTotal)}`} />
+          <TextApp texto={`Valor após desconto: ${formatMoney(valorFinal)}`} />
+        </BoxApp>
+        <FormRow marginTop='1rem'>
+          <FormItemRow xs={12} sm={12}>
+            <InputCustom
+              fullWidth
+              autoFocus
+              id='desconto'
+              name='desconto'
+              label='Desconto'
+              value={desconto}
+              mask={MaskType.MONEY}
+              onChange={(_, value) => setDesconto(value)}
+              error={descontoInvalido}
+              helperText={descontoInvalido ? 'O desconto não pode ser maior que o valor do pedido' : undefined}
+            />
+          </FormItemRow>
+        </FormRow>
+        <Grid
+          size={{ xs: 12 }}
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column-reverse', sm: 'row' },
+            justifyContent: 'flex-end',
+            gap: 2,
+            mt: 3,
+            '& > button': { width: { xs: '100%', sm: 'auto' } }
+          }}
+        >
+          <ButtonApp
+            variant='outlined'
+            onClick={cancelarDescontoAVista}
+            title='Cancelar'
+            disabled={loadingAcaoFatura}
+          />
+          <ButtonApp
+            variant='contained'
+            onClick={baixarAVista}
+            title='Confirmar baixa'
+            loading={baixarAutomaticamente.status === 'loading'}
+            disabled={descontoInvalido || loadingAcaoFatura}
           />
         </Grid>
       </ModalWithChildren>

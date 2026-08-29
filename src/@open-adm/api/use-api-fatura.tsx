@@ -1,6 +1,6 @@
 import { useNewApi } from "../hooks/use-new-api";
 import { IFaturaContasAReceber, IPagarFaturaAReceber } from "../types/contas-a-receber";
-import { ICriarFaturaRequest, IFatura, IParcela } from "../types/fatura";
+import { IBaixarFaturaAutomaticamenteRequest, ICriarFaturaRequest, IFatura, IParcela } from "../types/fatura";
 import { IResultado } from "../types/base";
 
 export function useApiFatura() {
@@ -95,9 +95,9 @@ export function useApiFatura() {
         return await excluirParcelaApi.fecth({ urlParams: id })
     }
 
-    async function baixarAutomaticamente(pedidoId: string): Promise<IResultado | undefined> {
+    async function baixarAutomaticamente(body: IBaixarFaturaAutomaticamenteRequest): Promise<IResultado | undefined> {
         return await baixaAutomaticaApi.fecth<IResultado>({
-            body: { pedidoId },
+            body,
             message: 'Fatura baixada com sucesso'
         })
     }
